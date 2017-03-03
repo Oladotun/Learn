@@ -5,6 +5,7 @@
  */
 
 import React, { Component } from 'react';
+import LinearGradient from 'react-native-linear-gradient';
 import {
   AppRegistry,
   StyleSheet,
@@ -15,7 +16,12 @@ import {
 export default class Oremi extends Component {
   render() {
     return (
+
       <View style={styles.container}>
+        <LinearGradient
+        colors={['#A1ADDB', '#B7BFDB', '#D6D7D8','#E6C4A5','#F9AD67']}
+        locations={[0, 0.25,0.5 ,.75, 1.0]}
+        style={styles.linearGradient}>
         <Text style={styles.welcome}>
           Welcome to React Native!
         </Text>
@@ -26,7 +32,9 @@ export default class Oremi extends Component {
           Press Cmd+R to reload,{'\n'}
           Cmd+D or shake for dev menu
         </Text>
+        </LinearGradient>
       </View>
+
     );
   }
 }
@@ -36,12 +44,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: 'transparent'
+    // backgroundColor: '#F9AD67'
+  },
+  linearGradient: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    justifyContent: 'center'
   },
   welcome: {
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
+
   },
   instructions: {
     textAlign: 'center',
