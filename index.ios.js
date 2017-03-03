@@ -52,8 +52,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     bottom: 0,
-    right: 0,
-    justifyContent: 'center'
+    right: 0
   },
   welcome: {
     fontSize: 20,
