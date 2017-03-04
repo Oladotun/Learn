@@ -13,8 +13,38 @@ import {
   View,
   Image
 } from 'react-native';
-
+import Sinch from 'react-native-sinch-verification'
+var custom = '';
 export default class Oremi extends Component {
+
+  componentDidMount() {
+
+	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: '',
+      errorMessage: ''
+    };
+
+    Sinch.init('333b66d3-b0da-4fe2-921a-7047947126fa');
+    this._onText = this._onText.bind(this);
+    // this._onText();
+
+  }
+
+  _onText(){
+    Sinch.sms('4437914148', custom, (err, res) => {
+  if (!err) {
+      // for android, verification is done, because the sms has been read automatically
+    // for ios, this means the sms has been sent out, you need to call verify with the received code
+    console.log('sent to user');
+  } else {
+    console.log(err);
+  }
+});
+  }
+
   render() {
     return (
 

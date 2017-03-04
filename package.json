@@ -7,9 +7,13 @@
     "test": "jest"
   },
   "dependencies": {
+    "frisbee": "^1.1.7",
     "react": "15.4.2",
     "react-native": "0.42.0",
-    "react-native-linear-gradient": "^2.0.0"
+    "react-native-country-picker-modal": "niftylettuce/react-native-country-picker-modal",
+    "react-native-form": "^2.1.2",
+    "react-native-linear-gradient": "^2.0.0",
+    "react-native-loading-spinner-overlay": "^0.4.1"
   },
   "devDependencies": {
     "babel-jest": "19.0.0",

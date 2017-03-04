@@ -36,8 +36,13 @@
 		2DCD954D1E0B4F2C00145EB5 /* OremiTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* OremiTests.m */; };
 		4E381023706D4066AF6C8B70 /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 168831E1CAE6410E90733A4E /* libBVLinearGradient.a */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
+		7C00D78B1E6A4D15001B4505 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C00D78A1E6A4D15001B4505 /* CoreTelephony.framework */; };
+		7C00D78D1E6A4D24001B4505 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C00D78C1E6A4D24001B4505 /* SystemConfiguration.framework */; };
+		7C00D78F1E6A4D3C001B4505 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C00D78E1E6A4D3C001B4505 /* libc++.tbd */; };
+		7C00D7911E6A4D4E001B4505 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C00D7901E6A4D4E001B4505 /* libicucore.tbd */; };
+		7C5B1F3A1E6A583500F9A9FD /* SinchVerificationIOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C5B1F391E6A583500F9A9FD /* SinchVerificationIOS.m */; };
+		7C5B1F3C1E6A58E900F9A9FD /* SinchVerification.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C5B1F3B1E6A58E900F9A9FD /* SinchVerification.framework */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
-		839D0805C6334B0292DE3CAD /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4095BEDFABB4BBCBE650796 /* libSplashScreen.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -230,13 +235,6 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = BVLinearGradient;
 		};
-		7C3822C51E68F9760055125C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8DC16C1FC3BD49EEA9720D18 /* SplashScreen.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3D7682761D8E76B80014119E;
-			remoteInfo = SplashScreen;
-		};
 		832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */;
@@ -272,9 +270,14 @@
 		2D02E4901E0B4A5D006451C7 /* Oremi-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Oremi-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
+		7C00D78A1E6A4D15001B4505 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		7C00D78C1E6A4D24001B4505 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		7C00D78E1E6A4D3C001B4505 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		7C00D7901E6A4D4E001B4505 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
+		7C5B1F381E6A583500F9A9FD /* SinchVerificationIOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SinchVerificationIOS.h; sourceTree = "<group>"; };
+		7C5B1F391E6A583500F9A9FD /* SinchVerificationIOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SinchVerificationIOS.m; sourceTree = "<group>"; };
+		7C5B1F3B1E6A58E900F9A9FD /* SinchVerification.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SinchVerification.framework; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
-		8DC16C1FC3BD49EEA9720D18 /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
-		C4095BEDFABB4BBCBE650796 /* libSplashScreen.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libSplashScreen.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -290,6 +293,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C00D7911E6A4D4E001B4505 /* libicucore.tbd in Frameworks */,
+				7C00D78F1E6A4D3C001B4505 /* libc++.tbd in Frameworks */,
+				7C00D78D1E6A4D24001B4505 /* SystemConfiguration.framework in Frameworks */,
+				7C00D78B1E6A4D15001B4505 /* CoreTelephony.framework in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
@@ -297,12 +304,12 @@
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
 				133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */,
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
+				7C5B1F3C1E6A58E900F9A9FD /* SinchVerification.framework in Frameworks */,
 				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				4E381023706D4066AF6C8B70 /* libBVLinearGradient.a in Frameworks */,
-				839D0805C6334B0292DE3CAD /* libSplashScreen.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,6 +462,18 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		7C00D7891E6A4D15001B4505 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7C5B1F3B1E6A58E900F9A9FD /* SinchVerification.framework */,
+				7C00D7901E6A4D4E001B4505 /* libicucore.tbd */,
+				7C00D78E1E6A4D3C001B4505 /* libc++.tbd */,
+				7C00D78C1E6A4D24001B4505 /* SystemConfiguration.framework */,
+				7C00D78A1E6A4D15001B4505 /* CoreTelephony.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		7C3822A41E68F9750055125C /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -463,12 +482,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		7C3822A61E68F9750055125C /* Products */ = {
+		7C5B1F371E6A583500F9A9FD /* SinchVerificationIOS */ = {
 			isa = PBXGroup;
 			children = (
-				7C3822C61E68F9760055125C /* libSplashScreen.a */,
+				7C5B1F381E6A583500F9A9FD /* SinchVerificationIOS.h */,
+				7C5B1F391E6A583500F9A9FD /* SinchVerificationIOS.m */,
 			);
-			name = Products;
+			path = SinchVerificationIOS;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -486,7 +506,6 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				148A8BEE8C214704AEBA20DB /* BVLinearGradient.xcodeproj */,
-				8DC16C1FC3BD49EEA9720D18 /* SplashScreen.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -503,10 +522,12 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				7C5B1F371E6A583500F9A9FD /* SinchVerificationIOS */,
 				13B07FAE1A68108700A75B9A /* Oremi */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* OremiTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
+				7C00D7891E6A4D15001B4505 /* Frameworks */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -681,10 +702,6 @@
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
-				},
-				{
-					ProductGroup = 7C3822A61E68F9750055125C /* Products */;
-					ProjectRef = 8DC16C1FC3BD49EEA9720D18 /* SplashScreen.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -873,13 +890,6 @@
 			remoteRef = 7C3822A91E68F9760055125C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		7C3822C61E68F9760055125C /* libSplashScreen.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libSplashScreen.a;
-			remoteRef = 7C3822C51E68F9760055125C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		832341B51AAA6A8300B99B32 /* libRCTText.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -967,6 +977,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C5B1F3A1E6A583500F9A9FD /* SinchVerificationIOS.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
@@ -1080,6 +1091,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SinchVerificationSDK",
+					"$(PROJECT_DIR)",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
@@ -1102,6 +1118,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SinchVerificationSDK",
+					"$(PROJECT_DIR)",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
