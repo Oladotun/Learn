@@ -11,7 +11,11 @@ import {
   StyleSheet,
   Text,
   View,
-  Image
+  Image,
+  Platform,
+  TextInput,
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 import Sinch from 'react-native-sinch-verification';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -19,8 +23,21 @@ import Form from 'react-native-form';
 import CountryPicker from 'react-native-country-picker-modal';
 
 var custom = '';
+// your brand's theme primary color
+const brandColor = '#FFF';
 // if you want to customize the country picker
 const countryPickerCustomStyles = {};
+
+// <Text style={styles.welcome}>
+//   Welcome to React Native!
+// </Text>
+// <Text style={styles.instructions}>
+//   To get started, edit index.ios.js
+// </Text>
+// <Text style={styles.instructions}>
+//   Press Cmd+R to reload,{'\n'}
+//   Cmd+D or shake for dev menu
+// </Text>
 export default class Oremi extends Component {
 
   componentDidMount() {
@@ -38,21 +55,88 @@ export default class Oremi extends Component {
     };
 
     Sinch.init('333b66d3-b0da-4fe2-921a-7047947126fa');
-    this._onText = this._onText.bind(this);
+    // this._onText = this._onText.bind(this);
     // this._onText();
 
   }
 
-  _onText(){
-    Sinch.sms('4437914148', custom, (err, res) => {
+  _onText = () =>{
+    this.setState({ spinner: true });
+    var value = this.refs.form.getValues();
+    Sinch.sms(value['phoneNumber'], custom, (err, res) => {
   if (!err) {
       // for android, verification is done, because the sms has been read automatically
     // for ios, this means the sms has been sent out, you need to call verify with the received code
     console.log('sent to user');
+    this.setState({
+      spinner: false,
+      enterCode: true,
+    });
+    this.refs.form.refs.textInput.setNativeProps({ text: '' });
+
+    Alert.alert('Sent!', "We've sent you a verification code", [{
+      text: 'OK',
+      onPress: () => this.refs.form.refs.textInput.focus()
+    }]);
   } else {
     console.log(err);
   }
 });
+  }
+_verifyCode = () => {
+    this.setState({ spinner: true });
+    var value = this.refs.form.getValues();
+    SinchVerification.verify(value['code'], (err, res) => {
+    if (!err) {
+        // done!
+          Alert.alert('Success!', 'You have successfully verified your phone number');
+    } else {
+      this.setState({ spinner: false });
+      Alert.alert('Oops!', err.message);
+    }
+  });
+}
+
+  _getSubmitAction = () => {
+    this.state.enterCode ? this._verifyCode() : this._onText();
+  }
+
+
+  _getCode = () => {
+
+    this.setState({ spinner: true });
+
+    setTimeout(async () => {
+
+      try {
+
+
+
+        if (res.err) throw res.err;
+
+        this.setState({
+          spinner: false,
+          enterCode: true
+        });
+        this.refs.form.refs.textInput.setNativeProps({ text: '' });
+
+        setTimeout(() => {
+          Alert.alert('Sent!', "We've sent you a verification code", [{
+            text: 'OK',
+            onPress: () => this.refs.form.refs.textInput.focus()
+          }]);
+        }, 100);
+
+      } catch (err) {
+        // <https://github.com/niftylettuce/react-native-loading-spinner-overlay/issues/30#issuecomment-276845098>
+        this.setState({ spinner: false });
+        setTimeout(() => {
+          Alert.alert('Oops!', err.message);
+        }, 100);
+      }
+
+    }, 100);
+
   }
 
   _renderCountryPicker = () => {
@@ -76,7 +160,7 @@ export default class Oremi extends Component {
   }
   _changeCountry = (country) => {
     this.setState({ country });
-    // this.refs.form.refs.textInput.focus();
+    this.refs.form.refs.textInput.focus();
   }
 
   _renderCallingCode = () => {
@@ -113,19 +197,6 @@ export default class Oremi extends Component {
         colors={['#A1ADDB', '#D5D7D9','#F9AD67']}
         locations={[0,.75, 1.0]}
         style={styles.linearGradient}>
-
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-        </LinearGradient>
-
         <Image
          style={styles.image}
          source={require('./img/oremiLogo.png')}
@@ -135,16 +206,42 @@ export default class Oremi extends Component {
        </Text>
        <Text style={styles.header}>{headerText}</Text>
 
-       <Form ref={'form'} style={styles.form}>
-
-         <View style={{ flexDirection: 'row' }}>
-         {this._renderCountryPicker()}
-         {this._renderCallingCode()}
-         </View>
-      </Form>
 
 
-      </View>
+        <Form ref={'form'} style={styles.form}>
+
+          <View style={{ flexDirection: 'row' }}>
+          {this._renderCountryPicker()}
+          {this._renderCallingCode()}
+
+          <TextInput
+            ref={'textInput'}
+            name={this.state.enterCode ? 'code' : 'phoneNumber' }
+            type={'TextInput'}
+            underlineColorAndroid={'transparent'}
+            autoCapitalize={'none'}
+            autoCorrect={false}
+            placeholder={this.state.enterCode ? '_ _ _ _' : 'Phone Number'}
+
+            keyboardType={Platform.OS === 'ios' ? 'number-pad' : 'numeric'}
+            style={[ styles.textInput, textStyle ]}
+            returnKeyType='go'
+            autoFocus
+            placeholderTextColor={brandColor}
+            selectionColor={brandColor}
+            maxLength={this.state.enterCode ? 6 : 20}
+            onSubmitEditing={this._getSubmitAction} />
+          </View>
+
+          <TouchableOpacity style={styles.button} onPress={this._getSubmitAction}>
+            <Text style={styles.buttonText}>{ buttonText }</Text>
+          </TouchableOpacity>
+
+       </Form>
+    
+        </LinearGradient>
+  </View>
+
 
     );
   }
@@ -153,7 +250,7 @@ export default class Oremi extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+
     backgroundColor: 'transparent'
     // backgroundColor: '#F9AD67'
   },
@@ -163,7 +260,8 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
     right: 0,
-    justifyContent: 'center'
+    // alignItems: 'center'
+    // justifyContent: 'center'
   },countryPicker: {
     alignItems: 'center',
     justifyContent: 'center'
@@ -171,7 +269,8 @@ const styles = StyleSheet.create({
   image: {
     width: 150,
     height: 90,
-    top: 40
+    top: 40,
+    alignSelf: 'center'
   },
   message: {
     fontSize: 20,
@@ -196,6 +295,45 @@ const styles = StyleSheet.create({
     fontSize: 22,
     margin: 20,
     color: '#4A4A4A',
+  },
+  form: {
+    margin: 20
+  },
+  textInput: {
+    padding: 0,
+    margin: 0,
+    flex: 1,
+    fontSize: 20,
+    color: brandColor
+  },
+  countryPicker: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  callingCodeText: {
+    fontSize: 20,
+    color: brandColor,
+    fontFamily: 'Helvetica',
+    fontWeight: 'bold',
+    paddingRight: 10
+  },
+  callingCodeView: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  buttonText: {
+    color: '#4A90E2',
+    fontFamily: 'Helvetica',
+    fontSize: 16,
+    fontWeight: 'bold',
+
+  },button: {
+    marginTop: 20,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+      backgroundColor: '#FFFFFD'
   }
 });
 
