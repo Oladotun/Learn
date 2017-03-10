@@ -28,16 +28,6 @@ const brandColor = '#FFF';
 // if you want to customize the country picker
 const countryPickerCustomStyles = {};
 
-// <Text style={styles.welcome}>
-//   Welcome to React Native!
-// </Text>
-// <Text style={styles.instructions}>
-//   To get started, edit index.ios.js
-// </Text>
-// <Text style={styles.instructions}>
-//   Press Cmd+R to reload,{'\n'}
-//   Cmd+D or shake for dev menu
-// </Text>
 export default class Oremi extends Component {
 
   componentDidMount() {
@@ -60,7 +50,7 @@ export default class Oremi extends Component {
 
   }
 
-  _onText = () =>{
+  _getCode = () =>{
     this.setState({ spinner: true });
     var value = this.refs.form.getValues();
     Sinch.sms(value['phoneNumber'], custom, (err, res) => {
@@ -86,7 +76,7 @@ export default class Oremi extends Component {
 _verifyCode = () => {
     this.setState({ spinner: true });
     var value = this.refs.form.getValues();
-    SinchVerification.verify(value['code'], (err, res) => {
+    Sinch.verify(value['code'], (err, res) => {
     if (!err) {
         // done!
           Alert.alert('Success!', 'You have successfully verified your phone number');
@@ -98,46 +88,9 @@ _verifyCode = () => {
 }
 
   _getSubmitAction = () => {
-    this.state.enterCode ? this._verifyCode() : this._onText();
+    this.state.enterCode ? this._verifyCode() : this._getCode();
   }
 
-
-  _getCode = () => {
-
-    this.setState({ spinner: true });
-
-    setTimeout(async () => {
-
-      try {
-
-
-
-        if (res.err) throw res.err;
-
-        this.setState({
-          spinner: false,
-          enterCode: true
-        });
-        this.refs.form.refs.textInput.setNativeProps({ text: '' });
-
-        setTimeout(() => {
-          Alert.alert('Sent!', "We've sent you a verification code", [{
-            text: 'OK',
-            onPress: () => this.refs.form.refs.textInput.focus()
-          }]);
-        }, 100);
-
-      } catch (err) {
-        // <https://github.com/niftylettuce/react-native-loading-spinner-overlay/issues/30#issuecomment-276845098>
-        this.setState({ spinner: false });
-        setTimeout(() => {
-          Alert.alert('Oops!', err.message);
-        }, 100);
-      }
-
-    }, 100);
-
-  }
 
   _renderCountryPicker = () => {
 
@@ -190,59 +143,55 @@ _verifyCode = () => {
     } : {};
     return (
 
-
-
       <View style={styles.container}>
-      <LinearGradient
-        colors={['#A1ADDB', '#D5D7D9','#F9AD67']}
-        locations={[0,.75, 1.0]}
-        style={styles.linearGradient}>
-        <Image
-         style={styles.image}
-         source={require('./img/oremiLogo.png')}
-       />
-       <Text style={styles.message}>
-         OREMI
-       </Text>
-       <Text style={styles.header}>{headerText}</Text>
+          <LinearGradient
+            colors={['#A1ADDB', '#D5D7D9','#F9AD67']}
+            locations={[0,.75, 1.0]}
+            style={styles.linearGradient}>
+            <Image
+             style={styles.image}
+             source={require('./img/oremiLogo.png')}
+           />
+           <Text style={styles.message}>
+             OREMI
+           </Text>
+           <Text style={styles.header}>{headerText}</Text>
 
 
 
-        <Form ref={'form'} style={styles.form}>
+            <Form ref={'form'} style={styles.form}>
 
-          <View style={{ flexDirection: 'row' }}>
-          {this._renderCountryPicker()}
-          {this._renderCallingCode()}
+              <View style={{ flexDirection: 'row' }}>
+              {this._renderCountryPicker()}
+              {this._renderCallingCode()}
 
-          <TextInput
-            ref={'textInput'}
-            name={this.state.enterCode ? 'code' : 'phoneNumber' }
-            type={'TextInput'}
-            underlineColorAndroid={'transparent'}
-            autoCapitalize={'none'}
-            autoCorrect={false}
-            placeholder={this.state.enterCode ? '_ _ _ _' : 'Phone Number'}
+              <TextInput
+                ref={'textInput'}
+                name={this.state.enterCode ? 'code' : 'phoneNumber' }
+                type={'TextInput'}
+                underlineColorAndroid={'transparent'}
+                autoCapitalize={'none'}
+                autoCorrect={false}
+                placeholder={this.state.enterCode ? '_ _ _ _' : 'Phone Number'}
 
-            keyboardType={Platform.OS === 'ios' ? 'number-pad' : 'numeric'}
-            style={[ styles.textInput, textStyle ]}
-            returnKeyType='go'
-            autoFocus
-            placeholderTextColor={brandColor}
-            selectionColor={brandColor}
-            maxLength={this.state.enterCode ? 6 : 20}
-            onSubmitEditing={this._getSubmitAction} />
-          </View>
+                keyboardType={Platform.OS === 'ios' ? 'number-pad' : 'numeric'}
+                style={[ styles.textInput, textStyle ]}
+                returnKeyType='go'
+                autoFocus
+                placeholderTextColor={brandColor}
+                selectionColor={brandColor}
+                maxLength={this.state.enterCode ? 6 : 20}
+                onSubmitEditing={this._getSubmitAction} />
+              </View>
 
-          <TouchableOpacity style={styles.button} onPress={this._getSubmitAction}>
-            <Text style={styles.buttonText}>{ buttonText }</Text>
-          </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={this._getSubmitAction}>
+                <Text style={styles.buttonText}>{ buttonText }</Text>
+              </TouchableOpacity>
 
-       </Form>
-    
-        </LinearGradient>
-  </View>
+           </Form>
 
-
+            </LinearGradient>
+      </View>
     );
   }
 }
