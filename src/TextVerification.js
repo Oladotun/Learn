@@ -21,6 +21,8 @@ import Sinch from 'react-native-sinch-verification';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Form from 'react-native-form';
 import CountryPicker from 'react-native-country-picker-modal';
+import firebase from "firebase";
+// import {firebaseManager} from './FirebaseManager';
 
 var custom = '';
 // your brand's theme primary color
@@ -37,7 +39,6 @@ export default class TextVerification extends Component {
     super(props);
     this.state = {
       enterCode: false,
-      spinner: false,
       country: {
         cca2: 'US',
         callingCode: '1'
@@ -45,9 +46,21 @@ export default class TextVerification extends Component {
     };
 
     Sinch.init('333b66d3-b0da-4fe2-921a-7047947126fa');
-    // this._onText = this._onText.bind(this);
-    // this._onText();
+    this._test();
+  }
 
+  _test = () => {
+    var self = this;
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // User is signed in.
+        var isAnonymous = user.isAnonymous;
+        var uid = user.uid;
+        self.props.navigator.push({name:'home'});
+      } else {
+        // User is signed out.
+      }
+      });
   }
 
   _getCode = () =>{
@@ -76,10 +89,20 @@ export default class TextVerification extends Component {
 _verifyCode = () => {
     this.setState({ spinner: true });
     var value = this.refs.form.getValues();
+    var self = this;
     Sinch.verify(value['code'], (err, res) => {
     if (!err) {
         // done!
           Alert.alert('Success!', 'You have successfully verified your phone number');
+          firebase.auth().signInAnonymously().catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // ...
+            console.log('uError signing');
+
+
+          });
     } else {
       this.setState({ spinner: false });
       Alert.alert('Oops!', err.message);
