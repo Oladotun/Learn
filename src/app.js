@@ -8,6 +8,7 @@ import{
 
 import TextVerification from './TextVerification';
 import Home from './Home';
+import ProfileSetUp from './ProfileSetup';
 
 import firebase from "firebase";
 
@@ -16,6 +17,8 @@ const RouteMapper = (route, navigator) => {
     return <TextVerification navigator={navigator} />
   }else if(route.name === 'home') {
     return <Home navigator={navigator} />
+  } else if(route.name === 'profileSetUp'); {
+    return <ProfileSetUp navigator={navigator} />
   }
 }
 
@@ -28,15 +31,9 @@ export default class App extends Component {
         loading: true,
       unSubscribe: null
       };
-      let config = {
-        apiKey: "AIzaSyArUrQ20hQ4o4nohBBKs0VH5tH3bX6vDMI",
-        authDomain: "oremi-a0b25.firebaseapp.com",
-        databaseURL: "https://oremi-a0b25.firebaseio.com",
-        storageBucket: "oremi-a0b25.appspot.com",
-        messagingSenderId: "427045602725"
-      };
+
     // this.navigate = this.navigate.bind(this);
-    firebase.initializeApp(config)
+    
   }
 
   componentWillMount(){
@@ -67,37 +64,48 @@ export default class App extends Component {
 
   render(){
 
-        if(this.state.loading) {
-           return(
-           <View style ={styles.container}>
-              <Text style ={styles.welcome}>loading</Text>
-           </View>);
-        } else if (this.state.user) {
-          this.state.unSubscribe();
-            return(
-              <Navigator
-                // Default to movies route
-                initialRoute={{name: 'home'}}
-                // Use FloatFromBottom transition between screens
-                configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
-                // Pass a route mapper functions
-                renderScene={RouteMapper}
-              />
-        );
-        } else {
-          this.state.unSubscribe();
-          return (
-            <Navigator
-              // Default to movies route
-              initialRoute={{name: 'textVerification'}}
-              // Use FloatFromBottom transition between screens
-              configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
-              // Pass a route mapper functions
-              renderScene={RouteMapper}
-            />
-          );
+    return (
+      <Navigator
+        // Default to movies route
+        initialRoute={{name: 'profileSetUp'}}
+        // Use FloatFromBottom transition between screens
+        configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
+        // Pass a route mapper functions
+        renderScene={RouteMapper}
+      />
+    );
 
-        }
+        // if(this.state.loading) {
+        //    return(
+        //    <View style ={styles.container}>
+        //       <Text style ={styles.welcome}>loading</Text>
+        //    </View>);
+        // } else if (this.state.user) {
+        //   this.state.unSubscribe();
+        //     return(
+        //       <Navigator
+        //         // Default to movies route
+        //         initialRoute={{name: 'home'}}
+        //         // Use FloatFromBottom transition between screens
+        //         configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
+        //         // Pass a route mapper functions
+        //         renderScene={RouteMapper}
+        //       />
+        // );
+        // } else {
+        //   this.state.unSubscribe();
+        //   return (
+        //     <Navigator
+        //       // Default to movies route
+        //       initialRoute={{name: 'textVerification'}}
+        //       // Use FloatFromBottom transition between screens
+        //       configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
+        //       // Pass a route mapper functions
+        //       renderScene={RouteMapper}
+        //     />
+        //   );
+        //
+        // }
 
 
 

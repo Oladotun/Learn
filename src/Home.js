@@ -6,12 +6,12 @@ import{
   StyleSheet,
   Button
 } from 'react-native';
+import Background from './Background';
 
 export default class Home extends Component {
 
   constructor(props){
     super(props);
-    // this._navigate = this._navigate.bind(this);
   }
 
   _getClick = () => {
@@ -27,28 +27,23 @@ export default class Home extends Component {
 
   render() {
 
-    return (<View style={styles.container}>
-      <Text style={styles.welcome}>Home page</Text>
-      <Button title="Testing"
-      style={styles.welcome}
-      onPress={this._getClick}
-      color="#841584"
-      />
-      </View>
+    return (
+      // <View style={styles.container}>
+      <Background>
+        <Text style={styles.welcome}>Home page</Text>
+        <Button title="Testing"
+        style={styles.welcome}
+        onPress={this._getClick}
+        color="#841584"
+        />
+      </Background>
+      // </View>
 
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-
-    // backgroundColor: 'transparent'
-    backgroundColor: '#F9AD67',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   welcome: {
     fontSize: 20,
     textAlign: 'center',

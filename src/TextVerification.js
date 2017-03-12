@@ -22,6 +22,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Form from 'react-native-form';
 import CountryPicker from 'react-native-country-picker-modal';
 import firebase from "firebase";
+import Background from './Background';
 // import {firebaseManager} from './FirebaseManager';
 
 var custom = '';
@@ -164,13 +165,10 @@ _verifyCode = () => {
       fontWeight: 'bold',
       fontFamily: 'Courier'
     } : {};
+
     return (
 
-      <View style={styles.container}>
-          <LinearGradient
-            colors={['#A1ADDB', '#D5D7D9','#F9AD67']}
-            locations={[0,.75, 1.0]}
-            style={styles.linearGradient}>
+        <Background>
             <Image
              style={styles.image}
              source={require('./img/oremiLogo.png')}
@@ -179,9 +177,7 @@ _verifyCode = () => {
              OREMI
            </Text>
            <Text style={styles.header}>{headerText}</Text>
-
-
-
+           
             <Form ref={'form'} style={styles.form}>
 
               <View style={{ flexDirection: 'row' }}>
@@ -212,29 +208,13 @@ _verifyCode = () => {
               </TouchableOpacity>
 
            </Form>
-
-            </LinearGradient>
-      </View>
+        </Background>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-
-    backgroundColor: 'transparent'
-    // backgroundColor: '#F9AD67'
-  },
-  linearGradient: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    // alignItems: 'center'
-    // justifyContent: 'center'
-  },countryPicker: {
+  countryPicker: {
     alignItems: 'center',
     justifyContent: 'center'
   },

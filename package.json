@@ -9,12 +9,17 @@
   "dependencies": {
     "firebase": "^3.7.1",
     "frisbee": "^1.1.7",
+    "lodash": "^4.17.4",
     "react": "15.4.2",
     "react-native": "0.42.0",
     "react-native-country-picker-modal": "niftylettuce/react-native-country-picker-modal",
+    "react-native-fetch-blob": "^0.10.2",
     "react-native-form": "^2.1.2",
+    "react-native-image-picker": "^0.26.2",
     "react-native-linear-gradient": "^2.0.0",
-    "react-native-loading-spinner-overlay": "^0.4.1"
+    "react-native-loading-spinner-overlay": "^0.4.1",
+    "react-native-sinch-verification": "0.0.5",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "babel-jest": "19.0.0",
