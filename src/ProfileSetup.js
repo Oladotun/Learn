@@ -8,7 +8,10 @@ import {
   Platform,
   Image,
   ActivityIndicator,
-  Dimensions
+  Dimensions,
+  TextInput,
+  Picker,
+  Keyboard
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'react-native-fetch-blob';
@@ -26,9 +29,6 @@ let config = {
 const {width, height} = Dimensions.get('window');
 firebase.initializeApp(config);
 const storage = firebase.storage()
-
-console.log(width);
-console.log(height);
 
 // Prepare Blob support
 const Blob = RNFetchBlob.polyfill.Blob
@@ -69,8 +69,15 @@ export default class ProfileSetUp extends Component {
   constructor(props){
     super(props);
     this.state = {
-      opacity: 1
+      opacity: 1,
+      firstName: '',
+      lastName: '',
+      sex: ''
     }
+  }
+
+  _goToNext(){
+    this.props.navigator.push({name:'home'});
   }
 
   _pickImage() {
@@ -111,19 +118,66 @@ export default class ProfileSetUp extends Component {
                     source={{ uri: this.state.uploadURL }}
                     style={ styles.image }>
                     <TouchableOpacity onPress={ () => this._pickImage() }>
-
                       <Text style={[styles.message, {opacity:this.state.opacity}]} >
-                        Add Photo
+                        Profile Photo
                       </Text>
                     </TouchableOpacity>
                   </Image>
-
-
                   )
               }
             })()
           }
+          <TextInput
+            ref='SecondInput'
+            style={styles.inputField}
+            value={this.state.firstName}
+            keyboardType='email-address'
+            autoCorrect={false}
+            autoCapitalize='none'
+            onChangeText={(text) => this.setState({firstName: text })}
+            underlineColorAndroid='transparent'
+            placeholder='Your First Name'
+            placeholderTextColor='rgba(255,255,255,.6)'
+            onSubmitEditing={(event) => {
+              this.refs.ThirdInput.focus();
+            }}
+          />
+          <TextInput
+            ref='ThirdInput'
+            style={styles.inputField}
+            value={this.state.lastName}
+            keyboardType='email-address'
+            autoCorrect={false}
+            autoCapitalize='none'
+            onChangeText={(text) => this.setState({ lastName: text })}
+            underlineColorAndroid='transparent'
+            placeholder='Your Last Name'
+            placeholderTextColor='rgba(255,255,255,.6)'
+            onSubmitEditing={(event) => {
+              Keyboard.dismiss();
+            }}
+          />
+          <View style={styles.pickerContainer}>
+          <Text style={styles.text}>Sex:</Text>
+            <Picker
+              selectedValue={this.state.sex}
+              onValueChange={(lang) => this.setState({sex: lang})}
+              style={styles.picker}
+              >
+              <Picker.Item label="Male" value="male" />
+              <Picker.Item label="Female" value="female" />
+          </Picker>
         </View>
+
+          <View style={styles.btnContainers}>
+            <TouchableOpacity onPress={() => this._goToNext() }>
+              <View style={styles.submitBtnContainer}>
+                <Text style={styles.submitBtn}>{'Enter'.toUpperCase()}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+
       </Background>
 
     );
@@ -133,7 +187,29 @@ export default class ProfileSetUp extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+  oremiImage: {
+    width: 150,
+    height: 90,
+    top:40,
+    alignSelf: 'center'
+  },
+  pickerContainer: {
+    flexDirection: 'row',
+  },
+  picker: {
+    height: width/4,
+    width: width/3,
+    borderColor: 'gray',
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 20,
+    marginTop: 60,
+  }
+  ,
   image: {
     height: width/3,
     width: width/3,
@@ -141,12 +217,42 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
     justifyContent: 'center',
-    marginTop: 50,
-    marginLeft: 7
+
   },
   message:{
     textAlign: 'center',
     color: 'blue',
     textDecorationLine: 'underline'
+  },
+  inputField: {
+    width: width/1.25,
+    height: 40,
+    backgroundColor: 'rgba(0,0,0,.3)',
+    borderRadius: 5,
+    marginTop: 10,
+    marginLeft: 30,
+    marginRight: 30,
+    alignItems: 'center',
+    textAlign: 'center',
+    color: '#fff'
+  },
+  btnContainers: {
+    marginTop: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 280
+  },
+  submitBtnContainer: {
+    width: 120,
+    height: 40,
+    backgroundColor: '#4A90E2',
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  submitBtn: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: '#FFFFFD'
   }
 })

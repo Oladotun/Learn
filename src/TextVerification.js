@@ -57,7 +57,7 @@ export default class TextVerification extends Component {
         // User is signed in.
         var isAnonymous = user.isAnonymous;
         var uid = user.uid;
-        self.props.navigator.push({name:'home'});
+        self.props.navigator.push({name:'profileSetUp'});
       } else {
         // User is signed out.
       }
@@ -177,7 +177,7 @@ _verifyCode = () => {
              OREMI
            </Text>
            <Text style={styles.header}>{headerText}</Text>
-           
+
             <Form ref={'form'} style={styles.form}>
 
               <View style={{ flexDirection: 'row' }}>

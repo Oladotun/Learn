@@ -32,8 +32,6 @@ export default class App extends Component {
       unSubscribe: null
       };
 
-    // this.navigate = this.navigate.bind(this);
-    
   }
 
   componentWillMount(){
@@ -64,48 +62,39 @@ export default class App extends Component {
 
   render(){
 
-    return (
-      <Navigator
-        // Default to movies route
-        initialRoute={{name: 'profileSetUp'}}
-        // Use FloatFromBottom transition between screens
-        configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
-        // Pass a route mapper functions
-        renderScene={RouteMapper}
-      />
-    );
 
-        // if(this.state.loading) {
-        //    return(
-        //    <View style ={styles.container}>
-        //       <Text style ={styles.welcome}>loading</Text>
-        //    </View>);
-        // } else if (this.state.user) {
-        //   this.state.unSubscribe();
-        //     return(
-        //       <Navigator
-        //         // Default to movies route
-        //         initialRoute={{name: 'home'}}
-        //         // Use FloatFromBottom transition between screens
-        //         configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
-        //         // Pass a route mapper functions
-        //         renderScene={RouteMapper}
-        //       />
-        // );
-        // } else {
-        //   this.state.unSubscribe();
-        //   return (
-        //     <Navigator
-        //       // Default to movies route
-        //       initialRoute={{name: 'textVerification'}}
-        //       // Use FloatFromBottom transition between screens
-        //       configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
-        //       // Pass a route mapper functions
-        //       renderScene={RouteMapper}
-        //     />
-        //   );
-        //
-        // }
+
+        if(this.state.loading) {
+           return(
+           <View style ={styles.container}>
+              <Text style ={styles.welcome}>loading</Text>
+           </View>);
+        } else if (this.state.user) {
+          this.state.unSubscribe();
+            return(
+              <Navigator
+                // Default to movies route
+                initialRoute={{name: 'home'}}
+                // Use FloatFromBottom transition between screens
+                configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
+                // Pass a route mapper functions
+                renderScene={RouteMapper}
+              />
+        );
+        } else {
+          this.state.unSubscribe();
+          return (
+            <Navigator
+              // Default to movies route
+              initialRoute={{name: 'textVerification'}}
+              // Use FloatFromBottom transition between screens
+              configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
+              // Pass a route mapper functions
+              renderScene={RouteMapper}
+            />
+          );
+
+        }
 
 
 
