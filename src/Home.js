@@ -17,8 +17,6 @@ export default class Home extends Component {
   _getClick = () => {
     var self = this;
     firebase.auth().signOut().then(function() {
-      // Sign-out successful.
-      console.log("sign out worked");
     }).catch(function(error) {
       // An error happened.
     });

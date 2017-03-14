@@ -15,7 +15,8 @@ import {
   Platform,
   TextInput,
   TouchableOpacity,
-  Alert
+  Alert,
+  AsyncStorage
 } from 'react-native';
 import Sinch from 'react-native-sinch-verification';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -33,8 +34,9 @@ const countryPickerCustomStyles = {};
 
 export default class TextVerification extends Component {
 
-  componentDidMount() {
-
+  componentWillMount() {
+    Sinch.init('333b66d3-b0da-4fe2-921a-7047947126fa');
+    this._test();
 	}
   constructor(props) {
     super(props);
@@ -43,11 +45,11 @@ export default class TextVerification extends Component {
       country: {
         cca2: 'US',
         callingCode: '1'
-      }
+      },
+      phoneNumber: null
     };
 
-    Sinch.init('333b66d3-b0da-4fe2-921a-7047947126fa');
-    this._test();
+
   }
 
   _test = () => {
@@ -71,10 +73,10 @@ export default class TextVerification extends Component {
   if (!err) {
       // for android, verification is done, because the sms has been read automatically
     // for ios, this means the sms has been sent out, you need to call verify with the received code
-    console.log('sent to user');
     this.setState({
       spinner: false,
       enterCode: true,
+      phoneNumber: value['phoneNumber'],
     });
     this.refs.form.refs.textInput.setNativeProps({ text: '' });
 
@@ -91,19 +93,26 @@ _verifyCode = () => {
     this.setState({ spinner: true });
     var value = this.refs.form.getValues();
     var self = this;
-    Sinch.verify(value['code'], (err, res) => {
+    Sinch.verify(value['code'], async (err, res) => {
     if (!err) {
         // done!
-          Alert.alert('Success!', 'You have successfully verified your phone number');
-          firebase.auth().signInAnonymously().catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // ...
-            console.log('uError signing');
+        Alert.alert('Success!', 'You have successfully verified your phone number');
+        try {
+          await AsyncStorage.setItem('@UserPhoneNumber:key',
+                                      this.state.phoneNumber +'@oremi.us');
+        } catch (error) {
+          // Error saving data
+        }
 
-
-          });
+        firebase.auth()
+        .createUserWithEmailAndPassword(
+          this.state.phoneNumber +'@oremi.us',
+          '?<2L|mt+38v9|v}q23A1984D9|6LnB'+this.state.phoneNumber +'@oremi.us')
+        .catch(function(error) {
+           // Handle Errors here.
+           var errorCode = error.code;
+           var errorMessage = error.message;
+        });
     } else {
       this.setState({ spinner: false });
       Alert.alert('Oops!', err.message);
@@ -141,7 +150,6 @@ _verifyCode = () => {
   }
 
   _renderCallingCode = () => {
-
     if (this.state.enterCode)
       return (
         <View />

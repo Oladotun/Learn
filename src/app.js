@@ -3,7 +3,8 @@ import{
   Navigator,
   View,
   Text,
-  StyleSheet
+  StyleSheet,
+  AsyncStorage
 } from 'react-native';
 
 import TextVerification from './TextVerification';
@@ -29,48 +30,93 @@ export default class App extends Component {
     this.state = {
         user: null,
         loading: true,
-      unSubscribe: null
+      unSubscribe: null,
+       phoneNumber: null
       };
 
   }
 
-  componentWillMount(){
+  _userState = () => {
     var self = this;
     self.state.unSubscribe = firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // User is signed in.
         var isAnonymous = user.isAnonymous;
         var uid = user.uid;
-        console.log('user signed in mount');
+
         self.setState({
           user: user,
           loading: false
-        })
+        });
       } else {
         // User is signed out.
-        self.setState({
-            loading: false
-          })      }
-      // ...
+      }
       });
+  }
 
+ _retrieveValue = async () => {
+    try {
+      var self = this;
+      this.state.phoneNumber = await AsyncStorage.getItem('@UserPhoneNumber:key');
+      var password = '?<2L|mt+38v9|v}q23A1984D9|6LnB'+this.state.phoneNumber;
+      var user = firebase.auth().currentUser;
+      if (user) {
+        self.setState({
+          user: user,
+          loading: false
+        });
+      } else {
+        this._userState();
+        if (self.state.phoneNumber  !== null){
+             firebase.auth()
+            .signInWithEmailAndPassword(self.state.phoneNumber, password)
+            .catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // go to verifcation page
+                // ...
+                console.log(errorMessage);
+                self.setState({ // go to text verification
+                  user: null,
+                  loading: false
+                });
+              });
+
+        } else { // go to text verifcation
+          self.setState({
+            user: null,
+            loading: false
+          });
+
+        }
+
+      }
+
+    } catch (error) {
+      // Error retrieving data
+    }
+  }
+
+  componentWillMount(){
+    this._retrieveValue();
 
   }
   componentDidMount(){
 
   }
+  componentWillUnmount(){
+    this.state.unSubscribe();
+  }
 
   render(){
 
-
-
-        if(this.state.loading) {
+      if(this.state.loading) {
            return(
            <View style ={styles.container}>
               <Text style ={styles.welcome}>loading</Text>
            </View>);
         } else if (this.state.user) {
-          this.state.unSubscribe();
             return(
               <Navigator
                 // Default to movies route
@@ -82,7 +128,6 @@ export default class App extends Component {
               />
         );
         } else {
-          this.state.unSubscribe();
           return (
             <Navigator
               // Default to movies route
