@@ -46,7 +46,8 @@ export default class TextVerification extends Component {
         cca2: 'US',
         callingCode: '1'
       },
-      phoneNumber: null
+      phoneNumber: null,
+      error: 0
     };
 
 
@@ -66,28 +67,44 @@ export default class TextVerification extends Component {
       });
   }
 
+  _validatePhoneNumber = (phoneNumber) => {
+    if (phoneNumber == null) {
+      return false;
+    }
+
+    return phoneNumber.toString().length == 10
+  }
   _getCode = () =>{
     this.setState({ spinner: true });
     var value = this.refs.form.getValues();
-    Sinch.sms(value['phoneNumber'], custom, (err, res) => {
-  if (!err) {
-      // for android, verification is done, because the sms has been read automatically
-    // for ios, this means the sms has been sent out, you need to call verify with the received code
-    this.setState({
-      spinner: false,
-      enterCode: true,
-      phoneNumber: value['phoneNumber'],
-    });
-    this.refs.form.refs.textInput.setNativeProps({ text: '' });
 
-    Alert.alert('Sent!', "We've sent you a verification code", [{
-      text: 'OK',
-      onPress: () => this.refs.form.refs.textInput.focus()
-    }]);
-  } else {
-    console.log(err);
-  }
-});
+    if (!this._validatePhoneNumber(value['phoneNumber'])) {
+      this.setState({
+        error: 1
+      });
+      return
+    };
+
+    Sinch.sms(value['phoneNumber'], custom, (err, res) => {
+      if (!err) {
+          // for android, verification is done, because the sms has been read automatically
+        // for ios, this means the sms has been sent out, you need to call verify with the received code
+        this.setState({
+          spinner: false,
+          enterCode: true,
+          phoneNumber: value['phoneNumber'],
+          error: 0
+        });
+        this.refs.form.refs.textInput.setNativeProps({ text: '' });
+
+        Alert.alert('Sent!', "We've sent you a verification code", [{
+          text: 'OK',
+          onPress: () => this.refs.form.refs.textInput.focus()
+        }]);
+      } else {
+        console.log(err);
+      }
+    });
   }
 _verifyCode = () => {
     this.setState({ spinner: true });
@@ -114,8 +131,10 @@ _verifyCode = () => {
            var errorMessage = error.message;
         });
     } else {
-      this.setState({ spinner: false });
-      Alert.alert('Oops!', err.message);
+      this.setState({
+        spinner: false,
+      error: 1 });
+      return;
     }
   });
 }
@@ -165,6 +184,7 @@ _verifyCode = () => {
 
   render() {
     let headerText = `Whats your ${this.state.enterCode ? 'verification code' : 'phone number'}?`;
+    let errorText = `Your ${this.state.enterCode ? 'verification code' : 'phone number'} is wrong, re-enter`;
     let buttonText = this.state.enterCode ? 'Verify confirmation code' : 'Send confirmation code';
     let textStyle = this.state.enterCode ? {
       height: 50,
@@ -215,6 +235,8 @@ _verifyCode = () => {
                 <Text style={styles.buttonText}>{ buttonText }</Text>
               </TouchableOpacity>
 
+              <Text style={[styles.error,{opacity:this.state.error}]} > {errorText}</Text>
+
            </Form>
         </Background>
     );
@@ -244,6 +266,14 @@ const styles = StyleSheet.create({
     margin: 10,
 
   },
+  error: {
+    color: '#ff0000',
+    fontSize: 15,
+    fontFamily: 'Helvetica',
+    alignSelf: 'center',
+    marginTop: 10
+  }
+  ,
   instructions: {
     textAlign: 'center',
     color: '#333333',
