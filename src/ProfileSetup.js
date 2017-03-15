@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'react-native-fetch-blob';
+import Form from 'react-native-form';
 import firebase from 'firebase';
 import Background from './Background';
 
@@ -29,6 +30,7 @@ let config = {
 const {width, height} = Dimensions.get('window');
 firebase.initializeApp(config);
 const storage = firebase.storage()
+const database = firebase.database();
 
 // Prepare Blob support
 const Blob = RNFetchBlob.polyfill.Blob
@@ -69,15 +71,48 @@ export default class ProfileSetUp extends Component {
   constructor(props){
     super(props);
     this.state = {
+      uploadURL: undefined,
       opacity: 1,
       firstName: '',
       lastName: '',
-      sex: ''
+      sex: 'male',
+      error1: 0,
+      error2:0,
+      error3: 0,
     }
   }
 
   _goToNext(){
-    this.props.navigator.push({name:'home'});
+    // validate
+    if (this.state.firstName === '' && this.state.lastName === ''
+        && (this.state.uploadURL === '' || this.state.uploadURL === undefined )) {
+      // error
+      this.setState({error1: 1, error2: 1, error3: 1});
+    } else if(this.state.firstName === ''){
+      this.setState({error1: 1});
+    } else if(this.state.lastName === '') {
+      this.setState({error2: 1});
+    } else if(this.state.uploadURL === '' || this.state.uploadURL === undefined) {
+      this.setState({error3: 1});
+    } else {
+      var user = firebase.auth().currentUser;
+      var self = this;
+      firebase.database().ref('usersSex/' + user.uid).set({
+        sex: this.state.sex
+      });
+      user.updateProfile({
+        displayName: this.state.firstName + " " + this.state.lastName,
+        photoURL: this.state.uploadURL
+            }).then(function() {
+              // Update successful.
+              self.props.navigator.push({name:'home'});
+            }, function(error) {
+              // An error happened.
+      });
+
+
+
+    }
   }
 
   _pickImage() {
@@ -113,7 +148,7 @@ export default class ProfileSetUp extends Component {
                   return <ActivityIndicator />
                 default:
                   return (
-
+                <View>
                   <Image
                     source={{ uri: this.state.uploadURL }}
                     style={ styles.image }>
@@ -123,10 +158,16 @@ export default class ProfileSetUp extends Component {
                       </Text>
                     </TouchableOpacity>
                   </Image>
+                  <Text style={[styles.error,{opacity:this.state.error3}]}>
+                  Picture required
+                  </Text>
+                  </View>
+
                   )
               }
             })()
           }
+          <Form ref={'form'} style={styles.form}>
           <TextInput
             ref='SecondInput'
             style={styles.inputField}
@@ -134,7 +175,7 @@ export default class ProfileSetUp extends Component {
             keyboardType='email-address'
             autoCorrect={false}
             autoCapitalize='none'
-            onChangeText={(text) => this.setState({firstName: text })}
+            onChangeText={(text) => this.setState({firstName: text, error1:0 })}
             underlineColorAndroid='transparent'
             placeholder='Your First Name'
             placeholderTextColor='rgba(255,255,255,.6)'
@@ -142,6 +183,7 @@ export default class ProfileSetUp extends Component {
               this.refs.ThirdInput.focus();
             }}
           />
+          <Text style={[styles.error,{opacity:this.state.error1}]}> Field cannot be empty</Text>
           <TextInput
             ref='ThirdInput'
             style={styles.inputField}
@@ -149,7 +191,7 @@ export default class ProfileSetUp extends Component {
             keyboardType='email-address'
             autoCorrect={false}
             autoCapitalize='none'
-            onChangeText={(text) => this.setState({ lastName: text })}
+            onChangeText={(text) => this.setState({ lastName: text, error2: 0 })}
             underlineColorAndroid='transparent'
             placeholder='Your Last Name'
             placeholderTextColor='rgba(255,255,255,.6)'
@@ -157,6 +199,8 @@ export default class ProfileSetUp extends Component {
               Keyboard.dismiss();
             }}
           />
+          <Text style={[styles.error,{opacity:this.state.error2}]}> Field cannot be empty</Text>
+          </Form>
           <View style={styles.pickerContainer}>
           <Text style={styles.text}>Sex:</Text>
             <Picker
@@ -196,6 +240,14 @@ const styles = StyleSheet.create({
     top:40,
     alignSelf: 'center'
   },
+  error: {
+    color: '#ff0000',
+    fontSize: 15,
+    fontFamily: 'Helvetica',
+    alignSelf: 'center',
+    marginTop: 10
+  }
+  ,
   pickerContainer: {
     flexDirection: 'row',
   },

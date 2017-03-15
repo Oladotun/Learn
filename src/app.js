@@ -61,10 +61,14 @@ export default class App extends Component {
       var password = '?<2L|mt+38v9|v}q23A1984D9|6LnB'+this.state.phoneNumber;
       var user = firebase.auth().currentUser;
       if (user) {
+        console.log('user displayName');
+        console.log(user.displayName);
+
         self.setState({
           user: user,
           loading: false
         });
+
       } else {
         this._userState();
         if (self.state.phoneNumber  !== null){
@@ -116,17 +120,33 @@ export default class App extends Component {
            <View style ={styles.container}>
               <Text style ={styles.welcome}>loading</Text>
            </View>);
-        } else if (this.state.user) {
-            return(
-              <Navigator
-                // Default to movies route
-                initialRoute={{name: 'home'}}
-                // Use FloatFromBottom transition between screens
-                configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
-                // Pass a route mapper functions
-                renderScene={RouteMapper}
-              />
-        );
+        } else if (this.state.user){
+          if (this.state.user.displayName === null || this.state.user.photoURL === null) {
+            console.log(this.state.user);
+              return(
+                <Navigator
+                  // Default to movies route
+                  initialRoute={{name: 'profileSetUp'}}
+                  // Use FloatFromBottom transition between screens
+                  configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
+                  // Pass a route mapper functions
+                  renderScene={RouteMapper}
+                />
+                );
+          } else {
+            console.log(this.state.user);
+              return(
+                <Navigator
+                  // Default to movies route
+                  initialRoute={{name: 'home'}}
+                  // Use FloatFromBottom transition between screens
+                  configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
+                  // Pass a route mapper functions
+                  renderScene={RouteMapper}
+                />
+          );
+
+          }
         } else {
           return (
             <Navigator
