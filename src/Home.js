@@ -8,8 +8,10 @@ import{
   TabBarIOS
 } from 'react-native';
 import Background from './Background';
-import EventsHome from './EventsHome';
-import Settings from './Settings';
+import EventsHome from './events/EventsHome';
+import Settings from './settings/Settings';
+import Contacts from './contacts/Contact';
+import Chats from './chat/Chats'
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -35,8 +37,12 @@ export default class Home extends Component {
   renderScreen = () => {
     if (this.state.selectedTab === 'eventHome'){
       return(<EventsHome/>)
-    } else {
+    } else if (this.state.selectedTab === 'settings'){
       return(<Settings/>)
+    }else if (this.state.selectedTab === 'contacts'){
+      return(<Contacts/>)
+    }else if (this.state.selectedTab === 'chats'){
+      return(<Chats/>)
     }
   }
 
@@ -71,21 +77,46 @@ export default class Home extends Component {
          {this.renderScreen()}
       </MaterialIcon.TabBarItem>
 
-
-      <FontAwesome.TabBarItem
+      <Icon.TabBarItem
           title=""
-          iconName="cog"
-
-
-          selected={this.state.selectedTab === 'redTab'}
+          iconName="ios-people-outline"
+          selected={this.state.selectedTab === 'contacts'}
           onPress={() => {
             this.setState({
-              selectedTab: 'redTab',
+              selectedTab: 'contacts',
 
             });
           }}>
           {this.renderScreen()}
-        </FontAwesome.TabBarItem>
+      </Icon.TabBarItem>
+
+      <Icon.TabBarItem
+        title=""
+        iconName="ios-text-outline"
+
+        selected={this.state.selectedTab === 'chats'}
+        onPress={() => {
+          this.setState({
+            selectedTab: 'chats',
+
+          });
+        }}
+        >
+         {this.renderScreen()}
+      </Icon.TabBarItem>
+
+      <Icon.TabBarItem
+          title=""
+          iconName="ios-settings-outline"
+          selected={this.state.selectedTab === 'settings'}
+          onPress={() => {
+            this.setState({
+              selectedTab: 'settings',
+
+            });
+          }}>
+          {this.renderScreen()}
+      </Icon.TabBarItem>
 
     </TabBarIOS>
 
