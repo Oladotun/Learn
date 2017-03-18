@@ -18,8 +18,10 @@ const RouteMapper = (route, navigator) => {
     return <TextVerification navigator={navigator} />
   }else if(route.name === 'home') {
     return <Home navigator={navigator} />
-  } else if(route.name === 'profileSetUp'); {
+  } else if(route.name === 'profileSetUp') {
     return <ProfileSetUp navigator={navigator} />
+  } else if(route.name === 'settings'){
+    return <Settings navigator={navigator}/>
   }
 }
 
