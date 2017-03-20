@@ -5,13 +5,18 @@ import{
   Text,
   StyleSheet,
   Button,
-  TabBarIOS
+  TabBarIOS,
+  Navigator,
+  TouchableOpacity
 } from 'react-native';
 import Background from './Background';
 import EventsHome from './events/EventsHome';
+
+import {SimpleApp} from './events/EventsHome';
 import Settings from './settings/Settings';
 import Contacts from './contacts/Contact';
 import Chats from './chat/Chats'
+import AddNewEvent from './events/AddNewEvent';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -33,10 +38,46 @@ export default class Home extends Component {
       // An error happened.
     });
   }
+  openMenu = (route) => {
+
+    console.log('Hey in home');
+    if (route.name === 'EventsHome') {
+      this.refs.nav.push({name:'AddNewEvent',
+                          title: 'Add New',
+                          openMenu: this.openMenu ,
+                          closeMenu: this.closeMenu
+                        });
+    }
+
+  }
+
+  closeMenu = () => {
+    console.log('close in home');
+    this.refs.nav.pop();
+  }
+
+
 
   renderScreen = () => {
     if (this.state.selectedTab === 'eventHome'){
-      return(<EventsHome/>)
+      return(
+        <Navigator
+              initialRoute = {{ name: 'EventsHome',
+                                title: 'EventsHome',
+                                openMenu: this.openMenu ,
+                                closeMenu: this.closeMenu}}
+              renderScene = { renderRouterScene  }
+              navigationBar = {
+                 <Navigator.NavigationBar
+                    style = { styles.navigationBar }
+                    routeMapper = { NavigationBarRouteMapper } />
+              }
+              ref = "nav"
+           />
+
+
+
+        )
     } else if (this.state.selectedTab === 'settings'){
       return(<Settings/>)
     }else if (this.state.selectedTab === 'contacts'){
@@ -50,16 +91,6 @@ export default class Home extends Component {
   render() {
 
     return (
-      // <View style={styles.container}>
-      // <Background>
-      //   <Text style={styles.welcome}>Home page</Text>
-      //   <Button title="Testing"
-      //   style={styles.welcome}
-      //   onPress={this._getClick}
-      //   color="#841584"
-      //   />
-      // </Background>
-      // // </View>
 
       <TabBarIOS>
       <MaterialIcon.TabBarItem
@@ -125,6 +156,64 @@ export default class Home extends Component {
   }
 }
 
+
+
+var NavigationBarRouteMapper = {
+   LeftButton(route, navigator, index, navState) {
+      // if(index > 0) {
+      console.log(route);
+         return (
+
+            <TouchableOpacity
+               onPress = {() => route.closeMenu() }>
+               <Text style={ styles.leftButton }>
+                  Back
+               </Text>
+            </TouchableOpacity>
+         )
+      // }
+      // else { return null }
+   },
+   RightButton(route, navigator, index, navState) {
+       return (
+         <TouchableOpacity
+            onPress = { () => route.openMenu(route) }>
+            <Text style = { styles.rightButton }>
+               { route.rightText || 'Menu' }
+            </Text>
+         </TouchableOpacity>
+      )
+   },
+   Title(route, navigator, index, navState) {
+      return (
+         <Text style = { styles.title }>
+            {route.title}
+         </Text>
+      )
+   }
+};
+
+const renderRouterScene = (route, navigator) => {
+      if(route.name === 'EventsHome') {
+         return (
+            <EventsHome
+               navigator = {navigator}
+               {...route.passProps}
+            />
+         )
+      }
+      if(route.name === 'AddNewEvent') {
+         return (
+            <AddNewEvent
+               navigator = {navigator}
+               {...route.passProps}
+            />
+         )
+      }
+   }
+
+
+
 const styles = StyleSheet.create({
   welcome: {
     fontSize: 20,
@@ -132,4 +221,24 @@ const styles = StyleSheet.create({
     margin: 10,
 
   },
+
+  navigationBar: {
+      backgroundColor: 'blue',
+   },
+   leftButton: {
+      color: '#ffffff',
+      margin: 10,
+      fontSize: 17,
+   },
+   title: {
+      paddingVertical: 10,
+      color: '#ffffff',
+      justifyContent: 'center',
+      fontSize: 18
+   },
+   rightButton: {
+      color: 'white',
+      margin: 10,
+      fontSize: 16
+   }
 });
