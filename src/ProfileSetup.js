@@ -18,6 +18,7 @@ import RNFetchBlob from 'react-native-fetch-blob';
 import Form from 'react-native-form';
 import firebase from 'firebase';
 import Background from './Background';
+import {styles} from './styles';
 
 // Init Firebase
 let config = {
@@ -232,83 +233,83 @@ export class ProfileSetUp extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  oremiImage: {
-    width: 150,
-    height: 90,
-    top:40,
-    alignSelf: 'center'
-  },
-  error: {
-    color: '#ff0000',
-    fontSize: 15,
-    fontFamily: 'Helvetica',
-    alignSelf: 'center',
-    marginTop: 10
-  }
-  ,
-  pickerContainer: {
-    flexDirection: 'row',
-  },
-  picker: {
-    height: width/4,
-    width: width/3,
-    borderColor: 'gray',
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 20,
-    marginTop: 60,
-  }
-  ,
-  image: {
-    height: width/3,
-    width: width/3,
-    borderRadius: width/6,
-    borderWidth: 1,
-    borderColor: 'gray',
-    justifyContent: 'center',
-
-  },
-  message:{
-    textAlign: 'center',
-    color: 'blue',
-    textDecorationLine: 'underline'
-  },
-  inputField: {
-    width: width/1.25,
-    height: 40,
-    backgroundColor: 'rgba(0,0,0,.3)',
-    borderRadius: 5,
-    marginTop: 10,
-    marginLeft: 30,
-    marginRight: 30,
-    alignItems: 'center',
-    textAlign: 'center',
-    color: '#fff'
-  },
-  btnContainers: {
-    marginTop: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 280
-  },
-  submitBtnContainer: {
-    width: 120,
-    height: 40,
-    backgroundColor: '#4A90E2',
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  submitBtn: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#FFFFFD'
-  }
-})
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   oremiImage: {
+//     width: 150,
+//     height: 90,
+//     top:40,
+//     alignSelf: 'center'
+//   },
+//   error: {
+//     color: '#ff0000',
+//     fontSize: 15,
+//     fontFamily: 'Helvetica',
+//     alignSelf: 'center',
+//     marginTop: 10
+//   }
+//   ,
+//   pickerContainer: {
+//     flexDirection: 'row',
+//   },
+//   picker: {
+//     height: width/4,
+//     width: width/3,
+//     borderColor: 'gray',
+//     justifyContent: 'center',
+//   },
+//   text: {
+//     fontSize: 20,
+//     marginTop: 60,
+//   }
+//   ,
+//   image: {
+//     height: width/3,
+//     width: width/3,
+//     borderRadius: width/6,
+//     borderWidth: 1,
+//     borderColor: 'gray',
+//     justifyContent: 'center',
+//
+//   },
+//   message:{
+//     textAlign: 'center',
+//     color: 'blue',
+//     textDecorationLine: 'underline'
+//   },
+//   inputField: {
+//     width: width/1.25,
+//     height: 40,
+//     backgroundColor: 'rgba(0,0,0,.3)',
+//     borderRadius: 5,
+//     marginTop: 10,
+//     marginLeft: 30,
+//     marginRight: 30,
+//     alignItems: 'center',
+//     textAlign: 'center',
+//     color: '#fff'
+//   },
+//   btnContainers: {
+//     marginTop: 15,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     width: 280
+//   },
+//   submitBtnContainer: {
+//     width: 120,
+//     height: 40,
+//     backgroundColor: '#4A90E2',
+//     borderRadius: 5,
+//     justifyContent: 'center',
+//     alignItems: 'center'
+//   },
+//   submitBtn: {
+//     fontSize: 20,
+//     fontWeight: '800',
+//     color: '#FFFFFD'
+//   }
+// })

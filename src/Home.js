@@ -87,6 +87,7 @@ export default class Home extends Component {
                     routeMapper = { NavigationBarRouteMapper } />
               }
               ref = "nav"
+              sceneStyle={{paddingTop: 64}}
            />
 
 
