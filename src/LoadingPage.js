@@ -9,7 +9,7 @@ import{
 
 import TextVerification from './TextVerification';
 import Home from './Home';
-import ProfileSetUp from './ProfileSetup';
+import {database,ProfileSetUp} from './ProfileSetup';
 
 import firebase from "firebase";
 
@@ -33,7 +33,9 @@ export default class LoadingPage extends Component {
         user: null,
         loading: true,
       unSubscribe: null,
-       phoneNumber: null
+       phoneNumber: null,
+       displayName: null,
+       photoURL: null
       };
 
   }
@@ -46,10 +48,28 @@ export default class LoadingPage extends Component {
         var isAnonymous = user.isAnonymous;
         var uid = user.uid;
 
-        self.setState({
-          user: user,
-          loading: false
+        var userId = firebase.auth().currentUser.uid;
+        firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
+          var username = snapshot.val().displayName;
+          var photoURL = snapshot.val().photoURL;
+
+          self.setState({
+            user: user,
+            loading: false,
+            displayName: username,
+            photoURL: photoURL
+          });
+          // ...
+        }).catch(function(error){
+          self.setState({
+            user: user,
+            loading: false,
+            displayName: null,
+            photoURL: null
+          });
         });
+
+
       } else {
         // User is signed out.
       }
@@ -123,8 +143,9 @@ export default class LoadingPage extends Component {
               <Text style ={styles.welcome}>loading</Text>
            </View>);
         } else if (this.state.user){
-          if (this.state.user.displayName === null || this.state.user.photoURL === null) {
+          if (this.state.displayName === null || this.state.photoURL === null) {
             console.log(this.state.user);
+            console.log('profile');
               return(
                 <Navigator
                   // Default to movies route

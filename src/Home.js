@@ -39,21 +39,33 @@ export default class Home extends Component {
     });
   }
   openMenu = (route) => {
-
-    console.log('Hey in home');
     if (route.name === 'EventsHome') {
       this.refs.nav.push({name:'AddNewEvent',
                           title: 'Add New',
                           openMenu: this.openMenu ,
-                          closeMenu: this.closeMenu
+                          closeMenu: this.closeMenu,
+                          rightText: 'Save',
+                          leftText: 'Close'
                         });
     }
 
   }
 
-  closeMenu = () => {
+  closeMenu = (route) => {
     console.log('close in home');
-    this.refs.nav.pop();
+    if (route.name === 'AddNewEvent') {
+        this.refs.nav.pop();
+    }
+    if (route.name === 'EventsHome') {
+      this.refs.nav.push({name:'AddNewEvent',
+                          title: 'Add Event',
+                          openMenu: this.openMenu ,
+                          closeMenu: this.closeMenu,
+                          rightText: 'Save',
+                          leftText: 'Close'
+                        });
+    }
+
   }
 
 
@@ -65,7 +77,9 @@ export default class Home extends Component {
               initialRoute = {{ name: 'EventsHome',
                                 title: 'EventsHome',
                                 openMenu: this.openMenu ,
-                                closeMenu: this.closeMenu}}
+                                closeMenu: this.closeMenu,
+                                rightText: 'Search',
+                                leftText: 'Add'}}
               renderScene = { renderRouterScene  }
               navigationBar = {
                  <Navigator.NavigationBar
@@ -165,9 +179,9 @@ var NavigationBarRouteMapper = {
          return (
 
             <TouchableOpacity
-               onPress = {() => route.closeMenu() }>
+               onPress = {() => route.closeMenu(route) }>
                <Text style={ styles.leftButton }>
-                  Back
+                  { route.leftText || 'Add' }
                </Text>
             </TouchableOpacity>
          )
@@ -223,21 +237,21 @@ const styles = StyleSheet.create({
   },
 
   navigationBar: {
-      backgroundColor: 'blue',
+      backgroundColor: '#ffffff',
    },
    leftButton: {
-      color: '#ffffff',
+      color: '#4A90E2',
       margin: 10,
       fontSize: 17,
    },
    title: {
       paddingVertical: 10,
-      color: '#ffffff',
+      color: '#000000',
       justifyContent: 'center',
       fontSize: 18
    },
    rightButton: {
-      color: 'white',
+      color: '#4A90E2',
       margin: 10,
       fontSize: 16
    }

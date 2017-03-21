@@ -29,8 +29,8 @@ let config = {
 };
 const {width, height} = Dimensions.get('window');
 firebase.initializeApp(config);
-const storage = firebase.storage()
-const database = firebase.database();
+export const storage = firebase.storage()
+export const database = firebase.database();
 
 // Prepare Blob support
 const Blob = RNFetchBlob.polyfill.Blob
@@ -67,7 +67,7 @@ const uploadImage = (uri, mime = 'application/octet-stream') => {
 }
 
 
-export default class ProfileSetUp extends Component {
+export class ProfileSetUp extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -97,18 +97,22 @@ export default class ProfileSetUp extends Component {
     } else {
       var user = firebase.auth().currentUser;
       var self = this;
-      firebase.database().ref('usersSex/' + user.uid).set({
-        sex: this.state.sex
-      });
-      user.updateProfile({
+      firebase.database().ref('users/' + user.uid).set({
+        sex: this.state.sex,
         displayName: this.state.firstName + " " + this.state.lastName,
         photoURL: this.state.uploadURL
-            }).then(function() {
-              // Update successful.
-              self.props.navigator.push({name:'home'});
-            }, function(error) {
-              // An error happened.
       });
+       self.props.navigator.push({name:'home'});
+      // user.updateProfile({
+      //   displayName: this.state.firstName + " " + this.state.lastName,
+      //   photoURL: this.state.uploadURL
+      //       }).then(function() {
+      //         // Update successful.
+      //         console.log(user);
+      //         self.props.navigator.push({name:'home'});
+      //       }, function(error) {
+      //         // An error happened.
+      // });
 
 
 
