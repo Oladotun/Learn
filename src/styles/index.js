@@ -409,8 +409,8 @@ export const activityStyles = StyleSheet.create({
     color: Colors.bodyText,
   },
   messageText: {
-    color: Colors.bodyText,
-    marginLeft: 50,
+    color: Colors.brandPrimaryDark,
+    alignSelf: 'center',
     fontSize: 14,
     fontStyle: 'italic',
     fontWeight: '300',
@@ -449,36 +449,38 @@ export const overlayStyles = {
 
 export const autocompleteStyles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'white',
+    flex: 0,
+    backgroundColor: 'transparent',
   },
   textInputContainer: {
+    flexDirection: 'row',
     backgroundColor: 'white',
-    height: 44,
-    borderTopColor: 'white',
-    borderBottomColor: 'white',
+    height: height/12,
+    marginTop: 2
+    // borderTopColor: 'white',
+    // borderBottomColor: 'white',
   },
   textInput: {
     backgroundColor: 'white',
-    borderRadius: 5,
+    // borderRadius: 5,
     fontSize: 18,
     height: 28,
-    marginLeft: 8,
-    marginRight: 8,
-    marginTop: 7.5,
-    paddingBottom: 4.5,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 4.5,
+    // marginLeft: 8,
+    // marginRight: 8,
+    // marginTop: 7.5,
+    // paddingBottom: 4.5,
+    // paddingLeft: 10,
+    // paddingRight: 10,
+    // paddingTop: 4.5,
   },
   poweredContainer: {
     alignItems: 'center',
     backgroundColor: Colors.inactive,
     justifyContent: 'center',
   },
-  powered: {
-    marginTop: 15,
-  },
+  // powered: {
+  //   marginTop: 15,
+  // },
   listView: {
     flex: 1,
   },
