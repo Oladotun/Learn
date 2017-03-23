@@ -17,6 +17,8 @@
     "react-native-datepicker": "^1.4.4",
     "react-native-fetch-blob": "^0.10.2",
     "react-native-form": "^2.1.2",
+    "react-native-form-generator": "^0.9.9",
+    "react-native-google-places": "^2.0.9",
     "react-native-google-places-autocomplete": "^1.2.8",
     "react-native-image-picker": "^0.26.2",
     "react-native-keyboard-aware-scroll-view": "^0.2.7",
