@@ -8,10 +8,12 @@ import {
   TouchableOpacity,
   Dimensions,
   Modal,
-  TouchableHighlight
+  TouchableHighlight,
+  Image,
+  ActivityIndicator,
 } from 'react-native';
 
-
+import ImagePicker from 'react-native-image-picker';
 import { Form,
   Separator,InputField, LinkField,
   SwitchField, PickerField,DatePickerField,TimePickerField
@@ -21,21 +23,52 @@ import { styles,activityStyles,globals, formStyles, selectStyles,autocompleteSty
 import Icon from 'react-native-vector-icons/Ionicons';
 import RNGooglePlaces from 'react-native-google-places';
 import Colors from '../styles/colors';
+import {uploadImage} from '../ProfileSetup';
+
+
  var {height, width} = Dimensions.get('window');
 export default class AddNewEvent extends Component{
   constructor(props){
     super(props);
     this.state = {
       formData:{},
+      place: null,
+      uploadURL: 'nothing',
+      opacity: 1
     }
   }
 
+  _pickImage() {
+    this.setState({ uploadURL: '' })
+
+    ImagePicker.launchImageLibrary({}, response  => {
+      if (response === undefined) {
+        this.setState({ uploadURL: undefined });
+      } else {
+
+        uploadImage(response.uri)
+          .then((url) => {
+            this.setState({ uploadURL: url, opacity: 0})
+          })
+          .catch(error => {
+            this.setState({ uploadURL: undefined });
+            console.log(error)
+          })
+      }
+    })
+  }
+
+
+
   openSearchModal =() => {
+    var self = this;
    RNGooglePlaces.openAutocompleteModal()
    .then((place) => {
    console.log(place);
    // place represents user's selection from the
    // suggestions and it is a simplified Google Place object.
+   self.setState({place:place});
+
    })
    .catch(error => console.log(error.message));  // error is a Javascript Error object
  }
@@ -62,25 +95,60 @@ export default class AddNewEvent extends Component{
   handleFormFocus(e, component){
     //console.log(e, component);
   }
-  openTermsAndConditionsURL(){
+  openCategoryModal = () =>{
+    const items = [
+      "Item 1",
+      "Item 2",
+      "Item 3",
+      "Item 4",
+    ];
+    console.log('called category control');
+    return(
 
-  }
+        <ListViewSelect
+          list={items}
+          isVisible={true}
+          onClick={this.setItem}
+          onClose={this.closePopover}
+        />
 
-  _test = () => {
-    console.log('Test called');
+    )
   }
   render(){
+
+
     return (
-
-
       <KeyboardAwareScrollView  style={{flex:1}} extraScrollHeight={100}>
+      {
+        (() => {
+          switch (this.state.uploadURL) {
+            case null:
+              return null
+            case '':
+              return (
+                <View style={myStyles.imageContainer}>
+                  <ActivityIndicator />
+                </View>
+              )
+            default:
+                return(
+                  <Image
+                  style={myStyles.imageContainer}
+                    source={{ uri: this.state.uploadURL }}>
+                  <TouchableOpacity style={[{alignItems: 'center'},{justifyContent: 'center'}]}
+                  onPress={ () => this._pickImage()}>
+                      <Icon name="ios-camera" size={30} style={{opacity: this.state.opacity}} color={Colors.white}/>
+                      <Text style={[otherStyles.h4, globals.primaryText, {opacity: this.state.opacity}]}>Add a Photo</Text>
+                  </TouchableOpacity>
+                  </Image>
+
+                )
+          }
+        })()
+
+      }
 
 
-
-      <TouchableOpacity style={myStyles.imageContainer} onPress={this._test()}>
-          <Icon name="ios-camera" size={30} color={Colors.white}/>
-          <Text style={[otherStyles.h4, globals.primaryText]}>Add a Photo</Text>
-      </TouchableOpacity>
       <Form
         ref='registrationForm'
         onFocus={this.handleFormFocus.bind(this)}
@@ -132,15 +200,27 @@ export default class AddNewEvent extends Component{
            mode="datetime"
            date={new Date()}
            placeholder='Choose Start Time'/>
-        <Separator />
-        <LinkField label="Select a location" onPress={()=>{
+        <LinkField label={this.state.place==null? "Select a location":this.state.place.name} onPress={()=>{
             this.openSearchModal();
         }}/>
-        <SwitchField label='Do you want your event to be private?'
+        <PickerField ref='event_category'
+          label='Select event type'
+          value={""}
+          options={{
+             'conference': "Conferences",
+           'concert': "Concerts",
+             'education': "Education",
+             'get together': "Get together",
+             'parties':   "Parties",
+              "religious": "Religious",
+             'weddings': "Weddings",
+             'other': "Other"
+          }}/>
+        <SwitchField label='Make event private?'
           ref="is_event_private"
           />
         <PickerField ref='user_per_groupchat'
-          label='max number of users per chat'
+          label='Number of users per chat'
           value={4}
           options={{
             4: '4',
