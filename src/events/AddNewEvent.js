@@ -11,6 +11,7 @@ import {
   TouchableHighlight,
   Image,
   ActivityIndicator,
+  Alert
 } from 'react-native';
 
 import ImagePicker from 'react-native-image-picker';
@@ -91,6 +92,23 @@ export default class AddNewEvent extends Component{
 
     this.setState({formData:formData})
     this.props.onFormChange && this.props.onFormChange(formData);
+
+
+  }
+
+  validate = () => {
+    if(this.state.formData.event_title){
+      Alert.alert('You Legal', "We've sent you a verification code", [{
+        text: 'OK',
+        onPress: () => {console.log('legal');}
+      }]);
+    } else {
+      Alert.alert('You causing problems', "We've sent you a verification code", [{
+        text: 'OK',
+        onPress: () => {console.log('aint legal');}
+      }]);
+
+    }
   }
   handleFormFocus(e, component){
     //console.log(e, component);
@@ -199,39 +217,47 @@ export default class AddNewEvent extends Component{
            minimumDate={new Date('1/1/1900')}
            mode="datetime"
            date={new Date()}
-           placeholder='Choose Start Time'/>
-        <LinkField label={this.state.place==null? "Select a location":this.state.place.name} onPress={()=>{
-            this.openSearchModal();
-        }}/>
+           iconRight= {[<Icon style={{alignSelf:'center', marginLeft:10}} name='ios-arrow-forward' size={30} />,
+                       <Icon style={{alignSelf:'center', marginLeft:10}} name='ios-arrow-down' size={30} />
+                       ]}
+           placeholder='Start Time'/>
         <PickerField ref='event_category'
           label='Select event type'
-          value={""}
+          value={'get together'}
+          iconRight= {[<Icon style={{marginTop: 7, position:'absolute', right: 10}} name='ios-arrow-forward' size={30} />,
+                      <Icon style={{marginTop: 7, position:'absolute', right: 10}} name='ios-arrow-down' size={30} />
+                      ]}
           options={{
              'conference': "Conferences",
            'concert': "Concerts",
              'education': "Education",
              'get together': "Get together",
              'parties':   "Parties",
-              "religious": "Religious",
+              'religious': "Religious",
              'weddings': "Weddings",
              'other': "Other"
           }}/>
-        <SwitchField label='Make event private?'
-          ref="is_event_private"
-          />
         <PickerField ref='user_per_groupchat'
           label='Number of users per chat'
-          value={4}
+          value={'6'}
+          iconRight= {[<Icon style={{marginTop: 7, position:'absolute', right: 10}} name='ios-arrow-forward' size={30} />,
+                      <Icon style={{marginTop: 7, position:'absolute', right: 10}} name='ios-arrow-down' size={30} />
+                      ]}
           options={{
             4: '4',
             5: '5',
             6: '6',
             7: '7',
             8: '8',
+          }}
+
+          />
+          <LinkField label={this.state.place==null? "Select a location":this.state.place.name} onPress={()=>{
+              this.openSearchModal();
           }}/>
-
-
-
+          <SwitchField label='Make event private?'
+            ref="is_event_private"
+            />
         <Text>{JSON.stringify(this.state.formData)}</Text>
         </Form>
 
@@ -261,6 +287,9 @@ export default class AddNewEvent extends Component{
       alignItems: 'center',
       justifyContent: 'center'
     },
+    alignRight:{
+      marginTop: 7, position:'absolute', right: 10
+    }
 
 
 

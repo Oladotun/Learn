@@ -7,7 +7,8 @@ import{
   Button,
   TabBarIOS,
   Navigator,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 import Background from './Background';
 import EventsHome from './events/EventsHome';
@@ -27,7 +28,8 @@ export default class Home extends Component {
   constructor(props){
     super(props);
     this.state = {
-      selectedTab:'eventHome'
+      selectedTab:'eventHome',
+      rightButtonValidated: false
     }
   }
 
@@ -39,6 +41,7 @@ export default class Home extends Component {
     });
   }
   openMenu = (route) => {
+    // console.log(this.refs);
     if (route.name === 'EventsHome') {
       this.refs.nav.push({name:'AddNewEvent',
                           title: 'Add New',
@@ -48,6 +51,16 @@ export default class Home extends Component {
                           leftText: 'Close'
                         });
     }
+    if (route.name === 'AddNewEvent') {
+      this.refs.nav.refs.eventAdd.validate();
+    }
+
+  }
+  onSaveButton = (rightButtonValidated) => {
+    if(rightButtonValidated){
+      console.log('Color save button');
+    }
+    // this.setState({ rightButtonValidated });
 
   }
 
@@ -62,7 +75,9 @@ export default class Home extends Component {
                           openMenu: this.openMenu ,
                           closeMenu: this.closeMenu,
                           rightText: 'Save',
-                          leftText: 'Close'
+                          leftText: 'Close',
+                          onSaveButton: this.onSaveButton,
+                            rightValid: this.state.rightButtonValidated
                         });
     }
 
@@ -79,7 +94,9 @@ export default class Home extends Component {
                                 openMenu: this.openMenu ,
                                 closeMenu: this.closeMenu,
                                 rightText: 'Search',
-                                leftText: 'Add'}}
+                                leftText: 'Add',
+                            onSaveButton: this.onSaveButton,
+                          rightValid: true}}
               renderScene = { renderRouterScene  }
               navigationBar = {
                  <Navigator.NavigationBar
@@ -104,6 +121,7 @@ export default class Home extends Component {
 
 
   render() {
+    const { rightButtonValidated } = this.state.rightButtonValidated;
 
     return (
 
@@ -192,8 +210,12 @@ var NavigationBarRouteMapper = {
    RightButton(route, navigator, index, navState) {
        return (
          <TouchableOpacity
-            onPress = { () => route.openMenu(route) }>
-            <Text style = { styles.rightButton }>
+            onPress = { () =>
+
+                route.openMenu(route)
+
+            }>
+            <Text style = {[styles.rightButton]}>
                { route.rightText || 'Menu' }
             </Text>
          </TouchableOpacity>
@@ -222,6 +244,8 @@ const renderRouterScene = (route, navigator) => {
             <AddNewEvent
                navigator = {navigator}
                {...route.passProps}
+               route={route}
+               ref='eventAdd'
             />
          )
       }
@@ -252,7 +276,7 @@ const styles = StyleSheet.create({
       fontSize: 18
    },
    rightButton: {
-      color: '#4A90E2',
+     color: '#4A90E2',
       margin: 10,
       fontSize: 16
    }
