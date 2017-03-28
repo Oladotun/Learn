@@ -32,15 +32,21 @@ export default class AddNewEvent extends Component{
   constructor(props){
     super(props);
     this.state = {
-      formData:{},
+      formData:{
+        event_time:new Date(),
+        user_per_groupchat: '6',
+        event_category: 'get together',
+        is_event_private: false
+      },
       place: null,
       uploadURL: 'nothing',
-      opacity: 1
+      opacity: 1,
+      gotonext:false
     }
   }
 
   _pickImage() {
-    this.setState({ uploadURL: '' })
+    this.setState({ uploadURL: 'loading' })
 
     ImagePicker.launchImageLibrary({}, response  => {
       if (response === undefined) {
@@ -50,6 +56,10 @@ export default class AddNewEvent extends Component{
         uploadImage(response.uri)
           .then((url) => {
             this.setState({ uploadURL: url, opacity: 0})
+            if (this.state.gotonext){
+              this.validate();
+            }
+
           })
           .catch(error => {
             this.setState({ uploadURL: undefined });
@@ -77,18 +87,21 @@ export default class AddNewEvent extends Component{
 
 
   handleFormChange(formData){
-    /*
-    formData will contain all the values of the form,
-    in this example.
 
-    formData = {
-    first_name:"",
-    last_name:"",
-    gender: '',
-    birthday: Date,
-    has_accepted_conditions: bool
+    if (formData.event_time == undefined) {
+      formData.event_time = new Date();
     }
-    */
+    if (formData.event_category == undefined) {
+      formData.event_category = 'get together';
+    }
+    if(formData.is_event_private == undefined){
+      formData.is_event_private = false;
+
+    }
+    if(formData.user_per_groupchat == undefined){
+      formData.user_per_groupchat = '6';
+    }
+
 
     this.setState({formData:formData})
     this.props.onFormChange && this.props.onFormChange(formData);
@@ -97,18 +110,59 @@ export default class AddNewEvent extends Component{
   }
 
   validate = () => {
-    if(this.state.formData.event_title){
-      Alert.alert('You Legal', "We've sent you a verification code", [{
-        text: 'OK',
-        onPress: () => {console.log('legal');}
-      }]);
-    } else {
-      Alert.alert('You causing problems', "We've sent you a verification code", [{
-        text: 'OK',
-        onPress: () => {console.log('aint legal');}
-      }]);
+    if (this.state.place !== null){
+      if (!this.state.formData.place) {
+        this.state.formData.place = this.state.place;
+        this.setState({formData:this.state.formData});
+      }
 
     }
+
+
+    if (!this.state.formData.event_title || this.state.formData.event_title === '' ){
+      ///error
+      Alert.alert('Event Title Required', "Enter Title Below", [{
+      //     text: 'OK',
+      //     onPress: () => {console.log('aint legal');}
+        }]);
+        return;
+    } else  if (!this.state.place) {
+
+      Alert.alert('Location Required!', "Select a location", [{
+          text: 'OK',
+      //     onPress: () => {console.log('aint legal');}
+        }]);
+        return;
+    }
+    this.setState({gotonext:false});
+
+
+    if (this.state.uploadURL){
+
+
+      if(this.state.uploadURL !='' && this.state.uploadURL != 'loading'){
+        this.state.formData.uploadURL= this.state.uploadURL;
+        this.setState({formData:this.state.formData});
+
+        this.props.navigator.pop();
+      } else if(this.state.uploadURL == 'nothing'){
+        this.props.navigator.pop();
+      }
+
+    }
+
+
+    // uploadURL
+
+    // JSON.stringify({this.state.formData, this.state.place});
+
+  // (https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})
+
+
+
+
+
+
   }
   handleFormFocus(e, component){
     //console.log(e, component);
@@ -206,15 +260,20 @@ export default class AddNewEvent extends Component{
           label='Event Info'
           placeholder='Tell us more'
           multiline = {true}
+
+
         />
         <InputField
           multiline={true}
           ref='event_website'
           placeholder='Your event website'
           placeholderStyle={{textAlign:'center'}}
+
+
+
            />
            <DatePickerField ref='event_time'
-           minimumDate={new Date('1/1/1900')}
+           minimumDate={new Date()}
            mode="datetime"
            date={new Date()}
            iconRight= {[<Icon style={{alignSelf:'center', marginLeft:10}} name='ios-arrow-forward' size={30} />,
@@ -252,7 +311,7 @@ export default class AddNewEvent extends Component{
           }}
 
           />
-          <LinkField label={this.state.place==null? "Select a location":this.state.place.name} onPress={()=>{
+          <LinkField ref='link_field'label={this.state.place==null? "Select a location":this.state.place.name} onPress={()=>{
               this.openSearchModal();
           }}/>
           <SwitchField label='Make event private?'
