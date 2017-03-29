@@ -24,7 +24,8 @@ import { styles,activityStyles,globals, formStyles, selectStyles,autocompleteSty
 import Icon from 'react-native-vector-icons/Ionicons';
 import RNGooglePlaces from 'react-native-google-places';
 import Colors from '../styles/colors';
-import {uploadImage} from '../ProfileSetup';
+import {database,uploadImage} from '../ProfileSetup';
+import firebase from 'firebase';
 
 
  var {height, width} = Dimensions.get('window');
@@ -33,7 +34,7 @@ export default class AddNewEvent extends Component{
     super(props);
     this.state = {
       formData:{
-        event_time:new Date(),
+        event_time: (new Date()).toString(),
         user_per_groupchat: '6',
         event_category: 'get together',
         is_event_private: false
@@ -41,13 +42,14 @@ export default class AddNewEvent extends Component{
       place: null,
       uploadURL: 'nothing',
       opacity: 1,
-      gotonext:false
+      gotonext:false,
+      loading: null
     }
   }
 
   _pickImage() {
-    this.setState({ uploadURL: 'loading' })
-
+    this.setState({uploadURL:'', loading: true })
+    var self = this;
     ImagePicker.launchImageLibrary({}, response  => {
       if (response === undefined) {
         this.setState({ uploadURL: undefined });
@@ -55,9 +57,9 @@ export default class AddNewEvent extends Component{
 
         uploadImage(response.uri)
           .then((url) => {
-            this.setState({ uploadURL: url, opacity: 0})
+            this.setState({ uploadURL: url, opacity: 0,loading:false})
             if (this.state.gotonext){
-              this.validate();
+              self.validate();
             }
 
           })
@@ -89,7 +91,7 @@ export default class AddNewEvent extends Component{
   handleFormChange(formData){
 
     if (formData.event_time == undefined) {
-      formData.event_time = new Date();
+      formData.event_time = (new Date()).toString();
     }
     if (formData.event_category == undefined) {
       formData.event_category = 'get together';
@@ -107,6 +109,9 @@ export default class AddNewEvent extends Component{
     this.props.onFormChange && this.props.onFormChange(formData);
 
 
+  }
+  buttonCalled = () => {
+    this.setState(gotonext:true);
   }
 
   validate = () => {
@@ -134,22 +139,31 @@ export default class AddNewEvent extends Component{
         }]);
         return;
     }
-    this.setState({gotonext:false});
 
 
-    if (this.state.uploadURL){
 
+    // if (this.state.loading){
+    if(this.state.uploadURL == 'nothing' && this.state.loading === null){
+      this.props.navigator.pop();
+    } else if(this.state.loading === true){
+        return
 
-      if(this.state.uploadURL !='' && this.state.uploadURL != 'loading'){
+      } else if(this.state.loading === false) {
         this.state.formData.uploadURL= this.state.uploadURL;
         this.setState({formData:this.state.formData});
 
-        this.props.navigator.pop();
-      } else if(this.state.uploadURL == 'nothing'){
+        var user = firebase.auth().currentUser;
+        console.log(user);
+       var userRef =  database.ref('users/' + user.uid );
+       var eventRef = userRef.child('createdEvents');
+       var newEventRef = eventRef.push().set(
+         this.state.formData
+        );
+
         this.props.navigator.pop();
       }
 
-    }
+    // }
 
 
     // uploadURL
@@ -167,25 +181,6 @@ export default class AddNewEvent extends Component{
   handleFormFocus(e, component){
     //console.log(e, component);
   }
-  openCategoryModal = () =>{
-    const items = [
-      "Item 1",
-      "Item 2",
-      "Item 3",
-      "Item 4",
-    ];
-    console.log('called category control');
-    return(
-
-        <ListViewSelect
-          list={items}
-          isVisible={true}
-          onClick={this.setItem}
-          onClose={this.closePopover}
-        />
-
-    )
-  }
   render(){
 
 
@@ -202,6 +197,19 @@ export default class AddNewEvent extends Component{
                   <ActivityIndicator />
                 </View>
               )
+            case 'nothing':
+            return(
+              <Image
+              style={myStyles.imageContainer}
+                source={{ uri: '' }}>
+              <TouchableOpacity style={[{alignItems: 'center'},{justifyContent: 'center'}]}
+              onPress={ () => this._pickImage()}>
+                  <Icon name="ios-camera" size={30} style={{opacity: this.state.opacity}} color={Colors.white}/>
+                  <Text style={[otherStyles.h4, globals.primaryText, {opacity: this.state.opacity}]}>Add a Photo</Text>
+              </TouchableOpacity>
+              </Image>
+
+            )
             default:
                 return(
                   <Image
@@ -279,6 +287,7 @@ export default class AddNewEvent extends Component{
            iconRight= {[<Icon style={{alignSelf:'center', marginLeft:10}} name='ios-arrow-forward' size={30} />,
                        <Icon style={{alignSelf:'center', marginLeft:10}} name='ios-arrow-down' size={30} />
                        ]}
+           prettyPrint = {true}
            placeholder='Start Time'/>
         <PickerField ref='event_category'
           label='Select event type'

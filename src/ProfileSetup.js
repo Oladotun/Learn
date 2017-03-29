@@ -32,6 +32,7 @@ const {width, height} = Dimensions.get('window');
 firebase.initializeApp(config);
 export const storage = firebase.storage()
 export const database = firebase.database();
+export const user = firebase.auth().currentUser;
 
 // Prepare Blob support
 const Blob = RNFetchBlob.polyfill.Blob
