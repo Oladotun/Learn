@@ -119,6 +119,11 @@ export default class Home extends Component {
     }
   }
 
+  componentWillMount(){
+    console.log('nothing');
+
+  }
+
 
   render() {
     const { rightButtonValidated } = this.state.rightButtonValidated;

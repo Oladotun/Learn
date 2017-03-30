@@ -35,7 +35,8 @@ export default class LoadingPage extends Component {
       unSubscribe: null,
        phoneNumber: null,
        displayName: null,
-       photoURL: null
+       photoURL: null,
+       userSet: false
       };
 
   }
@@ -43,6 +44,8 @@ export default class LoadingPage extends Component {
   _userState = () => {
     var self = this;
     self.state.unSubscribe = firebase.auth().onAuthStateChanged(function(user) {
+
+  if (!self.state.userSet){
       if (user) {
         // User is signed in.
         var isAnonymous = user.isAnonymous;
@@ -57,15 +60,21 @@ export default class LoadingPage extends Component {
             user: user,
             loading: false,
             displayName: username,
-            photoURL: photoURL
+            photoURL: photoURL,
+            userSet: true
           });
+
+
+
+
           // ...
         }).catch(function(error){
           self.setState({
             user: user,
             loading: false,
             displayName: null,
-            photoURL: null
+            photoURL: null,
+            userSet: true
           });
         });
 
@@ -73,6 +82,8 @@ export default class LoadingPage extends Component {
       } else {
         // User is signed out.
       }
+
+    }
       });
   }
 
@@ -93,7 +104,9 @@ export default class LoadingPage extends Component {
 
       } else {
         this._userState();
+        console.log("I am in null login with password");
         if (self.state.phoneNumber  !== null){
+          console.log("Sign in with phone");
              firebase.auth()
             .signInWithEmailAndPassword(self.state.phoneNumber, password)
             .catch(function(error) {
@@ -102,6 +115,7 @@ export default class LoadingPage extends Component {
                 var errorMessage = error.message;
                 // go to verifcation page
                 // ...
+                console.log("I caught an error")
                 console.log(errorMessage);
                 self.setState({ // go to text verification
                   user: null,
@@ -114,7 +128,7 @@ export default class LoadingPage extends Component {
             user: null,
             loading: false
           });
-
+          console.log("I should be null")
         }
 
       }
@@ -122,6 +136,12 @@ export default class LoadingPage extends Component {
     } catch (error) {
       // Error retrieving data
     }
+  }
+
+  shouldComponentUpdate(nextProps){
+      return !this.state.userSet;
+
+
   }
 
   componentWillMount(){
@@ -143,6 +163,7 @@ export default class LoadingPage extends Component {
               <Text style ={styles.welcome}>loading</Text>
            </View>);
         } else if (this.state.user){
+            this.state.unSubscribe();
           if (this.state.displayName === null || this.state.photoURL === null) {
             console.log(this.state.user);
             console.log('profile');
@@ -158,6 +179,8 @@ export default class LoadingPage extends Component {
                 );
           } else {
             console.log(this.state.user);
+            console.log(this.state.userSet);
+            console.log('I am in home navigator');
               return(
                 <Navigator
                   // Default to movies route
@@ -169,7 +192,10 @@ export default class LoadingPage extends Component {
                 />
           );
 
+
           }
+
+
         } else {
           return (
             <Navigator
