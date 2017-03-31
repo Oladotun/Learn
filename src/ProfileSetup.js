@@ -104,7 +104,9 @@ export class ProfileSetUp extends Component {
         displayName: this.state.firstName + " " + this.state.lastName,
         photoURL: this.state.uploadURL
       });
+
        self.props.navigator.push({name:'home'});
+       this.setInfo(user);
       // user.updateProfile({
       //   displayName: this.state.firstName + " " + this.state.lastName,
       //   photoURL: this.state.uploadURL
@@ -120,6 +122,18 @@ export class ProfileSetUp extends Component {
 
     }
   }
+
+  setInfo = async(user) => {
+    try {
+      await AsyncStorage.setItem('@userUid:key',user.uid);
+      await AsyncStorage.setItem('@userDisplayName:key',this.state.displayName);
+      await AsyncStorage.setItem('@userPhotoUrl',this.state.photoURL);
+    } catch (error) {
+      // Error saving data
+    }
+  }
+
+
 
   _pickImage() {
     this.setState({ uploadURL: '' })

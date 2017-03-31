@@ -36,7 +36,8 @@ export default class LoadingPage extends Component {
        phoneNumber: null,
        displayName: null,
        photoURL: null,
-       userSet: false
+       userSet: false,
+       uidSet: false
       };
 
   }
@@ -91,15 +92,23 @@ export default class LoadingPage extends Component {
     try {
       var self = this;
       this.state.phoneNumber = await AsyncStorage.getItem('@UserPhoneNumber:key');
+      var uidSet =await AsyncStorage.getItem('@userUid:key');
       var password = '?<2L|mt+38v9|v}q23A1984D9|6LnB'+this.state.phoneNumber;
       var user = firebase.auth().currentUser;
       if (user) {
         console.log('user displayName');
         console.log(user.displayName);
+        var setUid;
+        if(uidSet){
+          setUid = true;
+        } else {
+          setUid = false;
+        }
 
         self.setState({
           user: user,
-          loading: false
+          loading: false,
+          uidSet: setUid
         });
 
       } else {
@@ -144,6 +153,26 @@ export default class LoadingPage extends Component {
 
   }
 
+  setInfo = async() => {
+    try {
+      if (this.state.user.uid != null){
+
+        await AsyncStorage.setItem('@userUid:key',this.state.user.uid);
+      }
+      if(this.state.displayName != null){
+        await AsyncStorage.setItem('@userDisplayName:key',this.state.displayName);
+      }
+      if(this.state.photoURL != null){
+        await AsyncStorage.setItem('@userPhotoUrl',this.state.photoURL);
+      }
+
+
+
+    } catch (error) {
+      // Error saving data
+    }
+  }
+
   componentWillMount(){
     this._retrieveValue();
 
@@ -181,6 +210,13 @@ export default class LoadingPage extends Component {
             console.log(this.state.user);
             console.log(this.state.userSet);
             console.log('I am in home navigator');
+            if (!this.state.uidSet){
+              console.log('going to set info');
+                this.setInfo();
+            }
+
+
+
               return(
                 <Navigator
                   // Default to movies route

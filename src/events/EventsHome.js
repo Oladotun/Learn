@@ -1,59 +1,124 @@
 import React, { Component, PropTypes } from 'react';
-import { NavigatorIOS,Image, Text,View,TouchableHighlight,StyleSheet,Button,Navigator ,TouchableOpacity} from 'react-native';
+import { Image, Dimensions,Text,View,ScrollView,TouchableHighlight,StyleSheet,Navigator,AsyncStorage ,TouchableOpacity} from 'react-native';
 import AddNewEvent from './AddNewEvent'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { globals,styles } from '../styles';
 
-// import {database} from '../ProfileSetup'
+import {database} from '../ProfileSetup';
+import firebase from 'firebase';
+import EventBox from './EventBox';
 
+var {height, width} = Dimensions.get('window');
 
-
-// export const EventBoxes = ({ groups, visitEvent, visitCreateGroup }) => {
-//   console.log('GROUPS', groups);
-//   if (! groups.length ) { return <EmptyGroupBoxes handlePress={visitCreateGroup}/> }
-//   return (
-//     <View style={styles.boxContainer}>
-//       {groups.map((event, idx) => {
-//         if (!group) { return <EmptyGroupBox key={idx}/>}
-//
-//       })}
-//     </View>
-//   );
-// }
 
 export default class EventsHome extends Component {
 
     constructor(props){
       super(props);
       this.state = {
-        screen:''
+        screen:'',
+        createdEvents:{}
       }
+      this.loadParent();
     }
+
+    loadParent = async() =>{
+      let userUid = await AsyncStorage.getItem('@userUid:key');
+      console.log(userUid);
+      var self = this;
+      let userRef =  database.ref('users/' + userUid + '/createdEvents/' );
+      // let starCountRef = firebase.database().ref('/users/' + userUid);
+          userRef.on('value', function(snapshot) {
+            console.log(snapshot.val());
+            self.setState({createdEvents:snapshot.val()});
+            var info = snapshot.val();
+            for ((obj) in info) {
+              console.log(info[obj]);
+              console.log(obj);
+              console.log('\n');
+            }
+            // console.log("In event db");
+
+          });
+
+          // console.log(this.state.createdEvents)
+
+    }
+
+
+
     visitEvent = (event) => {
       console.log('my event pressed');
     }
     render() {
 
-      return (
-        <View style={myStyles.wrapper}>
-          <Text style={myStyles.welcome}>Hello, Chat App!</Text>
+        return (
 
-              <Image source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}} style={{width: 50, height: 50}}>
+          <View style={styles.container}>
+          {
+            (() => {
+              try {
+                if (this.state.createdEvents != null){
+                  console.log(Object.keys(this.state.createdEvents).length);
 
-              </Image>
-        </View>
-      );
+                  if(Object.keys(this.state.createdEvents).length > 0){
+                    console.log('length is long');
+
+
+                    return (
+                      <ScrollView style={{height:height/4}} horizontal={true} vertical={false}
+                      showsVerticalScrollIndicator={false}
+                      >
+                      {
+                        (()=> {
+                           var itemInfo = [];
+                            for (items in this.state.createdEvents){
+                              var eachItem = this.state.createdEvents[items];
+
+                              var name = eachItem['event_title'];
+                              var image = eachItem['uploadURL']
+
+
+                            itemInfo.push(  <EventBox key={items} eventObject={eachItem} name={name} imageUrl={image}/>);
+                            }
+                            return itemInfo;
+
+                          })()
+                        }
+                        </ScrollView>
+
+                      )}
+                    }
+
+              } catch(e){
+                console.log(e);
+              }
+            })()
+
+          }
+
+          <View style={{height:height/3}}>
+            <Text style = {styles.welcome}>help</Text>
+          </View>
+
+
+
+
+
+
+
+          </View>
+
+        );
   }
 }
 var myStyles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   wrapper: {
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#F5FCFF',
-    marginTop: 80
+
   },
   welcome: {
     fontSize: 20,
