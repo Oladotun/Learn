@@ -14,13 +14,13 @@ export default class EventBox extends Component {
   }
 
   visitItem = () =>{
-    this.props.navigator.push({name:'ViewEvent',eventObject:this.props.eventObject});
+    this.props.navigator.push({name:'ViewEvent',title: this.props.eventObject.event_title,eventObject:this.props.eventObject});
   }
 
   render() {
     const{eventObject,name, imageUrl} = this.props;
     var date = eventObject['event_time'];
-    var formattedDate = moment(new Date(date)).format('DD MM YYYY');
+    var formattedDate = moment(new Date(date)).format('DD MMM YYYY');
     return (
       <TouchableOpacity  onPress={() => this.visitItem()}>
         <View style={styles.touchContainer}>
