@@ -14,7 +14,7 @@ export default class EventBox extends Component {
   }
 
   visitItem = () =>{
-    console.log("Item visited")
+    this.props.navigator.push({name:'ViewEvent',eventObject:this.props.eventObject});
   }
 
   render() {

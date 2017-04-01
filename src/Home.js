@@ -12,6 +12,7 @@ import{
 } from 'react-native';
 import Background from './Background';
 import EventsHome from './events/EventsHome';
+import ViewEvent from './events/ViewEvent';
 
 import {SimpleApp} from './events/EventsHome';
 import Settings from './settings/Settings';
@@ -32,6 +33,9 @@ export default class Home extends Component {
       rightButtonValidated: false
     }
   }
+
+
+
 
   _getClick = () => {
     var self = this;
@@ -251,6 +255,18 @@ const renderRouterScene = (route, navigator) => {
                {...route.passProps}
                route={route}
                ref='eventAdd'
+            />
+         )
+      }
+
+      if(route.name === 'ViewEvent') {
+         return (
+            <ViewEvent
+               navigator = {navigator}
+               {...route.passProps}
+               route={route}
+               eventObject = {route.eventObject}
+               ref='eventView'
             />
          )
       }

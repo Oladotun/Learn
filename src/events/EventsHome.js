@@ -79,7 +79,7 @@ export default class EventsHome extends Component {
                               var image = eachItem['uploadURL']
 
 
-                            itemInfo.push(  <EventBox key={items} eventObject={eachItem} name={name} imageUrl={image}/>);
+                            itemInfo.push(  <EventBox key={items} navigator ={this.props.navigator}eventObject={eachItem} name={name} imageUrl={image}/>);
                             }
                             return itemInfo;
 
