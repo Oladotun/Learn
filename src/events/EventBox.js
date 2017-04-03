@@ -6,20 +6,38 @@ var {height, width} = Dimensions.get('window');
 export default class EventBox extends Component {
   // Component prop types
   static propTypes = {
-    // Movie object with title, genre, and poster
-    name: PropTypes.string.isRequired,
-    // Called when user taps on a poster
-    imageUrl: PropTypes.string.isRequired,
-    eventObject:  PropTypes.object.isRequired
+
+
+    eventObject:  PropTypes.object.isRequired,
+    openMenu: PropTypes.func.isRequired,
+    closeMenu: PropTypes.func.isRequired
   }
 
+
+
   visitItem = () =>{
-    this.props.navigator.push({name:'ViewEvent',title: this.props.eventObject.event_title,eventObject:this.props.eventObject});
+    console.log("Visiting view");
+    console.log(this.props);
+    this.props.navigator.push({
+      name:'ViewEvent',
+      title: this.props.eventObject.event_title,
+      eventObject:this.props.eventObject,
+      openMenu: this.props.openMenu ,
+      closeMenu: this.props.closeMenu,
+      rightText: 'Edit',
+      leftText: 'Back'
+
+  }
+
+
+  );
   }
 
   render() {
-    const{eventObject,name, imageUrl} = this.props;
+    const{eventObject} = this.props;
     var date = eventObject['event_time'];
+    var imageUrl = eventObject['uploadURL'];
+    var name = eventObject['event_title'];
     var formattedDate = moment(new Date(date)).format('DD MMM YYYY');
     return (
       <TouchableOpacity  onPress={() => this.visitItem()}>

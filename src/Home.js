@@ -55,8 +55,10 @@ export default class Home extends Component {
                           leftText: 'Close'
                         });
     }
-    if (route.name === 'AddNewEvent') {
+    else if (route.name === 'AddNewEvent') {
       this.refs.nav.refs.eventAdd.validate();
+    } else if (route.name === 'ViewEvent') {
+      console.log("Event clicked");
     }
 
   }
@@ -72,8 +74,7 @@ export default class Home extends Component {
     console.log('close in home');
     if (route.name === 'AddNewEvent') {
         this.refs.nav.pop();
-    }
-    if (route.name === 'EventsHome') {
+    } else if (route.name === 'EventsHome') {
       this.refs.nav.push({name:'AddNewEvent',
                           title: 'Add Event',
                           openMenu: this.openMenu ,
@@ -83,6 +84,8 @@ export default class Home extends Component {
                           onSaveButton: this.onSaveButton,
                             rightValid: this.state.rightButtonValidated
                         });
+    }else if (route.name === 'ViewEvent') {
+      this.refs.nav.pop();
     }
 
   }
@@ -245,6 +248,8 @@ const renderRouterScene = (route, navigator) => {
             <EventsHome
                navigator = {navigator}
                {...route.passProps}
+               openMenu = {route.openMenu}
+               closeMenu = {route.closeMenu}
             />
          )
       }

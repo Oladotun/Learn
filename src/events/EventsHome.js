@@ -51,6 +51,8 @@ export default class EventsHome extends Component {
       console.log('my event pressed');
     }
     render() {
+      console.log("In events home view ");
+      console.log(this.props);
 
         return (
 
@@ -79,7 +81,8 @@ export default class EventsHome extends Component {
                               var image = eachItem['uploadURL']
 
 
-                            itemInfo.push(  <EventBox key={items} navigator ={this.props.navigator}eventObject={eachItem} name={name} imageUrl={image}/>);
+                            itemInfo.push(  <EventBox key={items} navigator ={this.props.navigator}
+                              eventObject={eachItem} openMenu= {this.props.openMenu} closeMenu={this.props.closeMenu} />);
                             }
                             return itemInfo;
 
