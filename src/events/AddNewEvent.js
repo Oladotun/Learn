@@ -51,8 +51,9 @@ export default class AddNewEvent extends Component{
     this.setState({uploadURL:'', loading: true })
     var self = this;
     ImagePicker.launchImageLibrary({}, response  => {
-      if (response === undefined) {
-        this.setState({ uploadURL: undefined });
+      // console.log(response);
+      if (response.didCancel === true) {
+        this.setState({ uploadURL: 'nothing' });
       } else {
 
         uploadImage(response.uri)
@@ -64,7 +65,7 @@ export default class AddNewEvent extends Component{
 
           })
           .catch(error => {
-            this.setState({ uploadURL: undefined });
+            this.setState({ uploadURL: 'nothing' });
             console.log(error)
           })
       }
@@ -199,15 +200,13 @@ export default class AddNewEvent extends Component{
               )
             case 'nothing':
             return(
-              <Image
-              style={myStyles.imageContainer}
-                source={{ uri: '' }}>
-              <TouchableOpacity style={[{alignItems: 'center'},{justifyContent: 'center'}]}
+
+              <TouchableOpacity style={[myStyles.imageContainer,{alignItems: 'center'},{justifyContent: 'center'}]}
               onPress={ () => this._pickImage()}>
                   <Icon name="ios-camera" size={30} style={{opacity: this.state.opacity}} color={Colors.white}/>
                   <Text style={[otherStyles.h4, globals.primaryText, {opacity: this.state.opacity}]}>Add a Photo</Text>
               </TouchableOpacity>
-              </Image>
+
 
             )
             default:
