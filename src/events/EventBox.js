@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Image, Dimensions,Text,View,TouchableHighlight,StyleSheet,TouchableOpacity} from 'react-native';
 import moment from 'moment';
+import Icon from 'react-native-vector-icons/Ionicons';
 var {height, width} = Dimensions.get('window');
 
 export default class EventBox extends Component {
@@ -25,7 +26,7 @@ export default class EventBox extends Component {
       openMenu: this.props.openMenu ,
       closeMenu: this.props.closeMenu,
       rightText: 'Edit',
-      leftText: 'Back'
+      leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>
 
   }
 

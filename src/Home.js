@@ -47,13 +47,14 @@ export default class Home extends Component {
   openMenu = (route) => {
     // console.log(this.refs);
     if (route.name === 'EventsHome') {
-      this.refs.nav.push({name:'AddNewEvent',
-                          title: 'Add New',
-                          openMenu: this.openMenu ,
-                          closeMenu: this.closeMenu,
-                          rightText: 'Save',
-                          leftText: 'Close'
-                        });
+      // this.refs.nav.push({name:'AddNewEvent',
+      //                     title: 'Add New',
+      //                     openMenu: this.openMenu ,
+      //                     closeMenu: this.closeMenu,
+      //                     rightText: 'Save',
+      //                     leftText: 'Close'
+      //                   });
+      // search view
     }
     else if (route.name === 'AddNewEvent') {
       this.refs.nav.refs.eventAdd.validate();
@@ -80,7 +81,7 @@ export default class Home extends Component {
                           openMenu: this.openMenu ,
                           closeMenu: this.closeMenu,
                           rightText: 'Save',
-                          leftText: 'Close',
+                          leftText: 'Cancel',
                           onSaveButton: this.onSaveButton,
                             rightValid: this.state.rightButtonValidated
                         });
@@ -90,7 +91,7 @@ export default class Home extends Component {
 
   }
 
-
+// ios-add
 
   renderScreen = () => {
     if (this.state.selectedTab === 'eventHome'){
@@ -100,8 +101,8 @@ export default class Home extends Component {
                                 title: 'EventsHome',
                                 openMenu: this.openMenu ,
                                 closeMenu: this.closeMenu,
-                                rightText: 'Search',
-                                leftText: 'Add',
+                                rightIcon: <Icon name="ios-search" size={30} style={[{color:'#4A90E2'},{marginRight:10}]}/> ,
+                                leftIcon: <Icon name="ios-add" size={40} style={[{color:'#4A90E2'},{marginLeft:10}]}/>,
                             onSaveButton: this.onSaveButton,
                           rightValid: true}}
               renderScene = { renderRouterScene  }
@@ -207,19 +208,39 @@ var NavigationBarRouteMapper = {
    LeftButton(route, navigator, index, navState) {
       // if(index > 0) {
       console.log(route);
-         return (
 
+      if(route.leftIcon) {
+        return(
+          <TouchableOpacity
+             onPress = { () =>
+
+                 route.closeMenu(route)
+
+             }>
+             {route.leftIcon}
+          </TouchableOpacity>
+
+        )
+
+        } else {
+          return (
             <TouchableOpacity
-               onPress = {() => route.closeMenu(route) }>
-               <Text style={ styles.leftButton }>
-                  { route.leftText || 'Add' }
-               </Text>
+
+               onPress = { () =>
+
+                   route.closeMenu(route)
+
+               }>
+               <Text style={ styles.leftButton }> {route.leftText} </Text>
             </TouchableOpacity>
-         )
-      // }
-      // else { return null }
+          )
+
+        }
    },
    RightButton(route, navigator, index, navState) {
+
+
+     if(route.rightIcon) {
        return (
          <TouchableOpacity
             onPress = { () =>
@@ -227,11 +248,26 @@ var NavigationBarRouteMapper = {
                 route.openMenu(route)
 
             }>
-            <Text style = {[styles.rightButton]}>
-               { route.rightText || 'Menu' }
-            </Text>
+            {route.rightIcon}
          </TouchableOpacity>
-      )
+
+       );
+
+       } else {
+         return (
+           <TouchableOpacity
+              onPress = { () =>
+
+                  route.openMenu(route)
+
+              }>
+              <Text style = {styles.rightButton}> {route.rightText} </Text>
+           </TouchableOpacity>
+         );
+
+       }
+
+
    },
    Title(route, navigator, index, navState) {
       return (
