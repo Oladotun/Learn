@@ -73,7 +73,7 @@ export class ProfileSetUp extends Component {
   constructor(props){
     super(props);
     this.state = {
-      uploadURL: undefined,
+      uploadURL: 'nothing',
       opacity: 1,
       firstName: '',
       lastName: '',
@@ -87,7 +87,7 @@ export class ProfileSetUp extends Component {
   _goToNext(){
     // validate
     if (this.state.firstName === '' && this.state.lastName === ''
-        && (this.state.uploadURL === '' || this.state.uploadURL === undefined )) {
+        && (this.state.uploadURL === '' || this.state.uploadURL === 'nothing')) {
       // error
       this.setState({error1: 1, error2: 1, error3: 1});
     } else if(this.state.firstName === ''){
@@ -139,8 +139,8 @@ export class ProfileSetUp extends Component {
     this.setState({ uploadURL: '' })
 
     ImagePicker.launchImageLibrary({}, response  => {
-      if (response === undefined) {
-        this.setState({ uploadURL: undefined });
+      if (response.didCancel === true) {
+        this.setState({ uploadURL: 'nothing' });
       } else {
 
         uploadImage(response.uri)
@@ -148,7 +148,7 @@ export class ProfileSetUp extends Component {
             this.setState({ uploadURL: url, opacity:0 })
           })
           .catch(error => {
-            this.setState({ uploadURL: undefined });
+            this.setState({ uploadURL: 'nothing' });
             console.log(error)
           })
       }
@@ -166,6 +166,21 @@ export class ProfileSetUp extends Component {
                   return null
                 case '':
                   return <ActivityIndicator />
+              case 'nothing':
+                  return(
+                    <View>
+                    <TouchableOpacity style={ styles.image }
+                    onPress={ () => this._pickImage()}>
+                    <Text style={[styles.message, {opacity:this.state.opacity}]} >
+                      Profile Photo
+                    </Text>
+                    </TouchableOpacity>
+                    <Text style={[styles.error,{opacity:this.state.error3}]}>
+                    Picture required
+                    </Text>
+                    </View>
+
+                  )
                 default:
                   return (
                 <View>
