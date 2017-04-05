@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React,{Component, PropTypes} from 'react';
 
 import {
   AppRegistry,
@@ -37,13 +37,15 @@ export default class AddNewEvent extends Component{
         event_time: (new Date()).toString(),
         user_per_groupchat: '6',
         event_category: 'get together',
-        is_event_private: false
+        is_event_private: false,
+        host_name: this.props.displayName
       },
       place: null,
       uploadURL: 'nothing',
       opacity: 1,
       gotonext:false,
-      loading: null
+      loading: null,
+      mode: 'add'
     }
   }
 
@@ -91,22 +93,35 @@ export default class AddNewEvent extends Component{
 
   handleFormChange(formData){
 
-    if (formData.event_time == undefined) {
-      formData.event_time = (new Date()).toString();
-    }
-    if (formData.event_category == undefined) {
-      formData.event_category = 'get together';
-    }
-    if(formData.is_event_private == undefined){
-      formData.is_event_private = false;
+    if (this.state.mode === 'add'){
+      if (formData.event_time == undefined) {
+        formData.event_time = (new Date()).toString();
+      }
+      if (formData.event_category == undefined) {
+        formData.event_category = 'get together';
+      }
+      if(formData.is_event_private == undefined){
+        formData.is_event_private = false;
 
-    }
-    if(formData.user_per_groupchat == undefined){
-      formData.user_per_groupchat = '6';
+      }
+      if(formData.user_per_groupchat == undefined){
+        formData.user_per_groupchat = '6';
+      }
+      formData.host_name = this.props.displayName;
+
+
+      this.setState({formData:formData})
+
+    } else {
+      const updatedFormData = this.state.formData;
+      formData.host_name = this.props.displayName;
+      Object.keys(formData).forEach(function(key) {
+        updatedFormData[key] =formData[key];
+      });
+      this.setState(formData: updatedFormData);
     }
 
 
-    this.setState({formData:formData})
     this.props.onFormChange && this.props.onFormChange(formData);
 
 
@@ -155,11 +170,33 @@ export default class AddNewEvent extends Component{
 
         var user = firebase.auth().currentUser;
         console.log(user);
+
        var userRef =  database.ref('users/' + user.uid );
        var eventRef = userRef.child('createdEvents');
-       var newEventRef = eventRef.push().set(
-         this.state.formData
-        );
+       if(this.state.mode === 'add'){
+         var newEventRef = eventRef.push().set(
+           this.state.formData
+          );
+       } else if (this.state.mode === 'update'){
+         console.log("going to update");
+         console.log("Form data state");
+         console.log(this.state.formData);
+         console.log(this.props.eventDataLocation);
+         if (this.props.eventDataLocation){
+           console.log("updating inside data location");
+
+          //  var updateEventRef = eventRef.child(this.props.dataLocation);
+          var propString =  this.props.eventDataLocation + "";
+          var updateCreatedEventRef = eventRef.child(this.props.eventDataLocation);
+           updateCreatedEventRef.update(this.state.formData, response => {
+             console.log(response);
+           });
+         }
+
+       }
+
+       this.props.route.updateEventInView(this.state.formData);
+
 
         this.props.navigator.pop();
       }
@@ -182,8 +219,71 @@ export default class AddNewEvent extends Component{
   handleFormFocus(e, component){
     //console.log(e, component);
   }
-  render(){
 
+  componentWillMount(){
+      this.updateValueIfPresent();
+  }
+
+  updateValueIfPresent = () => {
+    var eventValue = this.props.eventObject
+    console.log('Event object present');
+    console.log(this.props);
+
+    var formData = {};
+    var uploadURL = 'nothing';
+    var opacity = 1;
+    var place = null;
+    var mode = 'add';
+
+
+    if (eventValue) {
+      if (eventValue['uploadURL']){
+        uploadURL = eventValue['uploadURL'];
+        opacity = 0;
+      }
+
+      if(eventValue['place']){
+        place = eventValue['place'];
+      }
+
+      if (eventValue['event_title']){
+        formData.event_title = eventValue['event_title'];
+      }
+
+      if(eventValue['event_description']){
+        formData.event_description = eventValue['event_description'];
+      }
+
+      if(eventValue['event_category']){
+        formData.event_category = eventValue['event_category'];
+      }
+
+      if(eventValue['event_time']){
+        formData.event_time = eventValue['event_time'];
+      }
+
+      if(eventValue['user_per_groupchat']){
+        formData.user_per_groupchat = eventValue['user_per_groupchat'];
+      }
+
+      if(eventValue['is_event_private']){
+        formData.is_event_private = eventValue['is_event_private'];
+      }
+      if (eventValue['event_website']){
+        formData.event_website = eventValue['event_website'];
+      }
+      mode = 'update';
+
+      this.setState({formData: formData, opacity:opacity,uploadURL:uploadURL, place:place,mode:mode,loading:false});
+
+      return formData;
+
+
+    }
+
+  }
+
+  render(){
 
     return (
       <KeyboardAwareScrollView  style={{flex:1}} extraScrollHeight={100}>
@@ -239,6 +339,7 @@ export default class AddNewEvent extends Component{
           label ='Event Name'
           placeholder='Event Name'
           multiline ={true}
+          value= {this.state.formData.event_title}
           helpText={((self)=>{
 
             if(Object.keys(self.refs).length !== 0){
@@ -267,6 +368,7 @@ export default class AddNewEvent extends Component{
           label='Event Info'
           placeholder='Tell us more'
           multiline = {true}
+          value = {this.state.formData.event_description}
 
 
         />
@@ -275,6 +377,7 @@ export default class AddNewEvent extends Component{
           ref='event_website'
           placeholder='Your event website'
           placeholderStyle={{textAlign:'center'}}
+          value= {this.state.formData.event_website}
 
 
 
@@ -282,7 +385,7 @@ export default class AddNewEvent extends Component{
            <DatePickerField ref='event_time'
            minimumDate={new Date()}
            mode="datetime"
-           date={new Date()}
+           date={new Date(this.state.formData.event_time)}
            iconRight= {[<Icon style={{alignSelf:'center', marginLeft:10}} name='ios-arrow-forward' size={30} />,
                        <Icon style={{alignSelf:'center', marginLeft:10}} name='ios-arrow-down' size={30} />
                        ]}
@@ -290,7 +393,7 @@ export default class AddNewEvent extends Component{
            placeholder='Start Time'/>
         <PickerField ref='event_category'
           label='Select event type'
-          value={'get together'}
+          value={this.state.formData.event_category}
           iconRight= {[<Icon style={{marginTop: 7, position:'absolute', right: 10}} name='ios-arrow-forward' size={30} />,
                       <Icon style={{marginTop: 7, position:'absolute', right: 10}} name='ios-arrow-down' size={30} />
                       ]}
@@ -306,7 +409,7 @@ export default class AddNewEvent extends Component{
           }}/>
         <PickerField ref='user_per_groupchat'
           label='Number of users per chat'
-          value={'6'}
+          value={this.state.formData.user_per_groupchat}
           iconRight= {[<Icon style={{marginTop: 7, position:'absolute', right: 10}} name='ios-arrow-forward' size={30} />,
                       <Icon style={{marginTop: 7, position:'absolute', right: 10}} name='ios-arrow-down' size={30} />
                       ]}

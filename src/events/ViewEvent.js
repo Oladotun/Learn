@@ -33,6 +33,11 @@ export default class ViewEvent extends Component{
     }
   }
 
+  updateEvent = (eventObject) => {
+    this.setState({eventObject: eventObject});
+
+  }
+
 
   goingToggle = () => {
     console.log("going");
@@ -49,7 +54,14 @@ export default class ViewEvent extends Component{
   }
 
   render(){
-    const{eventObject} = this.props;
+    var eventObject = null;
+    if (this.state.eventObject){
+      eventObject = this.state.eventObject;
+    } else {
+      eventObject = this.props.eventObject;
+
+    }
+    // const{eventObject} = this.props;
     var newObject = {
       event_title: '',
       event_time : '',

@@ -60,7 +60,26 @@ export default class Home extends Component {
       this.refs.nav.refs.eventAdd.validate();
     } else if (route.name === 'ViewEvent') {
       console.log("Event clicked");
+      console.log(route.eventDataLocation);
+
+      this.refs.nav.push({
+        name:'EditNewEvent',
+        title: route.eventObject.event_title,
+        eventObject: route.eventObject,
+        openMenu: this.openMenu ,
+        closeMenu: this.closeMenu,
+        rightText: 'Update',
+        leftText: 'Close',
+        eventDataLocation: route.eventDataLocation,
+        updateEventInView: this.refs.nav.refs.eventView.updateEvent,
+        displayName : this.props.displayName
+
+    } );
+    } else if (route.name === 'EditNewEvent'){
+      this.refs.nav.refs.editEvent.validate();
+      console.log('Updated');
     }
+
 
   }
   onSaveButton = (rightButtonValidated) => {
@@ -83,7 +102,8 @@ export default class Home extends Component {
                           rightText: 'Save',
                           leftText: 'Cancel',
                           onSaveButton: this.onSaveButton,
-                            rightValid: this.state.rightButtonValidated
+                            rightValid: this.state.rightButtonValidated,
+                            displayName : this.props.displayName
                         });
     }else if (route.name === 'ViewEvent') {
       this.refs.nav.pop();
@@ -106,6 +126,15 @@ export default class Home extends Component {
                             onSaveButton: this.onSaveButton,
                           rightValid: true}}
               renderScene = { renderRouterScene  }
+              configureScene = {(route, routeStack) => {
+                if(route.name === 'EditNewEvent'){
+                  return Navigator.SceneConfigs.FloatFromBottom;
+                } else {
+                  return Navigator.SceneConfigs.FloatFromRight;
+                }
+              }
+
+              }
               navigationBar = {
                  <Navigator.NavigationBar
                     style = { styles.navigationBar }
@@ -296,6 +325,22 @@ const renderRouterScene = (route, navigator) => {
                {...route.passProps}
                route={route}
                ref='eventAdd'
+               displayName={route.displayName}
+            />
+         )
+      }
+      if(route.name === 'EditNewEvent') {
+        console.log("gonna edit");
+        console.log(route.eventDataLocation);
+         return (
+            <AddNewEvent
+               navigator = {navigator}
+               {...route.passProps}
+               route={route}
+               ref='editEvent'
+               eventObject={route.eventObject}
+               eventDataLocation = {route.eventDataLocation}
+               displayName={route.displayName}
             />
          )
       }
