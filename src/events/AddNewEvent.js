@@ -155,10 +155,6 @@ export default class AddNewEvent extends Component{
         }]);
         return;
     }
-
-
-
-    // if (this.state.loading){
     if(this.state.uploadURL == 'nothing' && this.state.loading === null){
       this.props.navigator.pop();
     } else if(this.state.loading === true){
@@ -166,17 +162,28 @@ export default class AddNewEvent extends Component{
 
       } else if(this.state.loading === false) {
         this.state.formData.uploadURL= this.state.uploadURL;
-        this.setState({formData:this.state.formData});
+
 
         var user = firebase.auth().currentUser;
         console.log(user);
 
        var userRef =  database.ref('users/' + user.uid );
-       var eventRef = userRef.child('createdEvents');
+       var eventRef = database.ref('events/');
+       var createdRef = userRef.child('createdEvents');
+       this.state.formData.owner_id = user.uid + '';
+
+       this.setState({formData:this.state.formData});
        if(this.state.mode === 'add'){
-         var newEventRef = eventRef.push().set(
-           this.state.formData
-          );
+         var newEventRef = eventRef.push();
+         var eventString = newEventRef.key;
+         var info = {};
+         info[eventString] = {
+           'event_title' : this.state.formData.event_title,
+           'event_time' : this.state.formData.event_time,
+           'uploadURL' : this.state.formData.uploadURL
+         }
+         newEventRef.set(this.state.formData);
+          createdRef.set(info);
        } else if (this.state.mode === 'update'){
          console.log("going to update");
          console.log("Form data state");
@@ -186,16 +193,27 @@ export default class AddNewEvent extends Component{
            console.log("updating inside data location");
 
           //  var updateEventRef = eventRef.child(this.props.dataLocation);
-          var propString =  this.props.eventDataLocation + "";
-          var updateCreatedEventRef = eventRef.child(this.props.eventDataLocation);
-           updateCreatedEventRef.update(this.state.formData, response => {
+          var updateEventsRef = eventRef.child(this.props.eventDataLocation);
+          var updateUserEventsRef = createdRef.child(this.props.eventDataLocation);
+           updateEventsRef.update(this.state.formData, response => {
              console.log(response);
            });
+
+           updateUserEventsRef.update(
+             {
+               'event_title' : this.state.formData.event_title,
+               'event_time' : this.state.formData.event_time,
+               'uploadURL' : this.state.formData.uploadURL
+             }
+
+           );
          }
+
+         this.props.route.updateEventInView(this.state.formData);
 
        }
 
-       this.props.route.updateEventInView(this.state.formData);
+
 
 
         this.props.navigator.pop();
