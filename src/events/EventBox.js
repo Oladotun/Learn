@@ -24,10 +24,16 @@ export default class EventBox extends Component {
 
   loadValues =() =>{
     var self = this;
+    console.log(this.props);
     let eventObjectRef =  database.ref('events').child(this.props.dataLocation);
         eventObjectRef.once('value', function(snapshot) {
-          self.setState({currentEvent:snapshot.val()});
-          self.visitItem()
+          console.log('I am in console');
+          console.log(snapshot);
+          console.log(snapshot.val());
+          self.setState({currentEvent:snapshot.val()}, () => {
+              self.visitItem()
+          });
+
 
         });
 
@@ -36,18 +42,41 @@ export default class EventBox extends Component {
 
 
   visitItem = () =>{
+    console.log("where is state");
+    console.log(this.state);
     if(this.state.currentEvent){
-      this.props.navigator.push({
-        name:'ViewEvent',
-        title: 'Event Info',
-        eventObject:this.state.currentEvent,
-        openMenu: this.props.openMenu ,
-        closeMenu: this.props.closeMenu,
-        eventDataLocation: this.props.dataLocation,
-        rightText: 'Edit',
-        leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>
+      console.log(this.props);
 
-    });
+      if (this.props.joinEvent){
+
+        this.props.navigator.push({
+          name:'ViewEvent',
+          title: 'Event Info',
+          eventObject:this.state.currentEvent,
+          openMenu: this.props.openMenu ,
+          closeMenu: this.props.closeMenu,
+          eventDataLocation: this.props.dataLocation,
+          rightText: 'Join',
+          leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>
+
+      });
+
+      } else {
+
+        this.props.navigator.push({
+          name:'ViewEvent',
+          title: 'Event Info',
+          eventObject:this.state.currentEvent,
+          openMenu: this.props.openMenu ,
+          closeMenu: this.props.closeMenu,
+          eventDataLocation: this.props.dataLocation,
+          rightText: 'Edit',
+          leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>
+
+      });
+
+      }
+
 
     }
 

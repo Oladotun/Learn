@@ -117,6 +117,7 @@ export default class Home extends Component {
                                 leftIcon: <Icon name="ios-add" size={40} style={[{color:'#4A90E2'},{marginLeft:10}]}/>,
                             onSaveButton: this.onSaveButton,
                             userUid : this.props.userUid,
+                            displayName: this.props.displayName,
                           rightValid: true}}
               renderScene = { renderRouterScene  }
               configureScene = {(route, routeStack) => {

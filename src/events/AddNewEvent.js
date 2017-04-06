@@ -183,7 +183,7 @@ export default class AddNewEvent extends Component{
            'uploadURL' : this.state.formData.uploadURL
          }
          newEventRef.set(this.state.formData);
-          createdRef.set(info);
+          createdRef.child(eventString).set(info[eventString]);
           this.props.navigator.pop();
        } else if (this.state.mode === 'update'){
          console.log("going to update");
