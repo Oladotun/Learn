@@ -47,13 +47,6 @@ export default class Home extends Component {
   openMenu = (route) => {
     // console.log(this.refs);
     if (route.name === 'EventsHome') {
-      // this.refs.nav.push({name:'AddNewEvent',
-      //                     title: 'Add New',
-      //                     openMenu: this.openMenu ,
-      //                     closeMenu: this.closeMenu,
-      //                     rightText: 'Save',
-      //                     leftText: 'Close'
-      //                   });
       // search view
     }
     else if (route.name === 'AddNewEvent') {
@@ -71,8 +64,8 @@ export default class Home extends Component {
         rightText: 'Update',
         leftText: 'Close',
         eventDataLocation: route.eventDataLocation,
-        updateEventInView: this.refs.nav.refs.eventView.updateEvent,
-        displayName : this.props.displayName
+        displayName : this.props.displayName,
+        userUid : this.props.userUid
 
     } );
     } else if (route.name === 'EditNewEvent'){
@@ -101,7 +94,8 @@ export default class Home extends Component {
                           leftText: 'Cancel',
                           onSaveButton: this.onSaveButton,
                             rightValid: this.state.rightButtonValidated,
-                            displayName : this.props.displayName
+                            displayName : this.props.displayName,
+                            userUid : this.props.userUid
                         });
     }else {
         this.refs.nav.pop();
@@ -122,6 +116,7 @@ export default class Home extends Component {
                                 rightIcon: <Icon name="ios-search" size={30} style={[{color:'#4A90E2'},{marginRight:10}]}/> ,
                                 leftIcon: <Icon name="ios-add" size={40} style={[{color:'#4A90E2'},{marginLeft:10}]}/>,
                             onSaveButton: this.onSaveButton,
+                            userUid : this.props.userUid,
                           rightValid: true}}
               renderScene = { renderRouterScene  }
               configureScene = {(route, routeStack) => {
@@ -152,11 +147,6 @@ export default class Home extends Component {
     }else if (this.state.selectedTab === 'chats'){
       return(<Chats/>)
     }
-  }
-
-  componentWillMount(){
-    console.log('nothing');
-
   }
 
 
@@ -313,6 +303,7 @@ const renderRouterScene = (route, navigator) => {
                {...route.passProps}
                openMenu = {route.openMenu}
                closeMenu = {route.closeMenu}
+               userUid = {route.userUid}
             />
          )
       }
@@ -324,6 +315,7 @@ const renderRouterScene = (route, navigator) => {
                route={route}
                ref='eventAdd'
                displayName={route.displayName}
+               userUid = {route.userUid}
             />
          )
       }
@@ -339,6 +331,7 @@ const renderRouterScene = (route, navigator) => {
                eventObject={route.eventObject}
                eventDataLocation = {route.eventDataLocation}
                displayName={route.displayName}
+               userUid = {route.userUid}
             />
          )
       }

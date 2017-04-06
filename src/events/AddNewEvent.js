@@ -209,8 +209,6 @@ export default class AddNewEvent extends Component{
 
            );
          }
-
-         this.props.route.updateEventInView(this.state.formData);
          this.props.navigator.replacePrevious(
            {
              name:'ViewEvent',

@@ -17,7 +17,7 @@ const RouteMapper = (route, navigator) => {
   if(route.name === 'textVerification') {
     return <TextVerification navigator={navigator} />
   }else if(route.name === 'home') {
-    return <Home navigator={navigator} displayName={route.displayName} />
+    return <Home navigator={navigator} displayName={route.displayName} userUid = {route.userUid} />
   } else if(route.name === 'profileSetUp') {
     return <ProfileSetUp navigator={navigator} />
   } else if(route.name === 'settings'){
@@ -47,13 +47,10 @@ export default class LoadingPage extends Component {
     self.state.unSubscribe = firebase.auth().onAuthStateChanged(function(user) {
 
   if (!self.state.userSet){
-    console.log('User set ifo');
       if (user) {
         // User is signed in.
         var isAnonymous = user.isAnonymous;
         var uid = user.uid;
-        console.log('User is set');
-
         var userId = firebase.auth().currentUser.uid;
         firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
           var username = snapshot.val().displayName;
@@ -98,8 +95,6 @@ export default class LoadingPage extends Component {
       var password = '?<2L|mt+38v9|v}q23A1984D9|6LnB'+this.state.phoneNumber;
       var user = firebase.auth().currentUser;
       if (user) {
-        console.log('user displayName');
-        console.log(user.displayName);
         var setUid;
         if(uidSet){
           setUid = true;
@@ -139,7 +134,6 @@ export default class LoadingPage extends Component {
             user: null,
             loading: false
           });
-          console.log("I should be null")
         }
 
       }
@@ -196,8 +190,6 @@ export default class LoadingPage extends Component {
         } else if (this.state.user){
             this.state.unSubscribe();
           if (this.state.displayName === null || this.state.photoURL === null) {
-            console.log(this.state.user);
-            console.log('profile');
               return(
                 <Navigator
                   // Default to movies route
@@ -209,20 +201,16 @@ export default class LoadingPage extends Component {
                 />
                 );
           } else {
-            console.log(this.state.user);
-            console.log(this.state.userSet);
-            console.log('I am in home navigator');
             if (!this.state.uidSet){
-              console.log('going to set info');
                 this.setInfo();
             }
 
-
+            console.log(this.state.user);
 
               return(
                 <Navigator
                   // Default to movies route
-                  initialRoute={{name: 'home', displayName: this.state.displayName}}
+                  initialRoute={{name: 'home', displayName: this.state.displayName, userUid: this.state.user.uid}}
                   // Use FloatFromBottom transition between screens
                   configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
                   // Pass a route mapper functions

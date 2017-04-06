@@ -23,36 +23,19 @@ export default class EventsHome extends Component {
     }
 
     loadParent = async() =>{
-      let userUid = await AsyncStorage.getItem('@userUid:key');
+      let userUid = this.props.userUid;
       console.log(userUid);
       var self = this;
       let userRef =  database.ref('users/' + userUid + '/createdEvents/' );
-      // let starCountRef = firebase.database().ref('/users/' + userUid);
           userRef.on('value', function(snapshot) {
-            console.log(snapshot.val());
             self.setState({createdEvents:snapshot.val()});
-            var info = snapshot.val();
-            for ((obj) in info) {
-              console.log(info[obj]);
-              console.log(obj);
-              console.log('\n');
-            }
-            // console.log("In event db");
 
           });
 
-          // console.log(this.state.createdEvents)
-
     }
 
 
-
-    visitEvent = (event) => {
-      console.log('my event pressed');
-    }
     render() {
-      console.log("In events home view ");
-      console.log(this.props);
 
         return (
 
@@ -61,12 +44,8 @@ export default class EventsHome extends Component {
             (() => {
               try {
                 if (this.state.createdEvents != null){
-                  console.log(Object.keys(this.state.createdEvents).length);
 
                   if(Object.keys(this.state.createdEvents).length > 0){
-                    console.log('length is long');
-
-
                     return (
                       <ScrollView style={{height:height/4}} horizontal={true} vertical={false}
                       showsVerticalScrollIndicator={false}
@@ -103,12 +82,6 @@ export default class EventsHome extends Component {
           <View style={{height:height/3}}>
             <Text style = {styles.welcome}>help</Text>
           </View>
-
-
-
-
-
-
 
           </View>
 

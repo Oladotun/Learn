@@ -25,11 +25,7 @@ export default class EventBox extends Component {
   loadValues =() =>{
     var self = this;
     let eventObjectRef =  database.ref('events').child(this.props.dataLocation);
-    console.log('Value in location below');
-    console.log(this.props.dataLocation);
         eventObjectRef.once('value', function(snapshot) {
-          console.log('Value is in load Values');
-          console.log(snapshot.val());
           self.setState({currentEvent:snapshot.val()});
           self.visitItem()
 
