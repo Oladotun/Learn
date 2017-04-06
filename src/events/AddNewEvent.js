@@ -184,6 +184,7 @@ export default class AddNewEvent extends Component{
          }
          newEventRef.set(this.state.formData);
           createdRef.set(info);
+          this.props.navigator.pop();
        } else if (this.state.mode === 'update'){
          console.log("going to update");
          console.log("Form data state");
@@ -210,13 +211,27 @@ export default class AddNewEvent extends Component{
          }
 
          this.props.route.updateEventInView(this.state.formData);
+         this.props.navigator.replacePrevious(
+           {
+             name:'ViewEvent',
+             title: 'Event Info',
+             eventObject:this.state.formData,
+             openMenu: this.props.route.openMenu ,
+             closeMenu: this.props.route.closeMenu,
+             eventDataLocation: this.props.route.eventDataLocation,
+             rightText: 'Edit',
+             leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>
+
+         }
+         );
+         this.props.navigator.pop();
 
        }
 
 
 
 
-        this.props.navigator.pop();
+
       }
 
     // }

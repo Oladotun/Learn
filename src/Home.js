@@ -92,9 +92,7 @@ export default class Home extends Component {
 
   closeMenu = (route) => {
     console.log('close in home');
-    if (route.name === 'AddNewEvent') {
-        this.refs.nav.pop();
-    } else if (route.name === 'EventsHome') {
+    if (route.name === 'EventsHome') {
       this.refs.nav.push({name:'AddNewEvent',
                           title: 'Add Event',
                           openMenu: this.openMenu ,
@@ -105,8 +103,8 @@ export default class Home extends Component {
                             rightValid: this.state.rightButtonValidated,
                             displayName : this.props.displayName
                         });
-    }else if (route.name === 'ViewEvent') {
-      this.refs.nav.pop();
+    }else {
+        this.refs.nav.pop();
     }
 
   }
