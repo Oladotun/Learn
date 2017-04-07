@@ -36,6 +36,10 @@ export default class EventsHome extends Component {
 
     }
 
+    loadAttendingEvent = async() => {
+      
+    }
+
 
     loadAllNonEvents = async() =>{
       let userUid = this.props.userUid;

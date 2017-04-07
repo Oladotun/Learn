@@ -23,6 +23,7 @@ import AddNewEvent from './events/AddNewEvent';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import JoinEvent from './events/JoinEvent';
 
 export default class Home extends Component {
 
@@ -55,22 +56,44 @@ export default class Home extends Component {
       console.log("Event clicked");
       console.log(route.eventDataLocation);
 
-      this.refs.nav.push({
-        name:'EditNewEvent',
-        title: route.eventObject.event_title,
-        eventObject: route.eventObject,
-        openMenu: this.openMenu ,
-        closeMenu: this.closeMenu,
-        rightText: 'Update',
-        leftText: 'Close',
-        eventDataLocation: route.eventDataLocation,
-        displayName : this.props.displayName,
-        userUid : this.props.userUid
+      if (route.rightText === 'Join'){
 
-    } );
+        this.refs.nav.push({
+          name:'JoinEvent',
+          title: route.eventObject.event_title,
+          eventObject: route.eventObject,
+          openMenu: this.openMenu ,
+          closeMenu: this.closeMenu,
+          rightText: 'Done',
+          leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>,
+          displayName : this.props.displayName,
+          userUid : this.props.userUid,
+          eventDataLocation: route.eventDataLocation
+
+      } );
+
+      } else {
+        this.refs.nav.push({
+          name:'EditNewEvent',
+          title: route.eventObject.event_title,
+          eventObject: route.eventObject,
+          openMenu: this.openMenu ,
+          closeMenu: this.closeMenu,
+          rightText: 'Update',
+          leftText: 'Close',
+          eventDataLocation: route.eventDataLocation,
+          displayName : this.props.displayName,
+          userUid : this.props.userUid
+
+      } );
+      }
+
+
     } else if (route.name === 'EditNewEvent'){
       this.refs.nav.refs.editEvent.validate();
       console.log('Updated');
+    } else if (route.name === 'JoinEvent'){
+      this.refs.nav.refs.joinEvent.updateEventInfo();
     }
 
 
@@ -308,7 +331,7 @@ const renderRouterScene = (route, navigator) => {
             />
          )
       }
-      if(route.name === 'AddNewEvent') {
+      else if(route.name === 'AddNewEvent') {
          return (
             <AddNewEvent
                navigator = {navigator}
@@ -320,7 +343,7 @@ const renderRouterScene = (route, navigator) => {
             />
          )
       }
-      if(route.name === 'EditNewEvent') {
+      else if(route.name === 'EditNewEvent') {
         console.log("gonna edit");
         console.log(route.eventDataLocation);
          return (
@@ -337,7 +360,7 @@ const renderRouterScene = (route, navigator) => {
          )
       }
 
-      if(route.name === 'ViewEvent') {
+      else if(route.name === 'ViewEvent') {
          return (
             <ViewEvent
                navigator = {navigator}
@@ -347,6 +370,20 @@ const renderRouterScene = (route, navigator) => {
                ref='eventView'
             />
          )
+      }
+      else if(route.name === 'JoinEvent'){
+        return (
+          <JoinEvent
+          navigator = {navigator}
+          {...route.passProps}
+          route={route}
+          eventObject = {route.eventObject}
+          eventDataLocation = {route.eventDataLocation}
+          displayName={route.displayName}
+          userUid = {route.userUid}
+          ref='joinEvent'
+           />
+        )
       }
    }
 
