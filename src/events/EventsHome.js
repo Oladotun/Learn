@@ -18,7 +18,8 @@ export default class EventsHome extends Component {
       this.state = {
         screen:'',
         createdEvents:{},
-        unattendEvents: {}
+        unattendEvents: {},
+        attendingEvents: {}
       }
       this.loadParent();
       this.loadAllNonEvents();
@@ -37,7 +38,7 @@ export default class EventsHome extends Component {
     }
 
     loadAttendingEvent = async() => {
-      
+
     }
 
 
@@ -46,18 +47,43 @@ export default class EventsHome extends Component {
       console.log(userUid);
       console.log("On no events");
       var self = this;
-      var userUnattendedEvents = {}
+      var userUnattendedEvents = {};
+      var userAttendingEvents = {};
       let userRef =  database.ref('/events/' );
           userRef.on('value', function(snapshot) {
             snapshot.forEach(function(child){
               var key = child.key;
               var value = child.val();
 
-              if (value['owner_id'] != self.props.userUid) {
-                userUnattendedEvents[key] = value;
+
+              var userAttend = database.ref('users/' + userUid +
+                                            '/attendingEvents/');
+
+            userAttend.once('value', function(presentInUser){
+              console.log('presentInUser ');
+              console.log(presentInUser.val());
+              if (presentInUser.hasChild(key)){
+                console.log('I have child here');
+
+                 var userAttended = presentInUser.val();
+
+                 userAttendingEvents[key] = userAttended[key];
+
+              } else {
+
+                if (value['owner_id'] != self.props.userUid) {
+                  userUnattendedEvents[key] = value;
+                }
+
               }
+              console.log("User attending info");
+              console.log(userAttendingEvents);
+              self.setState({unattendEvents:userUnattendedEvents, attendingEvents:userAttendingEvents});
+
             });
-            self.setState({unattendEvents:userUnattendedEvents});
+
+
+            });
 
 
           });
@@ -78,8 +104,8 @@ export default class EventsHome extends Component {
 
                   if(Object.keys(this.state.createdEvents).length > 0){
                     return (
-                      <View style={styles.container}>
-                      <Text style={[{fontSize: 20},{textAlign:'center'},{color: '#000000'}]}> My Created Events </Text>
+                      <View style={myStyles.container}>
+                      <Text style={[{fontSize: 20},{textAlign:'center'},{color: '#000000'}]}> Your Created Events </Text>
                       <ScrollView  horizontal={true} vertical={false}
                       showsVerticalScrollIndicator={false}
                       >
@@ -108,7 +134,7 @@ export default class EventsHome extends Component {
                         return (
                           <View style={myStyles.imageContainer}>
                           <TouchableOpacity>
-                          <Text style={[{fontSize: 20},{color: '#000000'}]}> Create Events </Text>
+                          <Text style={[{fontSize: 20},{color: '#000000'}]}> Create New Events </Text>
                           <Icon name="ios-add-circle" size={100} style={[{color:'#4A90E2'},{marginLeft:40}]}/>
                           </TouchableOpacity>
 
@@ -123,8 +149,59 @@ export default class EventsHome extends Component {
             })()
 
           }
+          {
+            (() => {
+              try {
+                if (this.state.attendingEvents != null){
 
 
+                  if(Object.keys(this.state.attendingEvents).length > 0){
+                    return (
+                      <View style={[myStyles.container]}>
+                      <Text style={[{fontSize: 20},{textAlign:'center'},{color: '#000000'}]}>Your Upcoming Events </Text>
+                      <ScrollView  horizontal={true} vertical={false}
+                      showsVerticalScrollIndicator={false}
+                      >
+                      {
+                        (()=> {
+                           var itemInfo = [];
+                            for (items in this.state.attendingEvents){
+                              var eachItem = this.state.attendingEvents[items];
+
+                              var name = eachItem['event_title'];
+                              var image = eachItem['uploadURL']
+
+
+                            itemInfo.push(  <EventBox key={items} dataLocation = {items} navigator ={this.props.navigator}
+                              eventObject={eachItem} openMenu= {this.props.openMenu} joinEvent ={'true'} closeMenu={this.props.closeMenu} />);
+                            }
+                            return itemInfo;
+
+                          })()
+                        }
+                        </ScrollView>
+                        </View>
+
+                      )} else {
+
+                        return (
+                          <View style={myStyles.container}>
+                          <TouchableOpacity>
+                          <Text style={[{fontSize: 20},{color: '#000000'}]}> Search for Events </Text>
+                          <Icon name="ios-add-circle" size={100} style={[{color:'#4A90E2'},{marginLeft:40}]}/>
+                          </TouchableOpacity>
+
+                          </View>);
+
+                      }
+                    }
+
+              } catch(e){
+                console.log(e);
+              }
+            })()
+
+          }
           {
             (() => {
               try {
@@ -133,8 +210,8 @@ export default class EventsHome extends Component {
 
                   if(Object.keys(this.state.unattendEvents).length > 0){
                     return (
-                      <View style={[styles.container,{marginTop:10}]}>
-                      <Text style={[{fontSize: 20},{textAlign:'center'},{color: '#000000'}]}> Upcoming Events </Text>
+                      <View style={[myStyles.container]}>
+                      <Text style={[{fontSize: 20},{textAlign:'center'},{color: '#000000'}]}> Recommended Events </Text>
                       <ScrollView  horizontal={true} vertical={false}
                       showsVerticalScrollIndicator={false}
                       >
@@ -163,7 +240,7 @@ export default class EventsHome extends Component {
                         return (
                           <View style={myStyles.imageContainer}>
                           <TouchableOpacity>
-                          <Text style={[{fontSize: 20},{color: '#000000'}]}> Create Events </Text>
+                          <Text style={[{fontSize: 20},{color: '#000000'}]}> Search for Events </Text>
                           <Icon name="ios-add-circle" size={100} style={[{color:'#4A90E2'},{marginLeft:40}]}/>
                           </TouchableOpacity>
 
@@ -178,8 +255,6 @@ export default class EventsHome extends Component {
             })()
 
           }
-
-
 
           </View>
 
@@ -201,6 +276,7 @@ var myStyles = StyleSheet.create({
     margin: 10,
   },
   imageContainer: {
+    flex:1,
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 20
