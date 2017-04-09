@@ -24,6 +24,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import JoinEvent from './events/JoinEvent';
+import SearchEvent from './events/SearchEvent';
 
 export default class Home extends Component {
 
@@ -49,6 +50,25 @@ export default class Home extends Component {
     // console.log(this.refs);
     if (route.name === 'EventsHome') {
       // search view
+
+    //  Get event box
+    var eventArray = this.refs.nav.refs.eventsHome.goToEventSearch();
+    console.log('Search result');
+    console.log(eventArray);
+
+      this.refs.nav.push({
+        name:'SearchEvent',
+        title: 'Find Event',
+        openMenu: this.openMenu ,
+        closeMenu: this.closeMenu,
+        rightText: 'Done',
+        leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>,
+        displayName : this.props.displayName,
+        userUid : this.props.userUid,
+        eventArray: eventArray
+
+
+    } );
     }
     else if (route.name === 'AddNewEvent') {
       this.refs.nav.refs.eventAdd.validate();
@@ -328,6 +348,7 @@ const renderRouterScene = (route, navigator) => {
                openMenu = {route.openMenu}
                closeMenu = {route.closeMenu}
                userUid = {route.userUid}
+               ref = 'eventsHome'
             />
          )
       }
@@ -384,6 +405,10 @@ const renderRouterScene = (route, navigator) => {
           ref='joinEvent'
            />
         )
+      }
+      else if (route.name === 'SearchEvent'){
+        return (<SearchEvent navigator = {navigator}
+          route={route} eventArray = {route.eventArray} />)
       }
    }
 

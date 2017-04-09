@@ -28,6 +28,7 @@
     "react-native-modal-datetime-picker": "^4.1.0",
     "react-native-modal-picker": "0.0.16",
     "react-native-navbar": "^1.6.3",
+    "react-native-searchbar": "^1.8.0",
     "react-native-simple-radio-button": "^2.5.0-alpha.1",
     "react-native-sinch-verification": "0.0.5",
     "react-native-vector-icons": "^4.0.0",

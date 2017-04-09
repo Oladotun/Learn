@@ -83,19 +83,48 @@ export default class EventBox extends Component {
   }
 
   render() {
-    const{eventObject} = this.props;
+    const{eventObject,type} = this.props;
     var date = eventObject['event_time'];
     var imageUrl = eventObject['uploadURL'];
     var name = eventObject['event_title'];
     var formattedDate = moment(new Date(date)).format('DD MMM YYYY');
     return (
       <TouchableOpacity  onPress={() => this.loadValues()}>
-        <View style={styles.touchContainer}>
-            <Image source={{uri:imageUrl}} style={styles.imageContainer}/>
-              <Text style = {styles.message}>{name}</Text>
-              <Text style={styles.dateMessage}>{formattedDate} </Text>
-        </View>
-        </TouchableOpacity>
+      {
+        (() => {
+          try {
+            if (!type){
+            return(
+              <View style={styles.touchContainer}>
+                  <Image source={{uri:imageUrl}} style={styles.imageContainer}/>
+                    <Text style = {styles.message}>{name}</Text>
+                    <Text style={styles.dateMessage}>{formattedDate} </Text>
+              </View>);
+
+            }else {
+              return(
+                <View style={styles.searchTouchContainer}>
+                    <Image source={{uri:imageUrl}} style={styles.imageSearchContainer}/>
+                    <View style={styles.eventInfo}>
+                      <Text style = {[styles.message, {width:width/1.27}]}>{name}</Text>
+                      <View style={styles.dateAtEnd}>
+                      <Text style={styles.dateMessage}>{formattedDate} </Text>
+                      </View>
+
+                    </View>
+
+                </View>
+
+              );
+            }
+
+          }catch(e){
+            console.log(e);
+          }
+        })()
+      }
+      </TouchableOpacity>
+
 
 
 
@@ -120,12 +149,36 @@ const styles = StyleSheet.create({
     fontSize: 10
 
   },
+  imageSearchContainer: {
+    width: width/1.05,
+    height: height/5,
+    backgroundColor: '#f0f8ff',
+
+
+  },
   touchContainer: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     marginRight: 10,
     marginLeft: 10
+  },
+  searchTouchContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    marginRight: 10,
+    marginLeft: 10,
+    backgroundColor: '#ffffff',
+
+  },
+  eventInfo: {
+    flexDirection: 'row'
+  },
+  dateAtEnd: {
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    backgroundColor: '#ffffff',
   }
 
 });

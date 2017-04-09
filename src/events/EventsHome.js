@@ -41,6 +41,22 @@ export default class EventsHome extends Component {
 
     }
 
+    goToEventSearch = () => {
+       var itemInfo = [];
+        for (items in this.state.createdEvents){
+          var eachItem = this.state.createdEvents[items];
+
+          var name = eachItem['event_title'];
+          var image = eachItem['uploadURL']
+
+
+        itemInfo.push(  <EventBox key={items} dataLocation = {items} navigator ={this.props.navigator}
+          eventObject={eachItem} openMenu= {this.props.openMenu} type={'search'}closeMenu={this.props.closeMenu} />);
+        }
+        return itemInfo;
+
+      }
+
 
     loadAllNonEvents = async() =>{
       let userUid = this.props.userUid;
