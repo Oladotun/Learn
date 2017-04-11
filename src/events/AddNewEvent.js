@@ -24,7 +24,7 @@ import { styles,activityStyles,globals, formStyles, selectStyles,autocompleteSty
 import Icon from 'react-native-vector-icons/Ionicons';
 import RNGooglePlaces from 'react-native-google-places';
 import Colors from '../styles/colors';
-import {database,uploadImage} from '../ProfileSetup';
+import {database,uploadImage} from '../Config';
 import firebase from 'firebase';
 
 

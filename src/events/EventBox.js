@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Image, Dimensions,Text,View,TouchableHighlight,StyleSheet,TouchableOpacity} from 'react-native';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {database} from '../ProfileSetup';
+import {database} from '../Config';
 var {height, width} = Dimensions.get('window');
 
 export default class EventBox extends Component {

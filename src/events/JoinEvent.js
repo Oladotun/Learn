@@ -6,7 +6,7 @@ import {
   Text
 } from 'react-native';
 
-import {database} from '../ProfileSetup';
+import {database} from '../Config';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 

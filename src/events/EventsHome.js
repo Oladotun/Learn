@@ -4,7 +4,7 @@ import AddNewEvent from './AddNewEvent'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { globals,styles } from '../styles';
 
-import {database} from '../ProfileSetup';
+import {database} from '../Config';
 import firebase from 'firebase';
 import EventBox from './EventBox';
 

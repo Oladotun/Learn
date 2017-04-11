@@ -9,7 +9,8 @@ import{
 
 import TextVerification from './TextVerification';
 import Home from './Home';
-import {database,ProfileSetUp} from './ProfileSetup';
+import {database} from './Config';
+import ProfileSetUp from './ProfileSetup';
 
 import firebase from "firebase";
 
