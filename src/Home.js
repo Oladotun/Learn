@@ -189,7 +189,7 @@ export default class Home extends Component {
     }else if (this.state.selectedTab === 'contacts'){
       return(<Contacts/>)
     }else if (this.state.selectedTab === 'chats'){
-      return(<Chats/>)
+      return(<Chats userUid= {this.props.userUid} displayName= {this.props.displayName} photoURL={this.props.photoURL}/>)
     }
   }
 

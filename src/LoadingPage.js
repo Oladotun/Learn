@@ -18,7 +18,7 @@ const RouteMapper = (route, navigator) => {
   if(route.name === 'textVerification') {
     return <TextVerification navigator={navigator} />
   }else if(route.name === 'home') {
-    return <Home navigator={navigator} displayName={route.displayName} userUid = {route.userUid} />
+    return <Home navigator={navigator} displayName={route.displayName} userUid = {route.userUid} photoURL ={route.photoURL} />
   } else if(route.name === 'profileSetUp') {
     return <ProfileSetUp navigator={navigator} />
   } else if(route.name === 'settings'){
@@ -211,7 +211,7 @@ export default class LoadingPage extends Component {
               return(
                 <Navigator
                   // Default to movies route
-                  initialRoute={{name: 'home', displayName: this.state.displayName, userUid: this.state.user.uid}}
+                  initialRoute={{name: 'home', displayName: this.state.displayName, userUid: this.state.user.uid,photoURL: this.state.photoURL}}
                   // Use FloatFromBottom transition between screens
                   configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
                   // Pass a route mapper functions
