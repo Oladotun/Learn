@@ -4,6 +4,7 @@ import {
   Dimensions,
 } from 'react-native';
 import RNFetchBlob from 'react-native-fetch-blob';
+import SendBird from 'sendbird';
 
 const {width, height} = Dimensions.get('window');
 // Init Firebase
@@ -14,6 +15,12 @@ let config = {
   storageBucket: "oremi-a0b25.appspot.com",
   messagingSenderId: "427045602725"
 };
+
+export const sendBird = new SendBird({
+    appId: '22A1C74F-AB20-44E0-8EEC-42D609F1187C'
+});
+
+
 
 firebase.initializeApp(config);
 export const storage = firebase.storage()

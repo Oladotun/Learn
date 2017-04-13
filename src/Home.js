@@ -17,7 +17,7 @@ import ViewEvent from './events/ViewEvent';
 import {SimpleApp} from './events/EventsHome';
 import Settings from './settings/Settings';
 import Contacts from './contacts/Contact';
-import Chats from './chat/Chats'
+import ChatHome from './chat/ChatHome'
 import AddNewEvent from './events/AddNewEvent';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -189,7 +189,7 @@ export default class Home extends Component {
     }else if (this.state.selectedTab === 'contacts'){
       return(<Contacts/>)
     }else if (this.state.selectedTab === 'chats'){
-      return(<Chats userUid= {this.props.userUid} displayName= {this.props.displayName} photoURL={this.props.photoURL}/>)
+      return(<ChatHome userUid= {this.props.userUid} displayName= {this.props.displayName} photoURL={this.props.photoURL}/>)
     }
   }
 
