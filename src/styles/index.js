@@ -2,7 +2,7 @@ import Colors from './colors';
 import { Dimensions, StyleSheet } from 'react-native';
 
 const { height: deviceHeight, width: deviceWidth } = Dimensions.get('window');
-const { height, width} = Dimensions.get('window');
+export const { height, width} = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
   container: {

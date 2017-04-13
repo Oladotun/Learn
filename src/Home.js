@@ -18,6 +18,7 @@ import {SimpleApp} from './events/EventsHome';
 import Settings from './settings/Settings';
 import Contacts from './contacts/Contact';
 import ChatHome from './chat/ChatHome'
+import Chat from './chat/Chats'
 import AddNewEvent from './events/AddNewEvent';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -189,7 +190,40 @@ export default class Home extends Component {
     }else if (this.state.selectedTab === 'contacts'){
       return(<Contacts/>)
     }else if (this.state.selectedTab === 'chats'){
-      return(<ChatHome userUid= {this.props.userUid} displayName= {this.props.displayName} photoURL={this.props.photoURL}/>)
+      console.log("chat home screen");
+      return(
+        <Navigator
+              initialRoute = {{ name: 'ChatHome',
+                                title: 'Chat List',
+                                openMenu: this.openMenu ,
+                                closeMenu: this.closeMenu,
+                                rightIcon: <FontAwesome name="pencil-square-o" size={30} style={[{color:'#4A90E2'},{marginRight:10}]}/> ,
+
+                            userUid : this.props.userUid,
+                            displayName: this.props.displayName,
+                            photoURL: this.props.photoURL
+                      }}
+              renderScene = { renderRouterScene  }
+              configureScene = {(route, routeStack) => {
+
+              return Navigator.SceneConfigs.FloatFromRight
+              }
+
+              }
+              navigationBar = {
+                 <Navigator.NavigationBar
+                    style = { styles.navigationBar }
+                    routeMapper = { NavigationBarRouteMapper } />
+              }
+              ref = "nav"
+              sceneStyle={{paddingTop: 64}}
+           />
+
+      );
+
+
+
+      // return(<ChatHome userUid= {this.props.userUid} displayName= {this.props.displayName} photoURL={this.props.photoURL}/>)
     }
   }
 
@@ -283,7 +317,7 @@ var NavigationBarRouteMapper = {
 
         )
 
-        } else {
+      } else {
           return (
             <TouchableOpacity
 
@@ -314,7 +348,7 @@ var NavigationBarRouteMapper = {
 
        );
 
-       } else {
+     } else {
          return (
            <TouchableOpacity
               onPress = { () =>
@@ -409,6 +443,23 @@ const renderRouterScene = (route, navigator) => {
       else if (route.name === 'SearchEvent'){
         return (<SearchEvent navigator = {navigator}
           route={route} eventArray = {route.eventArray} />)
+      } else if(route.name === 'ChatHome'){
+        console.log('going to call chat home');
+        return(<ChatHome
+              navigator = {navigator}
+            {...route.passProps}
+            route={route}
+            userUid= {route.userUid}
+            displayName= {route.displayName}
+            photoURL={route.photoURL}
+        />)
+
+      } else if(route.name === 'Chat'){
+        return(<Chat navigator={navigator} route={route}
+                userUid= {route.userUid}
+              displayName= {route.displayName}
+              photoURL={route.photoURL}
+        />)
       }
    }
 

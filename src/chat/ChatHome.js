@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {
     View,
     Text,
-    StyleSheet
+    StyleSheet,
 } from 'react-native';
 
 import {sendBird} from '../Config';
@@ -53,8 +53,11 @@ export default class ChatHome extends Component {
           (() => {
             if (this.state.channel) {
               console.log('going to group chat');
+              console.log(this.props);
 
-              return (<ChatGroupInfo channel = {this.state.channel} />)
+              return (<ChatGroupInfo channel = {this.state.channel} route={this.props.route} userUid = {this.props.userUid}
+              displayName= {this.props.displayName}
+              photoURL={this.props.photoURL} navigator={this.props.navigator}/>)
             } else {
               return (<Text style={{fontSize:20}}> I am home </Text>);
             }
