@@ -17,7 +17,7 @@ export default class Chat extends Component {
             messages: []
         };
 
-        this.chatRef = database.ref('chat/').child('event_chat');
+        this.chatRef = database.ref('chat/').child(this.props.eventUid);
         this.chatRefData = this.chatRef.orderByChild('order')
         this.onSend = this.onSend.bind(this);
 

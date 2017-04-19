@@ -21,26 +21,21 @@ export default class ChatGroupInfo extends Component {
   enterChatRoom = () => {
     var self = this;
     console.log(this.props);
-    this.props.channel.enter(function(response, error){
-        if (error) {
-            console.error(error);
-            return;
-        }
-        console.log(self.props);
+
       self.props.navigator.push({
                             name: 'Chat',
-                            title: self.props.channel.name,
+                            title: self.props.channel.event_title,
                             openMenu: self.props.route.openMenu ,
                             closeMenu: self.props.route.closeMenu,
                             rightText: "More Info" ,
                             leftText: "Back",
                             displayName: self.props.displayName,
                             userUid: self.props.userUid,
-                            photoURL: self.props.photoURL
+                            photoURL: self.props.photoURL,
+                            eventUid: this.props.eventUid
 
 
         });
-    });
 
   }
   render() {
@@ -53,11 +48,11 @@ export default class ChatGroupInfo extends Component {
 
         }>
         <Image
-          source={{ uri:channel.coverUrl}}
+          source={{ uri:channel.uploadURL}}
           style={ styles.image }>
 
         </Image>
-        <Text style={groupsStyles.h2}>{channel.name}</Text>
+        <Text style={groupsStyles.h2}>{channel.event_title}</Text>
         </TouchableOpacity>
         </View>
 

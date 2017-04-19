@@ -169,6 +169,7 @@ export default class AddNewEvent extends Component{
 
        var userRef =  database.ref('users/' + user.uid );
        var eventRef = database.ref('events/');
+       var chatMemberRef= database.ref('chatMembers');
        var createdRef = userRef.child('createdEvents');
        this.state.formData.owner_id = user.uid + '';
 
@@ -177,21 +178,25 @@ export default class AddNewEvent extends Component{
          var newEventRef = eventRef.push();
          var eventString = newEventRef.key;
          var info = {};
+         var userInfo = {};
          info[eventString] = {
            'event_title' : this.state.formData.event_title,
            'event_time' : this.state.formData.event_time,
            'uploadURL' : this.state.formData.uploadURL
+         };
+         userInfo[eventString] = {
+           'displayName': this.props.displayName,
+           'photoURL' : this.props.photoURL,
+           'sex': this.props.sex
          }
          newEventRef.set(this.state.formData);
           createdRef.child(eventString).set(info[eventString]);
+          chatMemberRef.child(eventString).update(info[eventString]);
           this.props.navigator.pop();
        } else if (this.state.mode === 'update'){
-         console.log("going to update");
-         console.log("Form data state");
-         console.log(this.state.formData);
-         console.log(this.props.eventDataLocation);
+
          if (this.props.eventDataLocation){
-           console.log("updating inside data location");
+
 
           //  var updateEventRef = eventRef.child(this.props.dataLocation);
           var updateEventsRef = eventRef.child(this.props.eventDataLocation);

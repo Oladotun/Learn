@@ -139,7 +139,8 @@ export default class Home extends Component {
                           onSaveButton: this.onSaveButton,
                             rightValid: this.state.rightButtonValidated,
                             displayName : this.props.displayName,
-                            userUid : this.props.userUid
+                            userUid : this.props.userUid,
+                            sex: this.props.sex
                         });
     }else {
         this.refs.nav.pop();
@@ -395,6 +396,7 @@ const renderRouterScene = (route, navigator) => {
                ref='eventAdd'
                displayName={route.displayName}
                userUid = {route.userUid}
+               sex = {route.sex}
             />
          )
       }
@@ -459,6 +461,7 @@ const renderRouterScene = (route, navigator) => {
                 userUid= {route.userUid}
               displayName= {route.displayName}
               photoURL={route.photoURL}
+              eventUid= {route.eventUid}
         />)
       }
    }

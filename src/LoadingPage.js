@@ -18,7 +18,7 @@ const RouteMapper = (route, navigator) => {
   if(route.name === 'textVerification') {
     return <TextVerification navigator={navigator} />
   }else if(route.name === 'home') {
-    return <Home navigator={navigator} displayName={route.displayName} userUid = {route.userUid} photoURL ={route.photoURL} />
+    return <Home navigator={navigator} displayName={route.displayName} userUid = {route.userUid} photoURL ={route.photoURL} sex={route.sex} />
   } else if(route.name === 'profileSetUp') {
     return <ProfileSetUp navigator={navigator} />
   } else if(route.name === 'settings'){
@@ -38,7 +38,8 @@ export default class LoadingPage extends Component {
        displayName: null,
        photoURL: null,
        userSet: false,
-       uidSet: false
+       uidSet: false,
+       sex: null
       };
 
   }
@@ -56,13 +57,15 @@ export default class LoadingPage extends Component {
         firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
           var username = snapshot.val().displayName;
           var photoURL = snapshot.val().photoURL;
+          var sex = snapshot.val().sex;
 
           self.setState({
             user: user,
             loading: false,
             displayName: username,
             photoURL: photoURL,
-            userSet: true
+            userSet: true,
+            sex: sex
           });
 
 
@@ -211,7 +214,7 @@ export default class LoadingPage extends Component {
               return(
                 <Navigator
                   // Default to movies route
-                  initialRoute={{name: 'home', displayName: this.state.displayName, userUid: this.state.user.uid,photoURL: this.state.photoURL}}
+                  initialRoute={{name: 'home', displayName: this.state.displayName, userUid: this.state.user.uid,photoURL: this.state.photoURL, sex: this.state.sex}}
                   // Use FloatFromBottom transition between screens
                   configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
                   // Pass a route mapper functions
