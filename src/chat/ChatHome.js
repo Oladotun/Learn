@@ -3,6 +3,7 @@ import {
     View,
     Text,
     StyleSheet,
+    ScrollView
 } from 'react-native';
 
 import ChatGroupInfo from './ChatGroupInfo';
@@ -75,17 +76,21 @@ export default class ChatHome extends Component {
   render() {
       return (
         <View style={styles.container}>
+        <ScrollView
+
+        >
+
         {
+
           (() => {
             var chatInfos = []
             if (this.state.allEvents.length > 0) {
               console.log('going to group chat');
               console.log(this.props);
+
               var itemChat = [];
               for (items in this.state.allEvents) {
-                var eachEvent = this.state.allEvents[items]
-                console.log(eachEvent)
-                console.log(items)
+                var eachEvent = this.state.allEvents[items];
                 var userKey = null;
                 var value = null;
                 Object.keys(eachEvent).forEach(function(key) {
@@ -107,6 +112,8 @@ export default class ChatHome extends Component {
           )()
 
         }
+      
+        </ScrollView>
 
         </View>
 
@@ -117,10 +124,8 @@ export default class ChatHome extends Component {
   const styles = StyleSheet.create({
   container: {
       flex: 1,
-      alignItems: 'center',
+      alignItems: 'flex-start',
       justifyContent: 'flex-start',
-      marginRight: 10,
-      marginLeft: 10,
-      marginBottom: 50
+      flexDirection: 'row'
   }
   })

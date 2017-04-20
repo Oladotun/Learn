@@ -140,6 +140,7 @@ export default class Home extends Component {
                             rightValid: this.state.rightButtonValidated,
                             displayName : this.props.displayName,
                             userUid : this.props.userUid,
+                            photoURL: this.props.photoURL,
                             sex: this.props.sex
                         });
     }else {
@@ -396,6 +397,7 @@ const renderRouterScene = (route, navigator) => {
                ref='eventAdd'
                displayName={route.displayName}
                userUid = {route.userUid}
+               photoURL = {route.photoURL}
                sex = {route.sex}
             />
          )
@@ -413,6 +415,7 @@ const renderRouterScene = (route, navigator) => {
                eventDataLocation = {route.eventDataLocation}
                displayName={route.displayName}
                userUid = {route.userUid}
+               photoURL = {route.photoURL}
             />
          )
       }

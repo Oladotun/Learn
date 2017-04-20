@@ -2,6 +2,7 @@ import firebase from 'firebase';
 import React, { Component } from 'react';
 import {
   Dimensions,
+  Platform
 } from 'react-native';
 import RNFetchBlob from 'react-native-fetch-blob';
 import SendBird from 'sendbird';

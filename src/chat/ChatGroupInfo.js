@@ -52,7 +52,7 @@ export default class ChatGroupInfo extends Component {
           style={ styles.image }>
 
         </Image>
-        <Text style={groupsStyles.h2}>{channel.event_title}</Text>
+        <Text style={{fontSize:10}}>{channel.event_title}</Text>
         </TouchableOpacity>
         </View>
 
@@ -64,14 +64,23 @@ const styles = StyleSheet.create({
   container: {
       flex: 1,
       alignItems: 'center',
-      justifyContent: 'flex-start',
-      marginRight: 10,
-      marginLeft: 10,
-      marginBottom: 50
-  },
-  image: {
-    height: width/3,
-    width: width/3,
+      justifyContent: 'center',
 
   },
+  image: {
+
+    height: width/4,
+    width: width/4,
+    borderRadius: width/6,
+    borderWidth: 1,
+    borderColor: 'gray',
+    justifyContent: 'center'
+
+  },
+  groupContainer: {
+    height: width/4,
+    width: width/2,
+    alignItems: 'center'
+
+  }
 });
