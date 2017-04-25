@@ -53,6 +53,7 @@ export default class ChatGroupInfo extends Component {
 
         </Image>
         <Text style={{fontSize:10}}>{channel.event_title}</Text>
+        <Text style={{fontSize:10}}>{channel.version}</Text>
         </TouchableOpacity>
         </View>
 

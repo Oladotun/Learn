@@ -36,6 +36,8 @@ export default class ChatHome extends Component {
       var attendingEvents = snapshot.val().attendingEvents;
       var createdEvents = snapshot.val().createdEvents;
 
+      var subgroupInfo = snapshot.val().subgroupInfo;
+
       console.log(attendingEvents);
       console.log(createdEvents);
       var allEvents = [];
@@ -50,6 +52,14 @@ export default class ChatHome extends Component {
         var obj = {};
         obj[events] = createdEvents[events];
           allEvents.push(obj);
+      });
+
+      Object.keys(subgroupInfo).forEach(function(events){
+
+        var obj = {};
+        obj[events] = subgroupInfo[events];
+        allEvents.push(obj);
+
       });
 
       self.setState({allEvents: allEvents});
@@ -112,7 +122,7 @@ export default class ChatHome extends Component {
           )()
 
         }
-      
+
         </ScrollView>
 
         </View>
