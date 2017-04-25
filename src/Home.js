@@ -89,6 +89,8 @@ export default class Home extends Component {
           leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>,
           displayName : this.props.displayName,
           userUid : this.props.userUid,
+          photoURL: this.props.photoURL,
+          sex: this.props.sex,
           eventDataLocation: route.eventDataLocation
 
       } );
@@ -441,6 +443,8 @@ const renderRouterScene = (route, navigator) => {
           eventDataLocation = {route.eventDataLocation}
           displayName={route.displayName}
           userUid = {route.userUid}
+          sex = {route.sex}
+          photoURL = {route.photoURL}
           ref='joinEvent'
            />
         )

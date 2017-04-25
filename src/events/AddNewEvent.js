@@ -39,7 +39,8 @@ export default class AddNewEvent extends Component{
         event_category: 'get together',
         is_event_private: false,
         host_name: this.props.displayName,
-        attendingCount: 1
+        attendingCount: 1,
+        subgroupVersion: 1
       },
       place: null,
       uploadURL: 'nothing',
@@ -189,7 +190,8 @@ export default class AddNewEvent extends Component{
          info[eventString] = {
            'event_title' : this.state.formData.event_title,
            'event_time' : this.state.formData.event_time,
-           'uploadURL' : this.state.formData.uploadURL
+           'uploadURL' : this.state.formData.uploadURL,
+           'user_per_groupchat': this.state.formData.user_per_groupchat
          };
          userInfo[eventString] = {
            'displayName': this.props.displayName,
@@ -199,6 +201,9 @@ export default class AddNewEvent extends Component{
 
          var malecount = 0;
          var femalecount = 0;
+        //  var nextChatLocation = subgroupString;
+         this.state.formData['openSubgroupMale'] = subgroupString;
+         this.state.formData['openSubgroupFemale'] = subgroupString;
          if (this.props.sex === 'male'){
            malecount = 1;
          } else {
@@ -220,8 +225,8 @@ export default class AddNewEvent extends Component{
          newEventRef.update(this.state.formData);
          parentEventSubGroupRef.child(eventString).child(subgroupString).update(subgroupInfo[subgroupString]);
          createdRef.child(eventString).set(info[eventString]);
-         chatMemberRef.child(eventString).update(userInfo[eventString]);
-         chatMemberRef.child(subgroupString).update(userInfo[eventString]);
+         chatMemberRef.child(eventString).child(this.props.userUid).update(userInfo[eventString]);
+         chatMemberRef.child(subgroupString).child(this.props.userUid).update(userInfo[eventString]);
          subgroupRef.child(subgroupString).update(subgroupInfo[subgroupString]);
          userRef.child('subgroupInfo').child(subgroupString).update(subgroupInfo[subgroupString]);
          this.props.navigator.pop();
