@@ -14,6 +14,10 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../styles/colors';
+import { TabViewAnimated, TabBar } from 'react-native-tab-view';
+import {database} from '../Config';
+import ChatGroupInfo from '../chat/ChatGroupInfo'
+
 var {height, width} = Dimensions.get('window');
 
 export default class ViewEvent extends Component{
@@ -29,11 +33,20 @@ export default class ViewEvent extends Component{
       websiteColor: '#a9a9a9',
       goingColor: '#a9a9a9',
       shareColor: '#a9a9a9',
+      index: 0,
+      routes: [
+      { key: '1', title: 'Chat' },
+      { key: '2', title: 'Members' },
+      ],
 
     }
   }
 
-  
+  componentWillMount(){
+
+  }
+
+
   goingToggle = () => {
     console.log("going");
     // this.setState({attending: })
@@ -47,6 +60,25 @@ export default class ViewEvent extends Component{
     this.setState({shareColor:'#488CE2',goingColor:'#a9a9a9',websiteColor:'#a9a9a9'});
 
   }
+
+  _handleChangeTab = (index) => {
+    this.setState({ index });
+  };
+
+  _renderHeader = (props) => {
+    return <TabBar scrollEnabled={true} {...props} />;
+  };
+
+  _renderScene = ({ route }) => {
+    switch (route.key) {
+    case '1':
+      return <ChatGroupInfo style={[ styles.page, { backgroundColor: '#ff4081' } ]} channel={this.props.eventObject}/>;
+    case '2':
+      return <View style={[ styles.page, { backgroundColor: '#673ab7' } ]} />;
+    default:
+      return null;
+    }
+  };
 
   render(){
     var eventObject = null;
@@ -153,6 +185,14 @@ export default class ViewEvent extends Component{
 
       </View>
 
+      <TabViewAnimated
+        style={{flex:1}}
+        navigationState={this.state}
+        renderScene={this._renderScene}
+        renderHeader={this._renderHeader}
+        onRequestChangeTab={this._handleChangeTab}
+      />
+
 
 
 
@@ -163,6 +203,8 @@ export default class ViewEvent extends Component{
     );
   }
 }
+
+
 
 const styles = StyleSheet.create({
   message: {
@@ -188,6 +230,11 @@ const styles = StyleSheet.create({
   container: {
     flex:1,
 
+  },
+  page: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   subViewInfo: {
     flexDirection: 'column',

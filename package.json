@@ -34,6 +34,7 @@
     "react-native-searchbar": "^1.8.0",
     "react-native-simple-radio-button": "^2.5.0-alpha.1",
     "react-native-sinch-verification": "0.0.5",
+    "react-native-tab-view": "0.0.60",
     "react-native-vector-icons": "^4.0.0",
     "react-navigation": "^1.0.0-beta.7",
     "sendbird": "^3.0.27",
