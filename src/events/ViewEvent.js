@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   Image,
-  Dimensions
+  Dimensions,
+  ScrollView
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -36,15 +37,42 @@ export default class ViewEvent extends Component{
       index: 0,
       routes: [
       { key: '1', title: 'Chat' },
-      { key: '2', title: 'Members' },
+      { key: '2', title: 'Attending (' + this.props.eventObject.attendingCount + ')'},
       ],
+      chatgroup: []
 
     }
   }
 
   componentWillMount(){
-
+    // this.getChatInfo();
   }
+
+  // getChatInfo = () => {
+  //   var self = this;
+  //   if (this.props.eventObject.subgroup){
+  //       var chatRef = database.ref('eventSubGroup').child(this.props.eventObject.subgroup);
+  //       var chatgrouplist = [];
+  //       chatgrouplist.push(  <ChatGroupInfo key={this.props.eventDataLocation} style={[ styles.page, { backgroundColor: '#ff4081' } ]} channel={this.props.eventObject}/>);
+  //
+  //       chatRef.once('value', function(snapshot){
+  //         var channel = snapshot.val();
+  //         chatgrouplist.push(<ChatGroupInfo key={self.props.eventObject.subgroup} style={[ styles.page, { backgroundColor: '#ff4081' } ]} channel={channel} >);
+  //           self.setState({chatgroup : chatgrouplist});
+  //
+  //           return chatgrouplist;
+  //       });
+  //   } else {
+  //     var chatgrouplist = [];
+  //     chatgrouplist.push(<ChatGroupInfo key={this.props.eventDataLocation} style={[ styles.page, { backgroundColor: '#ff4081' } ]} channel={this.props.eventObject}/>);
+  //     self.setState({chatgroup: chatgrouplist});
+  //     return chatgrouplist;
+  //   }
+  //
+  //
+  //
+  //
+  // }
 
 
   goingToggle = () => {
@@ -72,7 +100,9 @@ export default class ViewEvent extends Component{
   _renderScene = ({ route }) => {
     switch (route.key) {
     case '1':
-      return <ChatGroupInfo style={[ styles.page, { backgroundColor: '#ff4081' } ]} channel={this.props.eventObject}/>;
+    return <ChatGroupInfo key={this.props.eventDataLocation} style={[ styles.page, { backgroundColor: '#ff4081' } ]} channel={this.props.eventObject}/>;
+
+      // return this.state.chatgrouplist;
     case '2':
       return <View style={[ styles.page, { backgroundColor: '#673ab7' } ]} />;
     default:
@@ -233,7 +263,7 @@ const styles = StyleSheet.create({
   },
   page: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
   },
   subViewInfo: {

@@ -429,6 +429,8 @@ const renderRouterScene = (route, navigator) => {
                {...route.passProps}
                route={route}
                eventObject = {route.eventObject}
+               eventDataLocation = {route.eventDataLocation}
+               userEventObject = {route.eventUserObject}
                ref='eventView'
             />
          )

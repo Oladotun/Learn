@@ -56,6 +56,7 @@ export default class EventBox extends Component {
           openMenu: this.props.openMenu ,
           closeMenu: this.props.closeMenu,
           eventDataLocation: this.props.dataLocation,
+          eventUserObject: this.props.eventObject,
           rightText: 'Join',
           leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>
 

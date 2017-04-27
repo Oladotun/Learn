@@ -96,6 +96,8 @@ export default class JoinEvent extends Component{
 
     // subgroupString
     var self = this;
+    var subgroupchat = {};
+    subgroupchat['subgroup'] = lastGroupString;
 
     currSubGroupRef.once('value').then(function(snapshot){
       var subgroupInfo = snapshot.val();
@@ -114,6 +116,7 @@ export default class JoinEvent extends Component{
         userRef.child('subgroupInfo').child(lastGroupString).update(subgroupInfo);
         snapshot.ref.update(subgroupInfo);
         parentEventSubGroupRef.child(self.props.eventDataLocation).child(lastGroupString).update(subgroupInfo);
+        userRef.child('attendingEvents').child(this.props.eventDataLocation).update(subgroupchat);
 
         if (subgroupInfo[self.props.sex] >= subgroupInfo['max_users']/2 ){
           // find next group chat and update
@@ -177,6 +180,9 @@ export default class JoinEvent extends Component{
       'version': this.props.eventObject.subgroupVersion + 1
     }
 
+    var subgroupchat = {    };
+    subgroupchat['subgroup'] = subgroupString;
+
 
     eventLocationRef.update({'attendingCount': this.props.eventObject.attendingCount + 1,
                             'subgroupVersion': this.props.eventObject.subgroupVersion + 1,
@@ -189,6 +195,7 @@ export default class JoinEvent extends Component{
     chatMemberRef.child(subgroupString).child(this.props.userUid).update(userInfo[eventString]);
     subgroupRef.child(subgroupString).update(subgroupInfo[subgroupString]);
     userRef.child('subgroupInfo').child(subgroupString).update(subgroupInfo[subgroupString]);
+    userRef.child('attendingEvents').child(this.props.eventDataLocation).update(subgroupchat);
     // last group male
   }
 
