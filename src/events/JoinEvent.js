@@ -3,7 +3,8 @@ import RadioForm, {RadioButtonLabel} from 'react-native-simple-radio-button';
 import {
   StyleSheet,
   View,
-  Text
+  Text,
+  TextInput
 } from 'react-native';
 
 import {database} from '../Config';
@@ -19,7 +20,7 @@ export default class JoinEvent extends Component{
   constructor(props){
     super(props);
     this.state = {
-      value:0,
+      text:'',
     }
   }
 
@@ -246,19 +247,27 @@ export default class JoinEvent extends Component{
   }
 
   render() {
+    var eventObject = this.props.eventObject;
     return(
       <View style={{flex:1}}>
       <View style={styles.container}>
-      <Text style= {styles.message}> Oremi puts you in a group chat to start interacting with guests. </Text>
-      <Text style= {styles.message}> Would you like to be a group chat admin ? </Text>
+      <Text style= {styles.message}> {eventObject['host_name']} want you to chat with other guests. </Text>
+      <Text style= {styles.message}> Add a little Introduction about yourself below </Text>
 
 
      </View>
-     <View style={{alignSelf: 'center'}}>
-     <RadioForm
-       radio_props={radio_props}
-       initial={0}
-       onPress={(value) => {this.setState({value:value})}}
+     <View style={{
+       backgroundColor: this.state.text,
+       borderBottomColor: '#000000',
+       borderTopWidth: 1,
+       borderBottomWidth: 1 }}>
+     <TextInput
+      multiline = {true}
+       numberOfLines = {4}
+       onChangeText={(text) => this.setState({text})}
+       value={this.state.text}
+       editable = {true}
+       style ={{height:50}}
      />
      </View>
      </View>
