@@ -19,6 +19,7 @@ import Settings from './settings/Settings';
 import Contacts from './contacts/Contact';
 import ChatHome from './chat/ChatHome'
 import Chat from './chat/Chats'
+import ChatMoreInfo from './chat/ChatMoreInfo'
 import AddNewEvent from './events/AddNewEvent';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -117,6 +118,18 @@ export default class Home extends Component {
       console.log('Updated');
     } else if (route.name === 'JoinEvent'){
       this.refs.nav.refs.joinEvent.updateEventInfo();
+    } else if(route.name === 'Chat'){
+
+      this.refs.nav.push({
+        name: 'ChatMoreInfo',
+        title: 'Member Info',
+        openMenu: this.openMenu ,
+        closeMenu: this.closeMenu,
+        rightText: 'Update',
+        leftText: 'Close',
+        eventUid: route.eventUid
+      });
+
     }
 
 
@@ -471,7 +484,12 @@ const renderRouterScene = (route, navigator) => {
               displayName= {route.displayName}
               photoURL={route.photoURL}
               eventUid= {route.eventUid}
+
         />)
+      } else if(route.name === 'ChatMoreInfo'){
+        return(<ChatMoreInfo navigator={navigator} route={route}
+            eventUid = {route.eventUid}
+          />)
       }
    }
 
