@@ -30,7 +30,7 @@ export default class EventsHome extends Component {
       console.log(userUid);
       var self = this;
       let userRef =  database.ref('users/' + userUid + '/createdEvents/' );
-          userRef.on('value', function(snapshot) {
+          userRef.orderByChild("event_time").startAt(new Date()).on('value', function(snapshot) {
             self.setState({createdEvents:snapshot.val()});
 
           });
@@ -39,6 +39,20 @@ export default class EventsHome extends Component {
 
     loadAttendingEvent = async() => {
 
+    }
+    addNewEvent = () => {
+      this.props.navigator.push({name:'AddNewEvent',
+                          title: 'Add Event',
+                          openMenu: this.props.openMenu ,
+                          closeMenu: this.props.closeMenu,
+                          rightText: 'Save',
+                          leftText: 'Cancel',
+                            rightValid: true,
+                            displayName : this.props.displayName,
+                            userUid : this.props.userUid,
+                            photoURL: this.props.photoURL,
+                            sex: this.props.sex
+                        });
     }
 
     goToEventSearch = () => {
@@ -66,7 +80,7 @@ export default class EventsHome extends Component {
       var userUnattendedEvents = {};
       var userAttendingEvents = {};
       let userRef =  database.ref('/events/' );
-          userRef.on('value', function(snapshot) {
+          userRef.orderByChild("event_time").startAt(new Date()).on('value', function(snapshot) {
             snapshot.forEach(function(child){
               var key = child.key;
               var value = child.val();
@@ -75,7 +89,7 @@ export default class EventsHome extends Component {
               var userAttend = database.ref('users/' + userUid +
                                             '/attendingEvents/');
 
-            userAttend.once('value', function(presentInUser){
+            userAttend.orderByChild("event_time").startAt(new Date()).once('value', function(presentInUser){
               console.log('presentInUser ');
               console.log(presentInUser.val());
               if (presentInUser.hasChild(key)){
@@ -149,7 +163,7 @@ export default class EventsHome extends Component {
 
                         return (
                           <View style={myStyles.imageContainer}>
-                          <TouchableOpacity>
+                          <TouchableOpacity onPress={this.addNewEvent}>
                           <Text style={[{fontSize: 20},{color: '#000000'}]}> Create New Events </Text>
                           <Icon name="ios-add-circle" size={100} style={[{color:'#4A90E2'},{marginLeft:40}]}/>
                           </TouchableOpacity>
@@ -201,9 +215,9 @@ export default class EventsHome extends Component {
                       )} else {
 
                         return (
-                          <View style={myStyles.container}>
-                          <TouchableOpacity>
-                          <Text style={[{fontSize: 20},{color: '#000000'}]}> Search for Events </Text>
+                          <View style={myStyles.imageContainer}>
+                          <TouchableOpacity onPress={this.addNewEvent}>
+                          <Text style={[{fontSize: 20},{color: '#000000'}]}> No Upcoming Events </Text>
                           <Icon name="ios-add-circle" size={100} style={[{color:'#4A90E2'},{marginLeft:40}]}/>
                           </TouchableOpacity>
 
@@ -255,8 +269,8 @@ export default class EventsHome extends Component {
 
                         return (
                           <View style={myStyles.imageContainer}>
-                          <TouchableOpacity>
-                          <Text style={[{fontSize: 20},{color: '#000000'}]}> Search for Events </Text>
+                          <TouchableOpacity onPress={this.addNewEvent}>
+                          <Text style={[{fontSize: 20},{color: '#000000'}]}> No Searched Events </Text>
                           <Icon name="ios-add-circle" size={100} style={[{color:'#4A90E2'},{marginLeft:40}]}/>
                           </TouchableOpacity>
 

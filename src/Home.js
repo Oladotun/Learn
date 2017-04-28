@@ -187,6 +187,8 @@ export default class Home extends Component {
                             onSaveButton: this.onSaveButton,
                             userUid : this.props.userUid,
                             displayName: this.props.displayName,
+                            sex: this.props.sex,
+                            photoURL: this.props.photoURL,
                           rightValid: true}}
               renderScene = { renderRouterScene  }
               configureScene = {(route, routeStack) => {
@@ -407,6 +409,9 @@ const renderRouterScene = (route, navigator) => {
                openMenu = {route.openMenu}
                closeMenu = {route.closeMenu}
                userUid = {route.userUid}
+               displayName = {route.displayName}
+               photoURL = {route.photoURL}
+               sex = {route.sex}
                ref = 'eventsHome'
             />
          )
