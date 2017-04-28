@@ -120,7 +120,7 @@ export default class Home extends Component {
       this.refs.nav.refs.joinEvent.updateEventInfo();
     } else if(route.name === 'Chat'){
 
-      this.refs.nav.push({
+      this.refs.chatNav.push({
         name: 'ChatMoreInfo',
         title: 'Member Info',
         openMenu: this.openMenu ,
@@ -158,8 +158,11 @@ export default class Home extends Component {
                             photoURL: this.props.photoURL,
                             sex: this.props.sex
                         });
-    }else {
+    }else if(!route.name.includes('Chat') ){
+      console.log('pop called');
         this.refs.nav.pop();
+    } else {
+      this.refs.chatNav.pop();
     }
 
   }
@@ -232,7 +235,7 @@ export default class Home extends Component {
                     style = { styles.navigationBar }
                     routeMapper = { NavigationBarRouteMapper } />
               }
-              ref = "nav"
+              ref = "chatNav"
               sceneStyle={{paddingTop: 64}}
            />
 
