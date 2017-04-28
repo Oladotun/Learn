@@ -100,7 +100,9 @@ export default class ViewEvent extends Component{
   _renderScene = ({ route }) => {
     switch (route.key) {
     case '1':
-    return <ChatGroupInfo key={this.props.eventDataLocation} style={[ styles.page, { backgroundColor: '#ff4081' } ]} channel={this.props.eventObject}/>;
+    return <ChatGroupInfo key={this.props.eventDataLocation} navigator={this.props.navigator}
+    route={this.props.route} eventUid={this.props.eventDataLocation}
+    style={[ styles.page, { backgroundColor: '#ff4081' } ]} channel={this.props.eventObject}/>;
 
       // return this.state.chatgrouplist;
     case '2':

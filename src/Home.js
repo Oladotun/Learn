@@ -158,11 +158,16 @@ export default class Home extends Component {
                             photoURL: this.props.photoURL,
                             sex: this.props.sex
                         });
-    }else if(!route.name.includes('Chat') ){
+    }else if(!route.name.includes('Chat')){
       console.log('pop called');
         this.refs.nav.pop();
     } else {
-      this.refs.chatNav.pop();
+      if (this.refs.chatNav){
+        this.refs.chatNav.pop();
+      } else {
+        this.refs.nav.pop();
+      }
+
     }
 
   }
