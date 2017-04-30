@@ -213,7 +213,7 @@ export default class Home extends Component {
 
         )
     } else if (this.state.selectedTab === 'settings'){
-      return(<Settings/>)
+      return(<Settings displayName={this.props.displayName} photoURL={this.props.photoURL}/>)
     }else if (this.state.selectedTab === 'contacts'){
       return(<Contacts/>)
     }else if (this.state.selectedTab === 'chats'){
@@ -503,6 +503,11 @@ const renderRouterScene = (route, navigator) => {
         return(<ChatMoreInfo navigator={navigator} route={route}
             eventUid = {route.eventUid}
           />)
+      } else if(route.name === 'Settings'){
+        return(<Settings navigator={navigator} route={route}
+        displayName= {route.displayName}
+        photoURL = {route.photoURL}
+        />)
       }
    }
 
