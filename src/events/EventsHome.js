@@ -30,7 +30,7 @@ export default class EventsHome extends Component {
       console.log(userUid);
       var self = this;
       let userRef =  database.ref('users/' + userUid + '/createdEvents/' );
-          userRef.orderByChild("event_time").startAt(new Date()).on('value', function(snapshot) {
+          userRef.orderByChild("sortDate").startAt((new Date()).getTime()).on('value', function(snapshot) {
             self.setState({createdEvents:snapshot.val()});
 
           });

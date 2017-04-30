@@ -139,7 +139,10 @@ export default class AddNewEvent extends Component{
         this.setState({formData:this.state.formData});
       }
 
+
     }
+
+
 
 
     if (!this.state.formData.event_title || this.state.formData.event_title === '' ){
@@ -164,6 +167,9 @@ export default class AddNewEvent extends Component{
 
       } else if(this.state.loading === false) {
         this.state.formData.uploadURL= this.state.uploadURL;
+        if (this.state.formData.event_time) {
+          this.state.formData.sortDate = (new Date(this.state.formData.event_time)).getTime();
+        }
 
 
         var user = firebase.auth().currentUser;
@@ -190,6 +196,7 @@ export default class AddNewEvent extends Component{
          info[eventString] = {
            'event_title' : this.state.formData.event_title,
            'event_time' : this.state.formData.event_time,
+           'sortDate' : this.state.formData.sortDate,
            'uploadURL' : this.state.formData.uploadURL,
            'user_per_groupchat': this.state.formData.user_per_groupchat
          };
@@ -215,6 +222,7 @@ export default class AddNewEvent extends Component{
            'female': femalecount,
            'event_title' : this.state.formData.event_title,
            'event_time' : this.state.formData.event_time,
+           'sortDate' : this.state.formData.sortDate,
            'uploadURL' : this.state.formData.uploadURL,
            'parent_chatInfo': eventString,
            'currentCount': 1,
