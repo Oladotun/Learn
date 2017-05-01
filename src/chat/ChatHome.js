@@ -33,6 +33,7 @@ export default class ChatHome extends Component {
     var userRef = database.ref('users').child(this.props.userUid);
 
     userRef.once('value', function(snapshot){
+      console.log("In value snapshot");
       var attendingEvents = snapshot.val().attendingEvents;
       var createdEvents = snapshot.val().createdEvents;
 
@@ -41,26 +42,33 @@ export default class ChatHome extends Component {
       console.log(attendingEvents);
       console.log(createdEvents);
       var allEvents = [];
+     if (attendingEvents){
+       Object.keys(attendingEvents).forEach(function(events) {
+         var obj = {};
+         obj[events] = attendingEvents[events];
+           allEvents.push(obj);
+       });
+     }
 
-      Object.keys(attendingEvents).forEach(function(events) {
-        var obj = {};
-        obj[events] = attendingEvents[events];
-          allEvents.push(obj);
-      });
+     if(createdEvents){
+       Object.keys(createdEvents).forEach(function(events) {
+         var obj = {};
+         obj[events] = createdEvents[events];
+           allEvents.push(obj);
+       });
 
-      Object.keys(createdEvents).forEach(function(events) {
-        var obj = {};
-        obj[events] = createdEvents[events];
-          allEvents.push(obj);
-      });
+     }
 
-      Object.keys(subgroupInfo).forEach(function(events){
+     if(subgroupInfo){
+       Object.keys(subgroupInfo).forEach(function(events){
 
-        var obj = {};
-        obj[events] = subgroupInfo[events];
-        allEvents.push(obj);
+         var obj = {};
+         obj[events] = subgroupInfo[events];
+         allEvents.push(obj);
 
-      });
+       });
+     }
+
 
       self.setState({allEvents: allEvents});
 
@@ -110,6 +118,7 @@ export default class ChatHome extends Component {
                 chatInfos.push(<ChatGroupInfo key = {userKey} channel = {value} route={this.props.route} userUid = {this.props.userUid}
                 displayName= {this.props.displayName}
                 eventUid = {userKey}
+                callingFrom = {'ChatHome'}
                 photoURL={this.props.photoURL} navigator={this.props.navigator}/>)
 
               }

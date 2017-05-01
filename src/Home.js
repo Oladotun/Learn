@@ -119,16 +119,38 @@ export default class Home extends Component {
     } else if (route.name === 'JoinEvent'){
       this.refs.nav.refs.joinEvent.updateEventInfo();
     } else if(route.name === 'Chat'){
+      console.log("what is route");
+      console.log(route);
+      if (route.viewType === 'ChatHome'){
 
-      this.refs.chatNav.push({
-        name: 'ChatMoreInfo',
-        title: 'Member Info',
-        openMenu: this.openMenu ,
-        closeMenu: this.closeMenu,
-        rightText: 'Update',
-        leftText: 'Close',
-        eventUid: route.eventUid
-      });
+        this.refs.chatNav.push({
+          name: 'ChatMoreInfo',
+          title: 'Member Info',
+          openMenu: route.openMenu ,
+          closeMenu: route.closeMenu,
+          rightText: 'Update',
+          leftText: 'Close',
+          eventUid: route.eventUid,
+          photoURL: route.photoURL,
+          displayName: route.displayName,
+        });
+
+      } else {
+        this.refs.nav.push({
+          name: 'ChatMoreInfo',
+          title: 'Member Info',
+          openMenu: route.openMenu ,
+          closeMenu: route.closeMenu,
+          rightText: 'Update',
+          leftText: 'Close',
+          eventUid: route.eventUid,
+          photoURL: route.photoURL,
+          displayName: route.displayName,
+
+
+        })
+      }
+
 
     }
 
@@ -457,6 +479,9 @@ const renderRouterScene = (route, navigator) => {
                eventObject = {route.eventObject}
                eventDataLocation = {route.eventDataLocation}
                userEventObject = {route.eventUserObject}
+               displayName = {route.displayName}
+               userUid = {route.userUid}
+               photoURL = {route.photoURL}
                ref='eventView'
             />
          )

@@ -102,6 +102,8 @@ export default class ViewEvent extends Component{
     case '1':
     return <ChatGroupInfo key={this.props.eventDataLocation} navigator={this.props.navigator}
     route={this.props.route} eventUid={this.props.eventDataLocation}
+    userUid= {this.props.userUid} callingFrom = {'viewPage'}
+    displayName={this.props.displayName} photoURL={this.props.photoURL}
     style={[ styles.page, { backgroundColor: '#ff4081' } ]} channel={this.props.eventObject}/>;
 
       // return this.state.chatgrouplist;

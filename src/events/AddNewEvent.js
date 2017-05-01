@@ -254,7 +254,8 @@ export default class AddNewEvent extends Component{
              {
                'event_title' : this.state.formData.event_title,
                'event_time' : this.state.formData.event_time,
-               'uploadURL' : this.state.formData.uploadURL
+               'uploadURL' : this.state.formData.uploadURL,
+               'sortDate': this.state.formData.sortDate
              }
 
            );

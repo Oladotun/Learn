@@ -32,7 +32,8 @@ export default class ChatGroupInfo extends Component {
                             displayName: self.props.displayName,
                             userUid: self.props.userUid,
                             photoURL: self.props.photoURL,
-                            eventUid: this.props.eventUid
+                            eventUid: this.props.eventUid,
+                            viewType: self.props.callingFrom
 
 
         });

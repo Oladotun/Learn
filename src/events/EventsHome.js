@@ -65,6 +65,7 @@ export default class EventsHome extends Component {
 
 
         itemInfo.push(  <EventBox key={items} dataLocation = {items} navigator ={this.props.navigator}
+          displayName = {this.props.displayName} photoURL={this.props.photoURL} userUid = {this.props.userUid}
           eventObject={eachItem} openMenu= {this.props.openMenu} type={'search'}closeMenu={this.props.closeMenu} />);
         }
         return itemInfo;
@@ -80,7 +81,7 @@ export default class EventsHome extends Component {
       var userUnattendedEvents = {};
       var userAttendingEvents = {};
       let userRef =  database.ref('/events/' );
-          userRef.orderByChild("event_time").startAt(new Date()).on('value', function(snapshot) {
+          userRef.orderByChild("sortDate").startAt((new Date()).getTime()).on('value', function(snapshot) {
             snapshot.forEach(function(child){
               var key = child.key;
               var value = child.val();
@@ -89,7 +90,7 @@ export default class EventsHome extends Component {
               var userAttend = database.ref('users/' + userUid +
                                             '/attendingEvents/');
 
-            userAttend.orderByChild("event_time").startAt(new Date()).once('value', function(presentInUser){
+            userAttend.orderByChild("sortDate").startAt((new Date()).getTime()).once('value', function(presentInUser){
               console.log('presentInUser ');
               console.log(presentInUser.val());
               if (presentInUser.hasChild(key)){
@@ -150,6 +151,7 @@ export default class EventsHome extends Component {
 
 
                             itemInfo.push(  <EventBox key={items} dataLocation = {items} navigator ={this.props.navigator}
+                              displayName = {this.props.displayName} photoURL={this.props.photoURL} userUid = {this.props.userUid}
                               eventObject={eachItem} openMenu= {this.props.openMenu} closeMenu={this.props.closeMenu} />);
                             }
                             return itemInfo;
@@ -203,6 +205,7 @@ export default class EventsHome extends Component {
 
 
                             itemInfo.push(  <EventBox key={items} dataLocation = {items} navigator ={this.props.navigator}
+                              displayName = {this.props.displayName} photoURL={this.props.photoURL} userUid = {this.props.userUid}
                               eventObject={eachItem} openMenu= {this.props.openMenu} joinEvent ={'true'} closeMenu={this.props.closeMenu} />);
                             }
                             return itemInfo;
@@ -256,6 +259,7 @@ export default class EventsHome extends Component {
 
 
                             itemInfo.push(  <EventBox key={items} dataLocation = {items} navigator ={this.props.navigator}
+                              displayName = {this.props.displayName} photoURL={this.props.photoURL} userUid = {this.props.userUid}
                               eventObject={eachItem} openMenu= {this.props.openMenu} joinEvent ={'true'} closeMenu={this.props.closeMenu} />);
                             }
                             return itemInfo;

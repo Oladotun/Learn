@@ -178,7 +178,8 @@ export default class JoinEvent extends Component{
       'uploadURL' : this.props.eventObject.uploadURL,
       'parent_chatInfo': this.props.eventDataLocation,
       'currentCount': 1,
-      'version': this.props.eventObject.subgroupVersion + 1
+      'version': this.props.eventObject.subgroupVersion + 1,
+      'sortDate': this.props.eventObject.sortDate
     }
 
     var subgroupchat = {    };
@@ -212,7 +213,8 @@ export default class JoinEvent extends Component{
     attendingEventsInfo.set({
       'event_title' : this.props.eventObject.event_title,
       'event_time' : this.props.eventObject.event_time,
-      'uploadURL' : this.props.eventObject.uploadURL
+      'uploadURL' : this.props.eventObject.uploadURL,
+      'sortDate': this.props.eventObject.sortDate
     });
 
     this.joinEventSubGroup();

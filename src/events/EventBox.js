@@ -71,6 +71,9 @@ export default class EventBox extends Component {
           openMenu: this.props.openMenu ,
           closeMenu: this.props.closeMenu,
           eventDataLocation: this.props.dataLocation,
+          userUid: this.props.userUid,
+          photoURL: this.props.photoURL,
+          displayName: this.props.displayName,
           rightText: 'Edit',
           leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>
 
