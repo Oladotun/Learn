@@ -218,14 +218,22 @@ export default class ViewEvent extends Component{
       </View>
 
       </View>
+      {
+        (() => {
+          if(this.props.joinEvent === 'true') {
+            <TabViewAnimated
+              style={{flex:1}}
+              navigationState={this.state}
+              renderScene={this._renderScene}
+              renderHeader={this._renderHeader}
+              onRequestChangeTab={this._handleChangeTab}
+            />
+          }
 
-      <TabViewAnimated
-        style={{flex:1}}
-        navigationState={this.state}
-        renderScene={this._renderScene}
-        renderHeader={this._renderHeader}
-        onRequestChangeTab={this._handleChangeTab}
-      />
+        })()
+      }
+
+
 
 
 
