@@ -181,6 +181,7 @@ export default class Home extends Component {
                             sex: this.props.sex
                         });
     }else if(route.viewType === 'None'){
+      this.refs.nav.popToTop();
       this.setState({selectedTab:'chats'});
 
     }else if(!route.name.includes('Chat')){
