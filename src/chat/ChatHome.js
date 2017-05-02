@@ -3,12 +3,14 @@ import {
     View,
     Text,
     StyleSheet,
-    ScrollView
+    ScrollView,
+    ListView
 } from 'react-native';
 
 import ChatGroupInfo from './ChatGroupInfo';
 import firebase from 'firebase';
 import {database} from '../Config';
+import ListItem from './ListItem';
 
 export default class ChatHome extends Component {
 
@@ -17,7 +19,10 @@ export default class ChatHome extends Component {
     this.state = {
       channel: null,
       userRef: null,
-      allEvents: []
+      allEvents: [],
+      dataSource: new ListView.DataSource({
+        rowHasChanged: (row1, row2) => row1 !== row2,
+      })
     }
 
 
@@ -42,11 +47,17 @@ export default class ChatHome extends Component {
       console.log(attendingEvents);
       console.log(createdEvents);
       var allEvents = [];
+      var items = [];
      if (attendingEvents){
        Object.keys(attendingEvents).forEach(function(events) {
          var obj = {};
          obj[events] = attendingEvents[events];
            allEvents.push(obj);
+           items.push({
+             title: attendingEvents[events].event_title,
+             photoURL: attendingEvents[events].uploadURL,
+             _key: events
+           });
        });
      }
 
@@ -55,6 +66,11 @@ export default class ChatHome extends Component {
          var obj = {};
          obj[events] = createdEvents[events];
            allEvents.push(obj);
+           items.push({
+             title: createdEvents[events].event_title,
+             photoURL: createdEvents[events].uploadURL,
+             _key: events
+           });
        });
 
      }
@@ -65,12 +81,21 @@ export default class ChatHome extends Component {
          var obj = {};
          obj[events] = subgroupInfo[events];
          allEvents.push(obj);
+         items.push({
+           title: subgroupInfo[events].event_title,
+           photoURL: subgroupInfo[events].uploadURL,
+           _key: events
+         });
 
        });
      }
 
 
       self.setState({allEvents: allEvents});
+
+      self.setState({
+        dataSource: self.state.dataSource.cloneWithRows(items)
+      });
 
       // for (events in attendingEvents){
       //   allEvents.push({events: attendingEvents[events]});
@@ -79,7 +104,8 @@ export default class ChatHome extends Component {
       // for (created in createdEvents){
       //   allEvents.push({created: createdEvents[created]});
       // }
-      console.log(allEvents);
+      console.log(items);
+      // console.log(allEvents);
     });
 
 
@@ -91,52 +117,95 @@ export default class ChatHome extends Component {
   componentWillUnmount(){
 
   }
+
   render() {
-      return (
-        <View style={styles.container}>
-        <ScrollView
+    return (
+      <View style={styles.listcontainer}>
 
-        >
 
-        {
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={this._renderItem.bind(this)}
+          enableEmptySections={false}
+          style={styles.listview}/>
 
-          (() => {
-            var chatInfos = []
-            if (this.state.allEvents.length > 0) {
-              console.log('going to group chat');
-              console.log(this.props);
+      </View>
+    )
+  }
+  // render() {
+  //     return (
+  //       <View style={styles.container}>
+  //       <ScrollView
+  //
+  //       >
+  //
+  //       {
+  //
+  //         (() => {
+  //           var chatInfos = []
+  //           if (this.state.allEvents.length > 0) {
+  //             console.log('going to group chat');
+  //             console.log(this.props);
+  //
+  //             var itemChat = [];
+  //             for (items in this.state.allEvents) {
+  //               var eachEvent = this.state.allEvents[items];
+  //               var userKey = null;
+  //               var value = null;
+  //               Object.keys(eachEvent).forEach(function(key) {
+  //                 userKey = key;
+  //                 value = eachEvent[key];
+  //               });
+  //               chatInfos.push(<ChatGroupInfo key = {userKey} channel = {value} route={this.props.route} userUid = {this.props.userUid}
+  //               displayName= {this.props.displayName}
+  //               eventUid = {userKey}
+  //               callingFrom = {'ChatHome'}
+  //               photoURL={this.props.photoURL} navigator={this.props.navigator}/>)
+  //
+  //             }
+  //             return chatInfos;
+  //
+  //           } else {
+  //             return (<Text style={{fontSize:20}}> I am home </Text>);
+  //           }
+  //         }
+  //         )()
+  //
+  //       }
+  //
+  //       </ScrollView>
+  //
+  //       </View>
+  //
+  //     );
+  // }
 
-              var itemChat = [];
-              for (items in this.state.allEvents) {
-                var eachEvent = this.state.allEvents[items];
-                var userKey = null;
-                var value = null;
-                Object.keys(eachEvent).forEach(function(key) {
-                  userKey = key;
-                  value = eachEvent[key];
-                });
-                chatInfos.push(<ChatGroupInfo key = {userKey} channel = {value} route={this.props.route} userUid = {this.props.userUid}
-                displayName= {this.props.displayName}
-                eventUid = {userKey}
-                callingFrom = {'ChatHome'}
-                photoURL={this.props.photoURL} navigator={this.props.navigator}/>)
 
-              }
-              return chatInfos;
+  _renderItem(item) {
 
-            } else {
-              return (<Text style={{fontSize:20}}> I am home </Text>);
-            }
-          }
-          )()
+    const onPress = () => {
+      console.log("nothing");
 
-        }
+      this.props.navigator.push({
+                            name: 'Chat',
+                            title: item.title,
+                            openMenu: this.props.route.openMenu ,
+                            closeMenu: this.props.route.closeMenu,
+                            rightText: "More Info" ,
+                            leftText: "Back",
+                            displayName: this.props.displayName,
+                            userUid: this.props.userUid,
+                            photoURL: item.photoURL,
+                            eventUid: item._key,
+                            viewType: "ChatHome"
 
-        </ScrollView>
 
-        </View>
+        });
+    };
 
-      );
+    return (
+      <ListItem item={item} onPress={onPress} />
+    );
   }
   }
 
@@ -146,5 +215,30 @@ export default class ChatHome extends Component {
       alignItems: 'flex-start',
       justifyContent: 'flex-start',
       flexDirection: 'row'
+  },
+  listcontainer: {
+    backgroundColor: '#f2f2f2',
+    flex: 1,
+  },
+  listview: {
+    flex: 1,
+  },
+
+  li: {
+    backgroundColor: '#fff',
+    borderBottomColor: '#eee',
+    borderColor: 'transparent',
+    borderWidth: 1,
+    paddingLeft: 16,
+    
+    paddingBottom: 16,
+  },
+  liContainer: {
+    flex: 2,
+  },
+  liText: {
+    color: '#333',
+    fontSize: 16,
   }
-  })
+
+  });

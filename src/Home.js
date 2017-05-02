@@ -268,7 +268,7 @@ export default class Home extends Component {
                     routeMapper = { NavigationBarRouteMapper } />
               }
               ref = "chatNav"
-              sceneStyle={{paddingTop: 64}}
+              sceneStyle={{paddingTop: 40}}
            />
 
       );
