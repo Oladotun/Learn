@@ -4,7 +4,8 @@ import {
   StyleSheet,
   View,
   Text,
-  TextInput
+  TextInput,
+  Alert
 } from 'react-native';
 
 import {database} from '../Config';
@@ -92,6 +93,7 @@ export default class JoinEvent extends Component{
     var subgroupRef = database.ref('eventSubGroup')
     var currSubGroupRef = subgroupRef.child(lastGroupString);
     var chatMemberRef= database.ref('chatMembers');
+    var chatRef = database.ref('chat');
     var parentEventSubGroupRef = database.ref('parentEventSubGroup');
     var userInfo = {};
 
@@ -99,6 +101,7 @@ export default class JoinEvent extends Component{
     var self = this;
     var subgroupchat = {};
     subgroupchat['subgroup'] = lastGroupString;
+    var introMsg = {};
 
     currSubGroupRef.once('value').then(function(snapshot){
       var subgroupInfo = snapshot.val();
@@ -109,6 +112,19 @@ export default class JoinEvent extends Component{
           'photoURL' : self.props.photoURL,
           'sex': self.props.sex
         };
+        var now = new Date().getTime();
+        chatRef.child(lastGroupString).push({
+          _id: now,
+          text: self.state.text,
+          createdAt: now,
+          uid: self.props.userUid,
+          avatar: self.props.photoURL,
+          name: self.props.displayName,
+          order: -1 * now
+
+        });
+
+
 
         chatMemberRef.child(self.props.eventDataLocation).child(self.props.userUid).update(userInfo[self.props.eventDataLocation]);
         chatMemberRef.child(lastGroupString).child(self.props.userUid).update(userInfo[self.props.eventDataLocation]);
@@ -117,7 +133,23 @@ export default class JoinEvent extends Component{
         userRef.child('subgroupInfo').child(lastGroupString).update(subgroupInfo);
         snapshot.ref.update(subgroupInfo);
         parentEventSubGroupRef.child(self.props.eventDataLocation).child(lastGroupString).update(subgroupInfo);
-        userRef.child('attendingEvents').child(this.props.eventDataLocation).update(subgroupchat);
+        userRef.child('attendingEvents').child(self.props.eventDataLocation).update(subgroupchat);
+
+        self.props.navigator.push({
+                              name: 'Chat',
+                              title: self.props.eventObject.event_title,
+                              openMenu: self.props.route.openMenu ,
+                              closeMenu: self.props.route.closeMenu,
+                              rightText: "More Info" ,
+                              leftText: "Back",
+                              displayName: self.props.displayName,
+                              userUid: self.props.userUid,
+                              photoURL: self.props.photoURL,
+                              eventUid: lastGroupString,
+                              viewType: "None"
+
+
+          });
 
         if (subgroupInfo[self.props.sex] >= subgroupInfo['max_users']/2 ){
           // find next group chat and update
@@ -134,19 +166,25 @@ export default class JoinEvent extends Component{
   }
 
   databaseCreateSubGroupChat = () => {
+    console.log("In create sub group");
     var userRef =  database.ref('users/' + this.props.userUid );
     var eventLocationRef = database.ref('events/' + this.props.eventDataLocation);
     var subgroupRef = database.ref('eventSubGroup');
     var parentEventSubGroupRef = database.ref('parentEventSubGroup');
     var chatMemberRef= database.ref('chatMembers');
+    var chatRef = database.ref('chat');
 
     var eventString = this.props.eventDataLocation;
     var eventSubGroupRef = subgroupRef.push();
     var subgroupString = eventSubGroupRef.key;
 
+    console.log(subgroupString);
+
     var info = {};
     var userInfo = {};
     var subgroupInfo = {};
+
+
 
 
     userInfo[eventString] = {
@@ -185,24 +223,69 @@ export default class JoinEvent extends Component{
     var subgroupchat = {    };
     subgroupchat['subgroup'] = subgroupString;
 
+    console.log("In create mid group");
+
 
     eventLocationRef.update({'attendingCount': this.props.eventObject.attendingCount + 1,
-                            'subgroupVersion': this.props.eventObject.subgroupVersion + 1,
-                           subgroupChatLocation
-
+                            'subgroupVersion': this.props.eventObject.subgroupVersion + 1
                           });
+    console.log(subgroupChatLocation);
+    eventLocationRef.update( subgroupChatLocation);
+      console.log("In create mid group after");
+      console.log(subgroupInfo);
 
-    parentEventSubGroupRef.child(this.props.eventDataLocation).child(subgroupString).update(subgroupInfo[subgroupString]);
+    parentEventSubGroupRef.child(eventString).child(subgroupString).update(subgroupInfo[subgroupString]);
     chatMemberRef.child(eventString).child(this.props.userUid).update(userInfo[eventString]);
     chatMemberRef.child(subgroupString).child(this.props.userUid).update(userInfo[eventString]);
     subgroupRef.child(subgroupString).update(subgroupInfo[subgroupString]);
     userRef.child('subgroupInfo').child(subgroupString).update(subgroupInfo[subgroupString]);
     userRef.child('attendingEvents').child(this.props.eventDataLocation).update(subgroupchat);
+
+    var now = new Date().getTime();
+    chatRef.child(eventString).push({
+      _id: now,
+      text: this.state.text,
+      createdAt: now,
+      uid: this.props.userUid,
+      avatar: this.props.photoURL,
+      name: this.props.displayName,
+      order: -1 * now
+
+    });
     // last group male
+    // go to Chat
+
+    this.props.navigator.push({
+                name: 'Chat',
+                title: this.props.eventObject.event_title,
+                openMenu: this.props.route.openMenu ,
+                closeMenu: this.props.route.closeMenu,
+                rightText: "More Info" ,
+                leftText: "Back",
+                displayName: this.props.displayName,
+                userUid: this.props.userUid,
+                photoURL: this.props.photoURL,
+                eventUid: this.props.eventDataLocation,
+                viewType: "None"
+
+
+      });
+      console.log("Ending chat");
+
+
   }
 
   updateEventInfo = () =>{
     // Set member in Events
+
+    if (this.state.text === '') {
+
+      Alert.alert('Introduction Required', "Kindly introduce yourself", [{
+          text: 'OK',
+      //     onPress: () => {console.log('aint legal');}
+        }]);
+        return;
+    }
 
     let userUid = this.props.userUid;
     console.log(userUid);
@@ -235,11 +318,11 @@ export default class JoinEvent extends Component{
 
 
 
-    console.log('Joined');
-    console.log(this.props.navigator.getCurrentRoutes());
-    var routesArray = this.props.navigator.getCurrentRoutes();
-    var homeRoute = routesArray[0];
-    this.props.navigator.jumpTo(homeRoute);
+    // console.log('Joined');
+    // console.log(this.props.navigator.getCurrentRoutes());
+    // var routesArray = this.props.navigator.getCurrentRoutes();
+    // var homeRoute = routesArray[0];
+    // this.props.navigator.jumpTo(homeRoute);
 
     // Set User Attending Event info
 
@@ -259,7 +342,7 @@ export default class JoinEvent extends Component{
 
      </View>
      <View style={{
-       backgroundColor: this.state.text,
+       backgroundColor: '#f0f',
        borderBottomColor: '#000000',
        borderTopWidth: 1,
        borderBottomWidth: 1 }}>

@@ -112,6 +112,8 @@ export default class AddNewEvent extends Component{
       formData.host_name = this.props.displayName;
 
 
+
+
       this.setState({formData:formData})
 
     } else {
@@ -182,6 +184,8 @@ export default class AddNewEvent extends Component{
        var chatMemberRef= database.ref('chatMembers');
        var createdRef = userRef.child('createdEvents');
        this.state.formData.owner_id = user.uid + '';
+       this.state.attendingCount = 1;
+       this.state.subgroupVersion = 1;
 
        this.setState({formData:this.state.formData});
        if(this.state.mode === 'add'){
@@ -226,7 +230,7 @@ export default class AddNewEvent extends Component{
            'uploadURL' : this.state.formData.uploadURL,
            'parent_chatInfo': eventString,
            'currentCount': 1,
-           'version': 1
+           'version': 1,
          }
 
 

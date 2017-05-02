@@ -86,7 +86,7 @@ export default class Home extends Component {
           eventObject: route.eventObject,
           openMenu: this.openMenu ,
           closeMenu: this.closeMenu,
-          rightText: 'Done',
+          rightText: 'Send',
           leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>,
           displayName : this.props.displayName,
           userUid : this.props.userUid,
@@ -180,6 +180,9 @@ export default class Home extends Component {
                             photoURL: this.props.photoURL,
                             sex: this.props.sex
                         });
+    }else if(route.viewType === 'None'){
+      this.setState({selectedTab:'chats'});
+
     }else if(!route.name.includes('Chat')){
       console.log('pop called');
         this.refs.nav.pop();
