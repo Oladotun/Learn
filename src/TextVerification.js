@@ -16,14 +16,18 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-  AsyncStorage
+  AsyncStorage,
+  StatusBar,
+  PixelRatio
 } from 'react-native';
 import Sinch from 'react-native-sinch-verification';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Form from 'react-native-form';
-import CountryPicker from 'react-native-country-picker-modal';
+import CountryPicker,{getAllCountries} from 'react-native-country-picker-modal';
 import firebase from "firebase";
 import Background from './Background';
+import DeviceInfo from 'react-native-device-info';
+
 // import {firebaseManager} from './FirebaseManager';
 
 var custom = '';
@@ -32,6 +36,8 @@ const brandColor = '#FFF';
 // if you want to customize the country picker
 const countryPickerCustomStyles = {};
 
+const NORTH_AMERICA = ['CA', 'MX', 'US'];
+
 export default class TextVerification extends Component {
 
   componentWillMount() {
@@ -39,12 +45,25 @@ export default class TextVerification extends Component {
     this._test();
 	}
   constructor(props) {
+    StatusBar.setHidden(true);
     super(props);
+    let userLocaleCountryCode = DeviceInfo.getDeviceCountry();
+    const userCountryData = getAllCountries()
+      .filter((country) => NORTH_AMERICA.includes(country.cca2))
+      .filter((country) => country.cca2 === userLocaleCountryCode).pop();
+    let callingCode = null;
+    let cca2 = userLocaleCountryCode;
+    if (!cca2 || !userCountryData) {
+      cca2 = 'US';
+      callingCode = '1';
+    } else {
+      callingCode = userCountryData.callingCode;
+    }
     this.state = {
       enterCode: false,
       country: {
-        cca2: 'US',
-        callingCode: '1'
+        cca2: cca2,
+        callingCode: callingCode
       },
       phoneNumber: null,
       error: 0
@@ -154,12 +173,15 @@ _verifyCode = () => {
     return (
       <CountryPicker
         ref={'countryPicker'}
-        closeable
         style={styles.countryPicker}
+
         onChange={this._changeCountry}
         cca2={this.state.country.cca2}
         styles={countryPickerCustomStyles}
-        translation='eng'/>
+        translation='eng'
+        closeable
+
+        />
     );
 
   }
@@ -173,11 +195,19 @@ _verifyCode = () => {
       return (
         <View />
       );
+      console.log(this.refs);
 
+  //     <TouchableOpacity onPress={()=> this.refs.countryPicker.openModal()}>
+  //    <Text style={styles.instructions}>
+  //      or click here
+  //    </Text>
+  //  </TouchableOpacity>
     return (
-      <View style={styles.callingCodeView}>
-        <Text style={styles.callingCodeText}>+{this.state.country.callingCode}</Text>
-      </View>
+        <View style={styles.callingCodeView}>
+          <Text style={styles.callingCodeText}>+{this.state.country.callingCode}</Text>
+        </View>
+      </TouchableOpacity>
+
     );
 
   }
@@ -209,8 +239,10 @@ _verifyCode = () => {
             <Form ref={'form'} style={styles.form}>
 
               <View style={{ flexDirection: 'row' }}>
+
               {this._renderCountryPicker()}
               {this._renderCallingCode()}
+
 
               <TextInput
                 ref={'textInput'}
