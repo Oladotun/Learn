@@ -195,7 +195,7 @@ _verifyCode = () => {
       return (
         <View />
       );
-      console.log(this.refs);
+      // console.log(this.refs);
 
   //     <TouchableOpacity onPress={()=> this.refs.countryPicker.openModal()}>
   //    <Text style={styles.instructions}>
@@ -206,7 +206,7 @@ _verifyCode = () => {
         <View style={styles.callingCodeView}>
           <Text style={styles.callingCodeText}>+{this.state.country.callingCode}</Text>
         </View>
-      </TouchableOpacity>
+
 
     );
 
