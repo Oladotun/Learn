@@ -103,7 +103,8 @@ export default class ProfileSetUp extends Component {
       firebase.database().ref('users/' + user.uid).set({
         sex: this.state.sex,
         displayName: this.state.firstName + " " + this.state.lastName,
-        photoURL: this.state.uploadURL
+        photoURL: this.state.uploadURL,
+        phoneNumber: this.props.phoneNumber
       });
 
        self.props.navigator.push({name:'home'});

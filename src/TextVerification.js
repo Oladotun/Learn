@@ -47,23 +47,23 @@ export default class TextVerification extends Component {
   constructor(props) {
     StatusBar.setHidden(true);
     super(props);
-    let userLocaleCountryCode = DeviceInfo.getDeviceCountry();
-    const userCountryData = getAllCountries()
-      .filter((country) => NORTH_AMERICA.includes(country.cca2))
-      .filter((country) => country.cca2 === userLocaleCountryCode).pop();
-    let callingCode = null;
-    let cca2 = userLocaleCountryCode;
-    if (!cca2 || !userCountryData) {
-      cca2 = 'US';
-      callingCode = '1';
-    } else {
-      callingCode = userCountryData.callingCode;
-    }
+    // let userLocaleCountryCode = DeviceInfo.getDeviceCountry();
+    // const userCountryData = getAllCountries()
+    //   .filter((country) => NORTH_AMERICA.includes(country.cca2))
+    //   .filter((country) => country.cca2 === userLocaleCountryCode).pop();
+    // let callingCode = null;
+    // let cca2 = userLocaleCountryCode;
+    // if (!cca2 || !userCountryData) {
+    //   cca2 = 'US';
+    //   callingCode = '1';
+    // } else {
+    //   callingCode = userCountryData.callingCode;
+    // }
     this.state = {
       enterCode: false,
       country: {
-        cca2: cca2,
-        callingCode: callingCode
+        cca2: 'US',
+        callingCode: '1'
       },
       phoneNumber: null,
       error: 0
@@ -79,7 +79,7 @@ export default class TextVerification extends Component {
         // User is signed in.
         var isAnonymous = user.isAnonymous;
         var uid = user.uid;
-        self.props.navigator.push({name:'profileSetUp'});
+        self.props.navigator.push({name:'profileSetUp', phoneNumber: this.state.phoneNumber });
       } else {
         // User is signed out.
       }

@@ -45,6 +45,7 @@
 		7C5B1F3A1E6A583500F9A9FD /* SinchVerificationIOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C5B1F391E6A583500F9A9FD /* SinchVerificationIOS.m */; };
 		7C5B1F3C1E6A58E900F9A9FD /* SinchVerification.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C5B1F3B1E6A58E900F9A9FD /* SinchVerification.framework */; };
 		7C5D6D3B1E6A745500BBBEB8 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 7C5D6D3A1E6A745500BBBEB8 /* main.jsbundle */; };
+		7CBAD3241EBDE5E200F3E730 /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CBAD30E1EBDE5B200F3E730 /* libRCTPushNotification.a */; };
 		7CC021891E7A2C0C00ACA287 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7CC0217F1E7A2C0C00ACA287 /* Entypo.ttf */; };
 		7CC0218A1E7A2C0C00ACA287 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7CC021801E7A2C0C00ACA287 /* EvilIcons.ttf */; };
 		7CC0218B1E7A2C0C00ACA287 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7CC021811E7A2C0C00ACA287 /* FontAwesome.ttf */; };
@@ -272,6 +273,20 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = BVLinearGradient;
 		};
+		7CBAD30D1EBDE5B200F3E730 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7CBAD2FD1EBDE5B200F3E730 /* RCTPushNotification.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTPushNotification;
+		};
+		7CBAD30F1EBDE5B200F3E730 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7CBAD2FD1EBDE5B200F3E730 /* RCTPushNotification.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D05745F1DE6004600184BB4;
+			remoteInfo = "RCTPushNotification-tvOS";
+		};
 		7CC021B31E7A2D1F00ACA287 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7CC021AF1E7A2D1F00ACA287 /* RNVectorIcons.xcodeproj */;
@@ -326,6 +341,7 @@
 		7C5B1F391E6A583500F9A9FD /* SinchVerificationIOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SinchVerificationIOS.m; sourceTree = "<group>"; };
 		7C5B1F3B1E6A58E900F9A9FD /* SinchVerification.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SinchVerification.framework; sourceTree = "<group>"; };
 		7C5D6D3A1E6A745500BBBEB8 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = Oremi/main.jsbundle; sourceTree = "<group>"; };
+		7CBAD2FD1EBDE5B200F3E730 /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
 		7CC0217F1E7A2C0C00ACA287 /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Entypo.ttf; sourceTree = "<group>"; };
 		7CC021801E7A2C0C00ACA287 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
 		7CC021811E7A2C0C00ACA287 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
@@ -358,6 +374,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CC021B51E7A2D3E00ACA287 /* libRNVectorIcons.a in Frameworks */,
+				7CBAD3241EBDE5E200F3E730 /* libRCTPushNotification.a in Frameworks */,
 				7C00D7911E6A4D4E001B4505 /* libicucore.tbd in Frameworks */,
 				7C00D78F1E6A4D3C001B4505 /* libc++.tbd in Frameworks */,
 				7C00D78D1E6A4D24001B4505 /* SystemConfiguration.framework in Frameworks */,
@@ -594,6 +611,15 @@
 			path = SinchVerificationIOS;
 			sourceTree = "<group>";
 		};
+		7CBAD2FE1EBDE5B200F3E730 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7CBAD30E1EBDE5B200F3E730 /* libRCTPushNotification.a */,
+				7CBAD3101EBDE5B200F3E730 /* libRCTPushNotification-tvOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		7CC0217E1E7A2C0C00ACA287 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -622,6 +648,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				7CBAD2FD1EBDE5B200F3E730 /* RCTPushNotification.xcodeproj */,
 				7CC021AF1E7A2D1F00ACA287 /* RNVectorIcons.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -822,6 +849,10 @@
 				{
 					ProductGroup = 00C302D41ABCB9D200DB3ED1 /* Products */;
 					ProjectRef = 00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */;
+				},
+				{
+					ProductGroup = 7CBAD2FE1EBDE5B200F3E730 /* Products */;
+					ProjectRef = 7CBAD2FD1EBDE5B200F3E730 /* RCTPushNotification.xcodeproj */;
 				},
 				{
 					ProductGroup = 139105B71AF99BAD00B5F7CC /* Products */;
@@ -1065,6 +1096,20 @@
 			fileType = archive.ar;
 			path = libBVLinearGradient.a;
 			remoteRef = 7C3822A91E68F9760055125C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7CBAD30E1EBDE5B200F3E730 /* libRCTPushNotification.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTPushNotification.a;
+			remoteRef = 7CBAD30D1EBDE5B200F3E730 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7CBAD3101EBDE5B200F3E730 /* libRCTPushNotification-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRCTPushNotification-tvOS.a";
+			remoteRef = 7CBAD30F1EBDE5B200F3E730 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		7CC021B41E7A2D1F00ACA287 /* libRNVectorIcons.a */ = {
@@ -1357,6 +1402,7 @@
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-google-places/ios",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
 				);
 				INFOPLIST_FILE = Oremi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1389,6 +1435,7 @@
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-google-places/ios",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
 				);
 				INFOPLIST_FILE = Oremi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
