@@ -76,7 +76,7 @@ export default class Chat extends Component {
                 order: -1 * now
             })
 
-            PushNotification.localNotificationSchedule({
+            PushNotification.localNotification({
               message: message.text, // (required)
               userInfo: {chatUid: this.props.eventUid},
               date: new Date(Date.now() + (60 * 1000)) // in 60 secs
