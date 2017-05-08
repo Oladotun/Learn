@@ -180,6 +180,26 @@ export default class ChatHome extends Component {
   //     );
   // }
 
+  _openFromNotification = (chatUid) =>{
+
+    this.props.navigator.push({
+                          name: 'Chat',
+                          title: "TestChat",
+                          openMenu: this.props.route.openMenu ,
+                          closeMenu: this.props.route.closeMenu,
+                          rightText: "More Info" ,
+                          leftText: "Back",
+                          displayName: this.props.displayName,
+                          userUid: this.props.userUid,
+                          photoURL: this.props.photoURL,
+                          eventUid: chatUid,
+                          viewType: "ChatHome"
+
+
+      });
+
+  }
+
 
   _renderItem(item) {
 
@@ -195,7 +215,7 @@ export default class ChatHome extends Component {
                             leftText: "Back",
                             displayName: this.props.displayName,
                             userUid: this.props.userUid,
-                            photoURL: item.photoURL,
+                            photoURL: this.props.photoURL,
                             eventUid: item._key,
                             viewType: "ChatHome"
 
@@ -230,7 +250,7 @@ export default class ChatHome extends Component {
     borderColor: 'transparent',
     borderWidth: 1,
     paddingLeft: 16,
-    
+
     paddingBottom: 16,
   },
   liContainer: {

@@ -33,6 +33,7 @@
     "react-native-nav": "^1.2.0",
     "react-native-navbar": "^1.6.3",
     "react-native-onesignal": "^3.0.3",
+    "react-native-push-notification": "^2.2.1",
     "react-native-searchbar": "^1.8.0",
     "react-native-settings-list": "^1.4.0",
     "react-native-simple-radio-button": "^2.5.0-alpha.1",

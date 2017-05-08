@@ -8,7 +8,7 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import {database,user} from '../Config'
 
 
-
+var PushNotification = require('react-native-push-notification');
 export default class Chat extends Component {
 
     constructor(props) {
@@ -75,6 +75,12 @@ export default class Chat extends Component {
                 name: this.props.displayName,
                 order: -1 * now
             })
+
+            PushNotification.localNotificationSchedule({
+              message: message.text, // (required)
+              userInfo: {chatUid: this.props.eventUid},
+              date: new Date(Date.now() + (60 * 1000)) // in 60 secs
+            });
         })
 
     }

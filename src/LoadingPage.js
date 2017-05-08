@@ -4,7 +4,8 @@ import{
   View,
   Text,
   StyleSheet,
-  AsyncStorage
+  AsyncStorage,
+  TouchableOpacity
 } from 'react-native';
 
 import TextVerification from './TextVerification';
@@ -13,14 +14,15 @@ import {database} from './Config';
 import ProfileSetUp from './ProfileSetup';
 
 import firebase from "firebase";
+var PushNotification = require('react-native-push-notification');
 
 const RouteMapper = (route, navigator) => {
   if(route.name === 'textVerification') {
     return <TextVerification navigator={navigator} />
   }else if(route.name === 'home') {
-    return <Home navigator={navigator} displayName={route.displayName} userUid = {route.userUid} photoURL ={route.photoURL} sex={route.sex} />
+    return <Home navigator={navigator} displayName={route.displayName} userUid = {route.userUid} photoURL ={route.photoURL} sex={route.sex} chatUid={route.chatUid}/>
   } else if(route.name === 'profileSetUp') {
-    return <ProfileSetUp navigator={navigator} />
+    return <ProfileSetUp navigator={navigator} phoneNumber={route.phoneNumber} />
   } else if(route.name === 'settings'){
     return <Settings navigator={navigator}/>
   }
@@ -39,10 +41,12 @@ export default class LoadingPage extends Component {
        photoURL: null,
        userSet: false,
        uidSet: false,
-       sex: null
+       sex: null,
+       chatUid: null
       };
 
   }
+
 
   _userState = () => {
     var self = this;
@@ -94,9 +98,13 @@ export default class LoadingPage extends Component {
  _retrieveValue = async () => {
     try {
       var self = this;
-      this.state.phoneNumber = await AsyncStorage.getItem('@UserPhoneNumber:key');
+      var phoneNumber = await AsyncStorage.getItem('@UserPhoneNumber:key');
       var uidSet =await AsyncStorage.getItem('@userUid:key');
-      var password = '?<2L|mt+38v9|v}q23A1984D9|6LnB'+this.state.phoneNumber;
+      // uidSet = 'fWelkifclaU54sJVRzBajnGtneY2';
+
+      console.log(uidSet);
+      console.log(phoneNumber);
+      var password = '?<2L|mt+38v9|v}q23A1984D9|6LnB'+phoneNumber;
       var user = firebase.auth().currentUser;
       if (user) {
         var setUid;
@@ -115,10 +123,11 @@ export default class LoadingPage extends Component {
       } else {
         this._userState();
         console.log("I am in null login with password");
-        if (self.state.phoneNumber  !== null){
+        if (phoneNumber  !== null){
+          self.setState({phoneNumber: phoneNumber})
           console.log("Sign in with phone");
              firebase.auth()
-            .signInWithEmailAndPassword(self.state.phoneNumber, password)
+            .signInWithEmailAndPassword(phoneNumber, password)
             .catch(function(error) {
                 // Handle Errors here.
                 var errorCode = error.code;
@@ -144,6 +153,9 @@ export default class LoadingPage extends Component {
 
     } catch (error) {
       // Error retrieving data
+      console.log("not to text verification");
+        console.log("I caught an error");
+        console.log(error);
     }
   }
 
@@ -166,6 +178,10 @@ export default class LoadingPage extends Component {
         await AsyncStorage.setItem('@userPhotoUrl',this.state.photoURL);
       }
 
+      if(this.state.phoneNumber != null){
+        await AsyncStorage.setItem('@UserPhoneNumber:key',this.state.phoneNumber);
+      }
+
 
 
     } catch (error) {
@@ -173,16 +189,55 @@ export default class LoadingPage extends Component {
     }
   }
 
+  // componentWillMount(){
+  //   // this._retrieveValue();
+  //
+  // }
   componentWillMount(){
-    this._retrieveValue();
+    var self = this;
+    PushNotification.configure({
 
-  }
-  componentDidMount(){
+    // (optional) Called when Token is generated (iOS and Android)
+    onRegister: function(token) {
+        console.log( 'TOKEN:', token );
+    },
+
+    // (required) Called when a remote or local notification is opened or received
+    onNotification: function(notification) {
+        console.log( 'NOTIFICATION:', notification );
+        self.setState({chatUid:notification.data.chatUid});
+    },
+
+    // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
+    senderID: "YOUR GCM SENDER ID",
+
+    // IOS ONLY (optional): default: all - Permissions to register.
+    permissions: {
+        alert: true,
+        badge: true,
+        sound: true
+    },
+
+    // Should the initial notification be popped automatically
+    // default: true
+    popInitialNotification: true,
+
+    /**
+      * (optional) default: true
+      * - Specified if permissions (ios) and token (android and ios) will requested or not,
+      * - if not, you must call PushNotificationsHandler.requestPermissions() later
+      */
+    requestPermissions: true,
+});
+
+  this._retrieveValue();
 
   }
   componentWillUnmount(){
     this.state.unSubscribe();
+
   }
+
 
   render(){
 
@@ -210,11 +265,17 @@ export default class LoadingPage extends Component {
             }
 
             console.log(this.state.user);
-
+            console.log('going home');
               return(
                 <Navigator
                   // Default to movies route
-                  initialRoute={{name: 'home', displayName: this.state.displayName, userUid: this.state.user.uid,photoURL: this.state.photoURL, sex: this.state.sex}}
+                  initialRoute={{name: 'home',
+                   displayName: this.state.displayName,
+                   userUid: this.state.user.uid,
+                   photoURL: this.state.photoURL,
+                   sex: this.state.sex,
+                   chatUid: this.state.chatUid}
+                 }
                   // Use FloatFromBottom transition between screens
                   configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
                   // Pass a route mapper functions

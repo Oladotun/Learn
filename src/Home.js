@@ -32,10 +32,18 @@ export default class Home extends Component {
 
   constructor(props){
     super(props);
-    this.state = {
-      selectedTab:'eventHome',
-      rightButtonValidated: false
+    if(this.props.chatUid == null){
+      this.state = {
+        selectedTab:'eventHome',
+        rightButtonValidated: false
+      }
+    } else {
+      this.state = {
+        selectedTab:'chats',
+        rightButtonValidated: false
+      }
     }
+
   }
 
 
@@ -254,7 +262,8 @@ export default class Home extends Component {
 
                             userUid : this.props.userUid,
                             displayName: this.props.displayName,
-                            photoURL: this.props.photoURL
+                            photoURL: this.props.photoURL,
+                            chatUid: this.props.chatUid
                       }}
               renderScene = { renderRouterScene  }
               configureScene = {(route, routeStack) => {
@@ -518,6 +527,7 @@ const renderRouterScene = (route, navigator) => {
             userUid= {route.userUid}
             displayName= {route.displayName}
             photoURL={route.photoURL}
+            chatUid={route.chatUid}
         />)
 
       } else if(route.name === 'Chat'){
