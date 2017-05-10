@@ -37,6 +37,7 @@ export default class JoinEvent extends Component{
 
     lastOpenRef.once('value').then(function(snapshot) {
       var lastGroupCreatedInfo = snapshot.val();
+      console.log(lastGroupCreatedInfo);
 
       if(lastGroupCreatedInfo === 'Create New Group'){
         self.databaseCreateSubGroupChat();
@@ -226,7 +227,7 @@ export default class JoinEvent extends Component{
     // console("In create mid group");
 
 
-    eventLocationRef.update({'attendingCount': this.props.eventObject.attendingCount + 1,
+    eventLocationRef.update({
                             'subgroupVersion': this.props.eventObject.subgroupVersion + 1
                           });
     // console(subgroupChatLocation);

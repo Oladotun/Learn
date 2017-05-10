@@ -49,6 +49,20 @@ export default class EventBox extends Component {
 
       if (this.props.joinEvent){
 
+        if(this.props.joinEvent === 'true'){
+          this.props.navigator.push({
+            name:'ViewEvent',
+            title: 'Event Info',
+            eventObject:this.state.currentEvent,
+            openMenu: this.props.openMenu ,
+            closeMenu: this.props.closeMenu,
+            eventDataLocation: this.props.dataLocation,
+            eventUserObject: this.props.eventObject,
+            rightText: 'Join',
+            leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>
+
+        });
+      } else {
         this.props.navigator.push({
           name:'ViewEvent',
           title: 'Event Info',
@@ -57,10 +71,14 @@ export default class EventBox extends Component {
           closeMenu: this.props.closeMenu,
           eventDataLocation: this.props.dataLocation,
           eventUserObject: this.props.eventObject,
-          rightText: 'Join',
+          rightText: 'Member Info',
           leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>
 
       });
+      }
+
+
+
 
       } else {
 

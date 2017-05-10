@@ -21,6 +21,11 @@ export default class EventsHome extends Component {
         unattendEvents: {},
         attendingEvents: {}
       }
+      // this.loadParent();
+      // this.loadAllNonEvents();
+    }
+
+    componentDidMount(){
       this.loadParent();
       this.loadAllNonEvents();
     }
@@ -83,6 +88,7 @@ export default class EventsHome extends Component {
       var self = this;
       var userUnattendedEvents = {};
       var userAttendingEvents = {};
+
       let userRef =  database.ref('/events/' );
           userRef.orderByChild("sortDate").startAt((new Date()).getTime()).on('value', function(snapshot) {
             snapshot.forEach(function(child){
@@ -90,10 +96,10 @@ export default class EventsHome extends Component {
               var value = child.val();
 
 
-              var userAttend = database.ref('users/' + userUid +
-                                            '/attendingEvents/');
 
-            userAttend.orderByChild("sortDate").startAt((new Date()).getTime()).once('value', function(presentInUser){
+              var userAttend = database.ref('users/' + userUid).child('attendingEvents');
+
+            userAttend.orderByChild("sortDate").startAt((new Date()).getTime()).on('value', function(presentInUser){
               // console('presentInUser ');
               // console(presentInUser.val());
               if (presentInUser.hasChild(key)){
@@ -209,7 +215,7 @@ export default class EventsHome extends Component {
 
                             itemInfo.push(  <EventBox key={items} dataLocation = {items} navigator ={this.props.navigator}
                               displayName = {this.props.displayName} photoURL={this.props.photoURL} userUid = {this.props.userUid}
-                              eventObject={eachItem} openMenu= {this.props.openMenu} joinEvent ={'true'} closeMenu={this.props.closeMenu} />);
+                              eventObject={eachItem} openMenu= {this.props.openMenu} joinEvent ={'false'} closeMenu={this.props.closeMenu} />);
                             }
                             return itemInfo;
 

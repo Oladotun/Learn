@@ -86,7 +86,22 @@ export default class Home extends Component {
       // console("Event clicked");
       // console(route.eventDataLocation);
 
-      if (route.rightText === 'Join'){
+      if (route.rightText === 'Member Info'){
+
+        this.refs.nav.push({
+          name: 'ChatMoreInfo',
+          title: 'Member Info',
+          openMenu: route.openMenu ,
+          closeMenu: route.closeMenu,
+          rightText: '',
+          leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>,
+          eventUid: route.eventDataLocation,
+          photoURL: this.props.photoURL,
+          displayName: this.props.displayName,
+          viewType: 'memberHome'
+
+      } );
+      } else if (route.rightText === 'Join'){
 
         this.refs.nav.push({
           name:'JoinEvent',
@@ -136,8 +151,8 @@ export default class Home extends Component {
           title: 'Member Info',
           openMenu: route.openMenu ,
           closeMenu: route.closeMenu,
-          rightText: 'Update',
-          leftText: 'Close',
+          rightText: '',
+          leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>,
           eventUid: route.eventUid,
           photoURL: route.photoURL,
           displayName: route.displayName,
@@ -146,7 +161,7 @@ export default class Home extends Component {
       } else {
         this.refs.nav.push({
           name: 'ChatMoreInfo',
-          title: 'Member Info',
+          title: 'Member List',
           openMenu: route.openMenu ,
           closeMenu: route.closeMenu,
           rightText: 'Update',
@@ -190,10 +205,17 @@ export default class Home extends Component {
                         });
     }else if(route.viewType === 'None'){
       this.refs.nav.popToTop();
+      this.refs.nav.refs.eventsHome.loadParent();
+      this.refs.nav.refs.eventsHome.loadAllNonEvents();
       this.setState({selectedTab:'chats'});
 
-    }else if(!route.name.includes('Chat')){
+    }else if(!route.name.includes('Chat') || (route.viewType && route.viewType.includes('memberHome'))){
       // console('pop called');
+
+      if(route.name === 'SearchEvent' || route.name === 'AddNewEvent' || route.name === 'ViewEvent'){
+        this.refs.nav.refs.eventsHome.loadParent();
+        this.refs.nav.refs.eventsHome.loadAllNonEvents();
+      }
         this.refs.nav.pop();
     } else {
       if (this.refs.chatNav){

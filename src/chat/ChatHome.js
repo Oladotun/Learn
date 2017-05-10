@@ -37,7 +37,7 @@ export default class ChatHome extends Component {
     var self = this;
     var userRef = database.ref('users').child(this.props.userUid);
 
-    userRef.once('value', function(snapshot){
+    userRef.on('value', function(snapshot){
       // console("In value snapshot");
       if (snapshot.val()){
         var attendingEvents = snapshot.val().attendingEvents;
