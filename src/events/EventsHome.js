@@ -27,7 +27,7 @@ export default class EventsHome extends Component {
 
     loadParent = async() =>{
       let userUid = this.props.userUid;
-      console.log(userUid);
+      // console(userUid);
       var self = this;
       let userRef =  database.ref('users/' + userUid + '/createdEvents/' );
           userRef.orderByChild("sortDate").startAt((new Date()).getTime()).on('value', function(snapshot) {
@@ -78,8 +78,8 @@ export default class EventsHome extends Component {
 
     loadAllNonEvents = async() =>{
       let userUid = this.props.userUid;
-      console.log(userUid);
-      console.log("On no events");
+      // console(userUid);
+      // console("On no events");
       var self = this;
       var userUnattendedEvents = {};
       var userAttendingEvents = {};
@@ -94,10 +94,10 @@ export default class EventsHome extends Component {
                                             '/attendingEvents/');
 
             userAttend.orderByChild("sortDate").startAt((new Date()).getTime()).once('value', function(presentInUser){
-              console.log('presentInUser ');
-              console.log(presentInUser.val());
+              // console('presentInUser ');
+              // console(presentInUser.val());
               if (presentInUser.hasChild(key)){
-                console.log('I have child here');
+                // console('I have child here');
 
                  var userAttended = presentInUser.val();
 
@@ -110,8 +110,8 @@ export default class EventsHome extends Component {
                 }
 
               }
-              console.log("User attending info");
-              console.log(userAttendingEvents);
+              // console("User attending info");
+              // console(userAttendingEvents);
               self.setState({unattendEvents:userUnattendedEvents, attendingEvents:userAttendingEvents});
 
             });
@@ -179,7 +179,7 @@ export default class EventsHome extends Component {
                     }
 
               } catch(e){
-                console.log(e);
+                // console(e);
               }
             })()
 
@@ -233,7 +233,7 @@ export default class EventsHome extends Component {
                     }
 
               } catch(e){
-                console.log(e);
+                // console(e);
               }
             })()
 
@@ -287,7 +287,7 @@ export default class EventsHome extends Component {
                     }
 
               } catch(e){
-                console.log(e);
+                // console(e);
               }
             })()
 

@@ -20,7 +20,7 @@ export default class ChatGroupInfo extends Component {
 
   enterChatRoom = () => {
     var self = this;
-    console.log(this.props);
+    // console(this.props);
 
       self.props.navigator.push({
                             name: 'Chat',

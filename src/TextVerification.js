@@ -122,7 +122,7 @@ export default class TextVerification extends Component {
           onPress: () => this.refs.form.refs.textInput.focus()
         }]);
       } else {
-        console.log(err);
+        // console(err);
       }
     });
   }
@@ -149,7 +149,7 @@ _verifyCode = () => {
            // Handle Errors here.
            var errorCode = error.code;
            var errorMessage = error.message;
-           console.log("we have an error");
+           // console("we have an error");
         });
     } else {
       this.setState({
@@ -197,7 +197,7 @@ _verifyCode = () => {
       return (
         <View />
       );
-      // console.log(this.refs);
+      // // console(this.refs);
 
   //     <TouchableOpacity onPress={()=> this.refs.countryPicker.openModal()}>
   //    <Text style={styles.instructions}>

@@ -57,14 +57,14 @@ export default class Home extends Component {
     });
   }
   openMenu = (route) => {
-    // console.log(this.refs);
+    // // console(this.refs);
     if (route.name === 'EventsHome') {
       // search view
 
     //  Get event box
     var eventArray = this.refs.nav.refs.eventsHome.goToEventSearch();
-    console.log('Search result');
-    console.log(eventArray);
+    // console('Search result');
+    // console(eventArray);
 
       this.refs.nav.push({
         name:'SearchEvent',
@@ -83,8 +83,8 @@ export default class Home extends Component {
     else if (route.name === 'AddNewEvent') {
       this.refs.nav.refs.eventAdd.validate();
     } else if (route.name === 'ViewEvent') {
-      console.log("Event clicked");
-      console.log(route.eventDataLocation);
+      // console("Event clicked");
+      // console(route.eventDataLocation);
 
       if (route.rightText === 'Join'){
 
@@ -123,12 +123,12 @@ export default class Home extends Component {
 
     } else if (route.name === 'EditNewEvent'){
       this.refs.nav.refs.editEvent.validate();
-      console.log('Updated');
+      // console('Updated');
     } else if (route.name === 'JoinEvent'){
       this.refs.nav.refs.joinEvent.updateEventInfo();
     } else if(route.name === 'Chat'){
-      console.log("what is route");
-      console.log(route);
+      // console("what is route");
+      // console(route);
       if (route.viewType === 'ChatHome'){
 
         this.refs.chatNav.push({
@@ -166,14 +166,14 @@ export default class Home extends Component {
   }
   onSaveButton = (rightButtonValidated) => {
     if(rightButtonValidated){
-      console.log('Color save button');
+      // console('Color save button');
     }
     // this.setState({ rightButtonValidated });
 
   }
 
   closeMenu = (route) => {
-    console.log('close in home');
+    // console('close in home');
     if (route.name === 'EventsHome') {
       this.refs.nav.push({name:'AddNewEvent',
                           title: 'Add Event',
@@ -193,7 +193,7 @@ export default class Home extends Component {
       this.setState({selectedTab:'chats'});
 
     }else if(!route.name.includes('Chat')){
-      console.log('pop called');
+      // console('pop called');
         this.refs.nav.pop();
     } else {
       if (this.refs.chatNav){
@@ -253,7 +253,7 @@ export default class Home extends Component {
     //   return(<Contacts/>)
     // }
     else if (this.state.selectedTab === 'chats'){
-      console.log("chat home screen");
+      // console("chat home screen");
       return(
         <Navigator
               initialRoute = {{ name: 'ChatHome',
@@ -368,7 +368,7 @@ export default class Home extends Component {
 var NavigationBarRouteMapper = {
    LeftButton(route, navigator, index, navState) {
       // if(index > 0) {
-      console.log(route);
+      // console(route);
 
       if(route.leftIcon) {
         return(
@@ -470,8 +470,8 @@ const renderRouterScene = (route, navigator) => {
          )
       }
       else if(route.name === 'EditNewEvent') {
-        console.log("gonna edit");
-        console.log(route.eventDataLocation);
+        // console("gonna edit");
+        // console(route.eventDataLocation);
          return (
             <AddNewEvent
                navigator = {navigator}
@@ -523,7 +523,7 @@ const renderRouterScene = (route, navigator) => {
         return (<SearchEvent navigator = {navigator}
           route={route} eventArray = {route.eventArray} />)
       } else if(route.name === 'ChatHome'){
-        console.log('going to call chat home');
+        // console('going to call chat home');
         return(<ChatHome
               navigator = {navigator}
             {...route.passProps}

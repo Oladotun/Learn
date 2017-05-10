@@ -114,7 +114,7 @@ export default class ProfileSetUp extends Component {
       //   photoURL: this.state.uploadURL
       //       }).then(function() {
       //         // Update successful.
-      //         console.log(user);
+      //         // console(user);
       //         self.props.navigator.push({name:'home'});
       //       }, function(error) {
       //         // An error happened.
@@ -151,7 +151,7 @@ export default class ProfileSetUp extends Component {
           })
           .catch(error => {
             this.setState({ uploadURL: 'nothing' });
-            console.log(error)
+            // console(error)
           })
       }
     })

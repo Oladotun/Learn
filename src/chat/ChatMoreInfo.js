@@ -36,15 +36,15 @@ export default class ChatMoreInfo extends Component {
 
 
   listenForItems(itemsRef) {
-    console.log("going to listen for items");
+    // console("going to listen for items");
     itemsRef.on('value', (snap) => {
 
       // get children as an array
       var items = [];
       snap.forEach((child) => {
-        console.log("getting child");
-        console.log(child.val());
-        console.log(child.key);
+        // console("getting child");
+        // console(child.val());
+        // console(child.key);
         items.push({
           title: child.val().displayName,
           photoURL: child.val().photoURL,
@@ -83,7 +83,7 @@ export default class ChatMoreInfo extends Component {
   _renderItem(item) {
 
     const onPress = () => {
-      console.log("nothing");
+      // console("nothing");
     };
 
     return (

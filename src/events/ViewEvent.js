@@ -76,7 +76,7 @@ export default class ViewEvent extends Component{
 
 
   goingToggle = () => {
-    console.log("going");
+    // console("going");
     // this.setState({attending: })
     this.setState({shareColor:'#a9a9a9',goingColor:'#488CE2',websiteColor:'#a9a9a9'});
   }
@@ -144,8 +144,8 @@ export default class ViewEvent extends Component{
 
     Object.keys(eventObject).forEach(function(key) {
       newObject[key] = eventObject[key];
-      console.log("I am copying");
-      console.log(newObject[key]);
+      // console("I am copying");
+      // console(newObject[key]);
     });
     var date = newObject['event_time'];
     var formattedDate = moment(new Date(date)).format('DD MMM YYYY');
@@ -218,20 +218,7 @@ export default class ViewEvent extends Component{
       </View>
 
       </View>
-      {
-        (() => {
-          if(this.props.joinEvent === 'true') {
-            <TabViewAnimated
-              style={{flex:1}}
-              navigationState={this.state}
-              renderScene={this._renderScene}
-              renderHeader={this._renderHeader}
-              onRequestChangeTab={this._handleChangeTab}
-            />
-          }
 
-        })()
-      }
 
 
 
@@ -243,6 +230,21 @@ export default class ViewEvent extends Component{
       </View>
 
     );
+
+    // {
+    //   (() => {
+    //     if(this.props.joinEvent === 'true') {
+    //       <TabViewAnimated
+    //         style={{flex:1}}
+    //         navigationState={this.state}
+    //         renderScene={this._renderScene}
+    //         renderHeader={this._renderHeader}
+    //         onRequestChangeTab={this._handleChangeTab}
+    //       />
+    //     }
+    //
+    //   })()
+    // }
   }
 }
 

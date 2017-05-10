@@ -102,8 +102,8 @@ export default class LoadingPage extends Component {
       var uidSet =await AsyncStorage.getItem('@userUid:key');
       // uidSet = 'fWelkifclaU54sJVRzBajnGtneY2';
 
-      console.log(uidSet);
-      console.log(phoneNumber);
+      // console(uidSet);
+      // console(phoneNumber);
       var password = '?<2L|mt+38v9|v}q23A1984D9|6LnB'+phoneNumber;
       var user = firebase.auth().currentUser;
       if (user) {
@@ -122,10 +122,10 @@ export default class LoadingPage extends Component {
 
       } else {
         this._userState();
-        console.log("I am in null login with password");
+        // console("I am in null login with password");
         if (phoneNumber  !== null){
           self.setState({phoneNumber: phoneNumber})
-          console.log("Sign in with phone");
+          // console("Sign in with phone");
              firebase.auth()
             .signInWithEmailAndPassword(phoneNumber, password)
             .catch(function(error) {
@@ -134,8 +134,8 @@ export default class LoadingPage extends Component {
                 var errorMessage = error.message;
                 // go to verifcation page
                 // ...
-                console.log("I caught an error")
-                console.log(errorMessage);
+                // console("I caught an error")
+                // console(errorMessage);
                 self.setState({ // go to text verification
                   user: null,
                   loading: false
@@ -153,9 +153,9 @@ export default class LoadingPage extends Component {
 
     } catch (error) {
       // Error retrieving data
-      console.log("not to text verification");
-        console.log("I caught an error");
-        console.log(error);
+      // console("not to text verification");
+        // console("I caught an error");
+        // console(error);
     }
   }
 
@@ -199,12 +199,12 @@ export default class LoadingPage extends Component {
 
     // (optional) Called when Token is generated (iOS and Android)
     onRegister: function(token) {
-        console.log( 'TOKEN:', token );
+        // console( 'TOKEN:', token );
     },
 
     // (required) Called when a remote or local notification is opened or received
     onNotification: function(notification) {
-        console.log( 'NOTIFICATION:', notification );
+        // console( 'NOTIFICATION:', notification );
         self.setState({chatUid:notification.data.chatUid});
     },
 
@@ -264,8 +264,8 @@ export default class LoadingPage extends Component {
                 this.setInfo();
             }
 
-            console.log(this.state.user);
-            console.log('going home');
+            // console(this.state.user);
+            // console('going home');
               return(
                 <Navigator
                   // Default to movies route

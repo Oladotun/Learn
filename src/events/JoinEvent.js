@@ -166,7 +166,7 @@ export default class JoinEvent extends Component{
   }
 
   databaseCreateSubGroupChat = () => {
-    console.log("In create sub group");
+    // console("In create sub group");
     var userRef =  database.ref('users/' + this.props.userUid );
     var eventLocationRef = database.ref('events/' + this.props.eventDataLocation);
     var subgroupRef = database.ref('eventSubGroup');
@@ -178,7 +178,7 @@ export default class JoinEvent extends Component{
     var eventSubGroupRef = subgroupRef.push();
     var subgroupString = eventSubGroupRef.key;
 
-    console.log(subgroupString);
+    // console(subgroupString);
 
     var info = {};
     var userInfo = {};
@@ -223,16 +223,16 @@ export default class JoinEvent extends Component{
     var subgroupchat = {    };
     subgroupchat['subgroup'] = subgroupString;
 
-    console.log("In create mid group");
+    // console("In create mid group");
 
 
     eventLocationRef.update({'attendingCount': this.props.eventObject.attendingCount + 1,
                             'subgroupVersion': this.props.eventObject.subgroupVersion + 1
                           });
-    console.log(subgroupChatLocation);
+    // console(subgroupChatLocation);
     eventLocationRef.update( subgroupChatLocation);
-      console.log("In create mid group after");
-      console.log(subgroupInfo);
+      // console("In create mid group after");
+      // console(subgroupInfo);
 
     parentEventSubGroupRef.child(eventString).child(subgroupString).update(subgroupInfo[subgroupString]);
     chatMemberRef.child(eventString).child(this.props.userUid).update(userInfo[eventString]);
@@ -270,7 +270,7 @@ export default class JoinEvent extends Component{
 
 
       });
-      console.log("Ending chat");
+      // console("Ending chat");
 
 
   }
@@ -282,14 +282,14 @@ export default class JoinEvent extends Component{
 
       Alert.alert('Introduction Required', "Kindly introduce yourself", [{
           text: 'OK',
-      //     onPress: () => {console.log('aint legal');}
+      //     onPress: () => {// console('aint legal');}
         }]);
         return;
     }
 
     let userUid = this.props.userUid;
-    console.log(userUid);
-    console.log(this.props);
+    // console(userUid);
+    // console(this.props);
     let attendingEventsRef =  database.ref('users/' + userUid + '/attendingEvents/' );
     let attendingEventsInfo = attendingEventsRef.child(this.props.eventDataLocation);
 
@@ -318,8 +318,8 @@ export default class JoinEvent extends Component{
 
 
 
-    // console.log('Joined');
-    // console.log(this.props.navigator.getCurrentRoutes());
+    // // console('Joined');
+    // // console(this.props.navigator.getCurrentRoutes());
     // var routesArray = this.props.navigator.getCurrentRoutes();
     // var homeRoute = routesArray[0];
     // this.props.navigator.jumpTo(homeRoute);

@@ -55,7 +55,7 @@ export default class AddNewEvent extends Component{
     this.setState({uploadURL:'', loading: true })
     var self = this;
     ImagePicker.launchImageLibrary({}, response  => {
-      // console.log(response);
+      // //(response);
       if (response.didCancel === true) {
         this.setState({ uploadURL: 'nothing' });
       } else {
@@ -70,7 +70,7 @@ export default class AddNewEvent extends Component{
           })
           .catch(error => {
             this.setState({ uploadURL: 'nothing' });
-            console.log(error)
+            // //(error)
           })
       }
     })
@@ -82,13 +82,14 @@ export default class AddNewEvent extends Component{
     var self = this;
    RNGooglePlaces.openAutocompleteModal()
    .then((place) => {
-   console.log(place);
+  //  //(place);
    // place represents user's selection from the
    // suggestions and it is a simplified Google Place object.
    self.setState({place:place});
 
    })
-   .catch(error => console.log(error.message));  // error is a Javascript Error object
+   .catch(error =>{} //(error.message)
+ );  // error is a Javascript Error object
  }
 
 
@@ -151,14 +152,14 @@ export default class AddNewEvent extends Component{
       ///error
       Alert.alert('Event Title Required', "Enter Title Below", [{
       //     text: 'OK',
-      //     onPress: () => {console.log('aint legal');}
+      //     onPress: () => {//('aint legal');}
         }]);
         return;
     } else  if (!this.state.place) {
 
       Alert.alert('Location Required!', "Select a location", [{
           text: 'OK',
-      //     onPress: () => {console.log('aint legal');}
+      //     onPress: () => {//('aint legal');}
         }]);
         return;
     }
@@ -175,7 +176,7 @@ export default class AddNewEvent extends Component{
 
 
         var user = firebase.auth().currentUser;
-        console.log(user);
+        // //(user);
 
        var userRef =  database.ref('users/' + user.uid );
        var eventRef = database.ref('events/');
@@ -251,7 +252,7 @@ export default class AddNewEvent extends Component{
           var updateEventsRef = eventRef.child(this.props.eventDataLocation);
           var updateUserEventsRef = createdRef.child(this.props.eventDataLocation);
            updateEventsRef.update(this.state.formData, response => {
-             console.log(response);
+            //  //(response);
            });
 
            updateUserEventsRef.update(
@@ -303,7 +304,7 @@ export default class AddNewEvent extends Component{
 
   }
   handleFormFocus(e, component){
-    //console.log(e, component);
+    ////(e, component);
   }
 
   componentWillMount(){
@@ -312,8 +313,8 @@ export default class AddNewEvent extends Component{
 
   updateValueIfPresent = () => {
     var eventValue = this.props.eventObject
-    console.log('Event object present');
-    console.log(this.props);
+    // //('Event object present');
+    // //(this.props);
 
     var formData = {};
     var uploadURL = 'nothing';
@@ -514,10 +515,11 @@ export default class AddNewEvent extends Component{
           <SwitchField label='Make event private?'
             ref="is_event_private"
             />
-        <Text>{JSON.stringify(this.state.formData)}</Text>
+
         </Form>
 
       </KeyboardAwareScrollView>);
+      // <Text>{JSON.stringify(this.state.formData)}</Text>
     }
   }
   const otherStyles = formStyles;

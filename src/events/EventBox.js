@@ -24,12 +24,12 @@ export default class EventBox extends Component {
 
   loadValues =() =>{
     var self = this;
-    console.log(this.props);
+    // console(this.props);
     let eventObjectRef =  database.ref('events').child(this.props.dataLocation);
         eventObjectRef.once('value', function(snapshot) {
-          console.log('I am in console');
-          console.log(snapshot);
-          console.log(snapshot.val());
+          // console('I am in console');
+          // console(snapshot);
+          // console(snapshot.val());
           self.setState({currentEvent:snapshot.val()}, () => {
               self.visitItem()
           });
@@ -42,10 +42,10 @@ export default class EventBox extends Component {
 
 
   visitItem = () =>{
-    console.log("where is state");
-    console.log(this.state);
+    // console("where is state");
+    // console(this.state);
     if(this.state.currentEvent){
-      console.log(this.props);
+      // console(this.props);
 
       if (this.props.joinEvent){
 
@@ -123,7 +123,7 @@ export default class EventBox extends Component {
             }
 
           }catch(e){
-            console.log(e);
+            // console(e);
           }
         })()
       }

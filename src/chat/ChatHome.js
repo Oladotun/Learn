@@ -38,15 +38,15 @@ export default class ChatHome extends Component {
     var userRef = database.ref('users').child(this.props.userUid);
 
     userRef.once('value', function(snapshot){
-      console.log("In value snapshot");
+      // console("In value snapshot");
       if (snapshot.val()){
         var attendingEvents = snapshot.val().attendingEvents;
         var createdEvents = snapshot.val().createdEvents;
 
         var subgroupInfo = snapshot.val().subgroupInfo;
 
-        console.log(attendingEvents);
-        console.log(createdEvents);
+        // console(attendingEvents);
+        // console(createdEvents);
         var allEvents = [];
         var items = [];
        if (attendingEvents){
@@ -97,7 +97,7 @@ export default class ChatHome extends Component {
         self.setState({
           dataSource: self.state.dataSource.cloneWithRows(items)
         });
-        console.log(items);
+        // console(items);
 
       }
 
@@ -110,7 +110,7 @@ export default class ChatHome extends Component {
       //   allEvents.push({created: createdEvents[created]});
       // }
 
-      // console.log(allEvents);
+      // // console(allEvents);
     });
 
 
@@ -149,8 +149,8 @@ export default class ChatHome extends Component {
   //         (() => {
   //           var chatInfos = []
   //           if (this.state.allEvents.length > 0) {
-  //             console.log('going to group chat');
-  //             console.log(this.props);
+  //             // console('going to group chat');
+  //             // console(this.props);
   //
   //             var itemChat = [];
   //             for (items in this.state.allEvents) {
@@ -209,7 +209,7 @@ export default class ChatHome extends Component {
   _renderItem(item) {
 
     const onPress = () => {
-      console.log("nothing");
+      // console("nothing");
 
       this.props.navigator.push({
                             name: 'Chat',
