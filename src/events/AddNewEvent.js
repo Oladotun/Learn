@@ -111,6 +111,8 @@ export default class AddNewEvent extends Component{
         formData.user_per_groupchat = '6';
       }
       formData.host_name = this.props.displayName;
+      // formData.attendingCount = 1;
+      formData.subgroupVersion = 1;
 
 
 
@@ -473,16 +475,16 @@ export default class AddNewEvent extends Component{
            minimumDate={new Date()}
            mode="datetime"
            date={new Date(this.state.formData.event_time)}
-           iconRight= {[<Icon style={{alignSelf:'center', marginLeft:10}} name='ios-arrow-forward' size={30} />,
-                       <Icon style={{alignSelf:'center', marginLeft:10}} name='ios-arrow-down' size={30} />
+           iconRight= {[<Icon key={5} style={{alignSelf:'center', marginLeft:10}} name='ios-arrow-forward' size={30} />,
+                       <Icon key={6} style={{alignSelf:'center', marginLeft:10}} name='ios-arrow-down' size={30} />
                        ]}
            prettyPrint = {true}
            placeholder='Start Time'/>
         <PickerField ref='event_category'
           label='Select event type'
           value={this.state.formData.event_category}
-          iconRight= {[<Icon style={{marginTop: 7, position:'absolute', right: 10}} name='ios-arrow-forward' size={30} />,
-                      <Icon style={{marginTop: 7, position:'absolute', right: 10}} name='ios-arrow-down' size={30} />
+          iconRight= {[<Icon key={3} style={{marginTop: 7, position:'absolute', right: 8}} name='ios-arrow-forward' size={30} />,
+                      <Icon key={4} style={{marginTop: 7, position:'absolute', right: 8}} name='ios-arrow-down' size={30} />
                       ]}
           options={{
              'conference': "Conferences",
@@ -497,8 +499,8 @@ export default class AddNewEvent extends Component{
         <PickerField ref='user_per_groupchat'
           label='Number of users per chat'
           value={this.state.formData.user_per_groupchat}
-          iconRight= {[<Icon style={{marginTop: 7, position:'absolute', right: 10}} name='ios-arrow-forward' size={30} />,
-                      <Icon style={{marginTop: 7, position:'absolute', right: 10}} name='ios-arrow-down' size={30} />
+          iconRight= {[<Icon key={1}style={{marginTop: 7, position:'absolute', right: 10}} name='ios-arrow-forward' size={30} />,
+                      <Icon key={2}style={{marginTop: 7, position:'absolute', right: 10}} name='ios-arrow-down' size={30} />
                       ]}
           options={{
             4: '4',
