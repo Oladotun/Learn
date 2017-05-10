@@ -240,7 +240,7 @@ export default class LoadingPage extends Component {
 
 
   render(){
-
+    
       if(this.state.loading) {
            return(
            <View style ={styles.container}>

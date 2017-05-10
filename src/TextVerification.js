@@ -27,6 +27,7 @@ import CountryPicker,{getAllCountries} from 'react-native-country-picker-modal';
 import firebase from "firebase";
 import Background from './Background';
 import DeviceInfo from 'react-native-device-info';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 // import {firebaseManager} from './FirebaseManager';
 
@@ -79,7 +80,7 @@ export default class TextVerification extends Component {
         // User is signed in.
         var isAnonymous = user.isAnonymous;
         var uid = user.uid;
-        self.props.navigator.push({name:'profileSetUp', phoneNumber: this.state.phoneNumber });
+        self.props.navigator.push({name:'profileSetUp', phoneNumber: self.state.phoneNumber });
       } else {
         // User is signed out.
       }
@@ -135,19 +136,20 @@ _verifyCode = () => {
         Alert.alert('Success!', 'You have successfully verified your phone number');
         try {
           await AsyncStorage.setItem('@UserPhoneNumber:key',
-                                      this.state.phoneNumber +'@oremi.us');
+                                      self.state.phoneNumber +'@oremi.us');
         } catch (error) {
           // Error saving data
         }
 
         firebase.auth()
         .createUserWithEmailAndPassword(
-          this.state.phoneNumber +'@oremi.us',
-          '?<2L|mt+38v9|v}q23A1984D9|6LnB'+this.state.phoneNumber +'@oremi.us')
+          self.state.phoneNumber +'@oremi.us',
+          '?<2L|mt+38v9|v}q23A1984D9|6LnB'+self.state.phoneNumber +'@oremi.us')
         .catch(function(error) {
            // Handle Errors here.
            var errorCode = error.code;
            var errorMessage = error.message;
+           console.log("we have an error");
         });
     } else {
       this.setState({
@@ -227,6 +229,7 @@ _verifyCode = () => {
     return (
 
         <Background>
+        <KeyboardAwareScrollView >
             <Image
              style={styles.image}
              source={require('./img/oremiLogo.png')}
@@ -270,7 +273,9 @@ _verifyCode = () => {
               <Text style={[styles.error,{opacity:this.state.error}]} > {errorText}</Text>
 
            </Form>
+           </KeyboardAwareScrollView>
         </Background>
+
     );
   }
 }

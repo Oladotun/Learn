@@ -39,63 +39,68 @@ export default class ChatHome extends Component {
 
     userRef.once('value', function(snapshot){
       console.log("In value snapshot");
-      var attendingEvents = snapshot.val().attendingEvents;
-      var createdEvents = snapshot.val().createdEvents;
+      if (snapshot.val()){
+        var attendingEvents = snapshot.val().attendingEvents;
+        var createdEvents = snapshot.val().createdEvents;
 
-      var subgroupInfo = snapshot.val().subgroupInfo;
+        var subgroupInfo = snapshot.val().subgroupInfo;
 
-      console.log(attendingEvents);
-      console.log(createdEvents);
-      var allEvents = [];
-      var items = [];
-     if (attendingEvents){
-       Object.keys(attendingEvents).forEach(function(events) {
-         var obj = {};
-         obj[events] = attendingEvents[events];
-           allEvents.push(obj);
-           items.push({
-             title: attendingEvents[events].event_title,
-             photoURL: attendingEvents[events].uploadURL,
-             _key: events
-           });
-       });
-     }
+        console.log(attendingEvents);
+        console.log(createdEvents);
+        var allEvents = [];
+        var items = [];
+       if (attendingEvents){
+         Object.keys(attendingEvents).forEach(function(events) {
+           var obj = {};
+           obj[events] = attendingEvents[events];
+             allEvents.push(obj);
+             items.push({
+               title: attendingEvents[events].event_title,
+               photoURL: attendingEvents[events].uploadURL,
+               _key: events
+             });
+         });
+       }
 
-     if(createdEvents){
-       Object.keys(createdEvents).forEach(function(events) {
-         var obj = {};
-         obj[events] = createdEvents[events];
-           allEvents.push(obj);
-           items.push({
-             title: createdEvents[events].event_title,
-             photoURL: createdEvents[events].uploadURL,
-             _key: events
-           });
-       });
-
-     }
-
-     if(subgroupInfo){
-       Object.keys(subgroupInfo).forEach(function(events){
-
-         var obj = {};
-         obj[events] = subgroupInfo[events];
-         allEvents.push(obj);
-         items.push({
-           title: subgroupInfo[events].event_title,
-           photoURL: subgroupInfo[events].uploadURL,
-           _key: events
+       if(createdEvents){
+         Object.keys(createdEvents).forEach(function(events) {
+           var obj = {};
+           obj[events] = createdEvents[events];
+             allEvents.push(obj);
+             items.push({
+               title: createdEvents[events].event_title,
+               photoURL: createdEvents[events].uploadURL,
+               _key: events
+             });
          });
 
-       });
-     }
+       }
+
+       if(subgroupInfo){
+         Object.keys(subgroupInfo).forEach(function(events){
+
+           var obj = {};
+           obj[events] = subgroupInfo[events];
+           allEvents.push(obj);
+           items.push({
+             title: subgroupInfo[events].event_title,
+             photoURL: subgroupInfo[events].uploadURL,
+             _key: events
+           });
+
+         });
+       }
 
 
-      self.setState({allEvents: allEvents});
+        self.setState({allEvents: allEvents});
 
-      self.setState({
-        dataSource: self.state.dataSource.cloneWithRows(items)
-      });
+        self.setState({
+          dataSource: self.state.dataSource.cloneWithRows(items)
+        });
+        console.log(items);
+
+      }
+
 
       // for (events in attendingEvents){
       //   allEvents.push({events: attendingEvents[events]});
@@ -104,7 +109,7 @@ export default class ChatHome extends Component {
       // for (created in createdEvents){
       //   allEvents.push({created: createdEvents[created]});
       // }
-      console.log(items);
+
       // console.log(allEvents);
     });
 
@@ -126,7 +131,7 @@ export default class ChatHome extends Component {
         <ListView
           dataSource={this.state.dataSource}
           renderRow={this._renderItem.bind(this)}
-          enableEmptySections={false}
+          enableEmptySections={true}
           style={styles.listview}/>
 
       </View>

@@ -30,14 +30,14 @@ render() {
           <SettingsList.Item
             icon={<Image style={{alignSelf:'center',marginLeft:20,height:40, width:40}} source={{uri:this.props.photoURL}}/>}
             title={this.props.displayName}
-            onPress={() => Alert.alert('Route To Notifications Page')}
+            onPress={() => console.log("nothing")}
           />
 
           <SettingsList.Header headerText='User Settings' headerStyle={{marginTop:15}}/>
           <SettingsList.Item
             icon={<Image style={{alignSelf:'center',marginLeft:20,height:40, width:40}} source={require('../images/notifications.png')}/>}
             title='Notifications'
-            onPress={() => Alert.alert('Route To Notifications Page')}
+            onPress={() => console.log("nothing")}
           />
 
         </SettingsList>

@@ -248,9 +248,11 @@ export default class Home extends Component {
         )
     } else if (this.state.selectedTab === 'settings'){
       return(<Settings displayName={this.props.displayName} photoURL={this.props.photoURL}/>)
-    }else if (this.state.selectedTab === 'contacts'){
-      return(<Contacts/>)
-    }else if (this.state.selectedTab === 'chats'){
+    }
+    // else if (this.state.selectedTab === 'contacts'){
+    //   return(<Contacts/>)
+    // }
+    else if (this.state.selectedTab === 'chats'){
       console.log("chat home screen");
       return(
         <Navigator
@@ -292,6 +294,19 @@ export default class Home extends Component {
 
   render() {
     const { rightButtonValidated } = this.state.rightButtonValidated;
+  // comment out contacts
+    // <Icon.TabBarItem
+    //     title=""
+    //     iconName="ios-people-outline"
+    //     selected={this.state.selectedTab === 'contacts'}
+    //     onPress={() => {
+    //       this.setState({
+    //         selectedTab: 'contacts',
+    //
+    //       });
+    //     }}>
+    //     {this.renderScreen()}
+    // </Icon.TabBarItem>
 
     return (
 
@@ -311,18 +326,7 @@ export default class Home extends Component {
          {this.renderScreen()}
       </MaterialIcon.TabBarItem>
 
-      <Icon.TabBarItem
-          title=""
-          iconName="ios-people-outline"
-          selected={this.state.selectedTab === 'contacts'}
-          onPress={() => {
-            this.setState({
-              selectedTab: 'contacts',
 
-            });
-          }}>
-          {this.renderScreen()}
-      </Icon.TabBarItem>
 
       <Icon.TabBarItem
         title=""
