@@ -22,12 +22,13 @@ export default class JoinEvent extends Component{
     super(props);
     this.state = {
       text:'',
+      sex:''
     }
   }
 
   joinEventSubGroup = () => {
     var lastOpenRef = null;
-    if (this.props.sex === 'male'){
+    if (this.state.sex === 'male'){
       lastOpenRef = database.ref('events/' + this.props.eventDataLocation).child('openSubgroupMale');
     } else {
       lastOpenRef = database.ref('events/' + this.props.eventDataLocation).child('openSubgroupFemale');
@@ -64,10 +65,10 @@ export default class JoinEvent extends Component{
       for (childKey in snapshot) {
         var child = snapshot[childKey];
 
-        if(child[self.props.sex] < child['max_users']/2 ){
+        if(child[self.state.sex] < child['max_users']/2 ){
           var parentInfo = child['parent_chatInfo'];
 
-          if(self.props.sex === 'male'){
+          if(self.state.sex === 'male'){
             eventLocationRef.update({'openSubgroupMale': childKey});
           }else {
             eventLocationRef.update({'openSubgroupFemale': childKey})
@@ -76,7 +77,7 @@ export default class JoinEvent extends Component{
         }
       }
 
-      if(self.props.sex === 'male'){
+      if(self.state.sex === 'male'){
         eventLocationRef.update({'openSubgroupMale': 'Create New Group'});
       }else {
         eventLocationRef.update({'openSubgroupFemale': 'Create New Group'})
@@ -106,12 +107,12 @@ export default class JoinEvent extends Component{
 
     currSubGroupRef.once('value').then(function(snapshot){
       var subgroupInfo = snapshot.val();
-      if (subgroupInfo[self.props.sex] < subgroupInfo['max_users']/2){
+      if (subgroupInfo[self.state.sex] < subgroupInfo['max_users']/2){
 
         userInfo[self.props.eventDataLocation] = {
           'displayName': self.props.displayName,
           'photoURL' : self.props.photoURL,
-          'sex': self.props.sex
+          'sex': self.state.sex
         };
         var now = new Date().getTime();
         chatRef.child(lastGroupString).push({
@@ -130,7 +131,7 @@ export default class JoinEvent extends Component{
         chatMemberRef.child(self.props.eventDataLocation).child(self.props.userUid).update(userInfo[self.props.eventDataLocation]);
         chatMemberRef.child(lastGroupString).child(self.props.userUid).update(userInfo[self.props.eventDataLocation]);
         // Update Sub group sex count
-        subgroupInfo[self.props.sex] = subgroupInfo[self.props.sex] + 1;
+        subgroupInfo[self.state.sex] = subgroupInfo[self.state.sex] + 1;
         userRef.child('subgroupInfo').child(lastGroupString).update(subgroupInfo);
         snapshot.ref.update(subgroupInfo);
         parentEventSubGroupRef.child(self.props.eventDataLocation).child(lastGroupString).update(subgroupInfo);
@@ -152,7 +153,7 @@ export default class JoinEvent extends Component{
 
           });
 
-        if (subgroupInfo[self.props.sex] >= subgroupInfo['max_users']/2 ){
+        if (subgroupInfo[self.state.sex] >= subgroupInfo['max_users']/2 ){
           // find next group chat and update
           self.databaseFindNextSubGroupChat();
         }
@@ -191,14 +192,14 @@ export default class JoinEvent extends Component{
     userInfo[eventString] = {
       'displayName': this.props.displayName,
       'photoURL' : this.props.photoURL,
-      'sex': this.props.sex
+      'sex': this.state.sex
     };
 
     var malecount = 0;
     var femalecount = 0;
     var subgroupChatLocation = {};
     var subgroupSex = '';
-    if (this.props.sex === 'male'){
+    if (this.state.sex === 'male'){
       malecount = 1;
       subgroupChatLocation['openSubgroupMale'] = subgroupString;
       subgroupSex = 'openSubgroupMale';
@@ -300,6 +301,12 @@ export default class JoinEvent extends Component{
       'uploadURL' : this.props.eventObject.uploadURL,
       'sortDate': this.props.eventObject.sortDate
     });
+    if(this.state.sex === 'undisclosed'){
+      this.setState({sex:'female'})
+    }else {
+      this.setState({sex:this.props.sex})
+    }
+
 
     this.joinEventSubGroup();
 

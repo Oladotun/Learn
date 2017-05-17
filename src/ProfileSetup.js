@@ -109,16 +109,16 @@ export default class ProfileSetUp extends Component {
 
        self.props.navigator.push({name:'home'});
        this.setInfo(user);
-      // user.updateProfile({
-      //   displayName: this.state.firstName + " " + this.state.lastName,
-      //   photoURL: this.state.uploadURL
-      //       }).then(function() {
-      //         // Update successful.
-      //         // console(user);
-      //         self.props.navigator.push({name:'home'});
-      //       }, function(error) {
-      //         // An error happened.
-      // });
+      user.updateProfile({
+        displayName: this.state.firstName + " " + this.state.lastName,
+        photoURL: this.state.uploadURL
+            }).then(function() {
+              // Update successful.
+              // console(user);
+              self.props.navigator.push({name:'home'});
+            }, function(error) {
+              // An error happened.
+      });
 
 
 
@@ -245,8 +245,10 @@ export default class ProfileSetUp extends Component {
               onValueChange={(lang) => this.setState({sex: lang})}
               style={styles.picker}
               >
+              <Picker.Item label="Not disclose" value="undisclosed" />
               <Picker.Item label="Male" value="male" />
               <Picker.Item label="Female" value="female" />
+
           </Picker>
         </View>
 
