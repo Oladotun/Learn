@@ -26,7 +26,7 @@ export default class ListItem extends Component {
 
         </Image>
           <View style={{flexDirection:'column'}}>
-          <Text style={styles.liText}>{this.props.item.title.length < 25? this.props.item.title +'' + type: this.props.item.title.substring(0,25)+'' + type}</Text>
+          <Text style={styles.liText}>{this.props.item.title.length < 25? type + ' '+ this.props.item.title :type + ' ' + this.props.item.title.substring(0,25)}</Text>
           <Text style={styles.liText}>{lastMessageInfo }</Text>
           </View>
         </View>

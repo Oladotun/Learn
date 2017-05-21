@@ -157,7 +157,7 @@ export default class EventBox extends Component {
 const styles = StyleSheet.create({
   imageContainer: {
     width: width/2,
-    height: height/5,
+    height: height/8,
     backgroundColor: '#f0f8ff',
 
 
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   },
   imageSearchContainer: {
     width: width/1.05,
-    height: height/5,
+    height: height/6,
     backgroundColor: '#f0f8ff',
 
 

@@ -145,7 +145,7 @@ export default class ChatHome extends Component {
                        title: attendingEvents[events].event_title,
                        photoURL: attendingEvents[events].uploadURL,
                        _key: events,
-                       type: "(Main)",
+                       type: "[Main]",
                        lastMessage: value.text,
                        createdAt: value.createdAt,
                        sender: value.name,
@@ -158,7 +158,7 @@ export default class ChatHome extends Component {
                      items_sync.push({
                        title: attendingEvents[events].event_title,
                        photoURL: attendingEvents[events].uploadURL,
-                       type: "(Main)",
+                       type: "[Main]",
                        _key: events
                      });
                    }
@@ -174,7 +174,7 @@ export default class ChatHome extends Component {
                      lastMessage: value.text,
                      createdAt: value.createdAt,
                      sender: value.name,
-                     type: "(Main)",
+                     type: "[Main]",
                      urlSender: value.avatar});
 
                    }
@@ -207,7 +207,7 @@ export default class ChatHome extends Component {
                      createdAt: value.createdAt,
                      sender: value.name,
                      urlSender: value.avatar,
-                     type: "(Main)"
+                     type: "[Main]"
 
                    });
 
@@ -216,7 +216,7 @@ export default class ChatHome extends Component {
                      title: createdEvents[events].event_title,
                      photoURL: createdEvents[events].uploadURL,
                      _key: events,
-                     type: "(Main)"
+                     type: "[Main]"
                    });
                  }
                  self.setDataSource(items_sync, items_async);
@@ -231,7 +231,7 @@ export default class ChatHome extends Component {
                    lastMessage: value.text,
                    createdAt: value.createdAt,
                    sender: value.name,
-                   type: "(Main)",
+                   type: "[Main]",
                    urlSender: value.avatar});
 
                  }
@@ -265,7 +265,7 @@ export default class ChatHome extends Component {
                   createdAt: value.createdAt,
                   sender: value.name,
                   urlSender: value.avatar,
-                  type: "(Sub)"
+                  type: "[Sub]"
 
                 });
 
@@ -274,7 +274,7 @@ export default class ChatHome extends Component {
                   title: subgroupInfo[events].event_title,
                   photoURL: subgroupInfo[events].uploadURL,
                   _key: events,
-                  type: "(Sub)"
+                  type: "[Sub]"
                 });
               }
               self.setDataSource(items_sync, items_async);
@@ -288,7 +288,7 @@ export default class ChatHome extends Component {
                 lastMessage: value.text,
                 createdAt: value.createdAt,
                 sender: value.name,
-                type: "(Sub)",
+                type: "[Sub]",
                 urlSender: value.avatar});
 
               }
