@@ -8,8 +8,13 @@ import {groupsStyles,height,width} from '../styles'
 export default class ListItem extends Component {
   render() {
     var lastMessageInfo = '';
+    var type = '';
     if (this.props.item.lastMessage){
       lastMessageInfo = this.props.item.lastMessage.length < 25? this.props.item.lastMessage : this.props.item.lastMessage.substring(0,25) + "...";
+    }
+    if(this.props.item.type){
+      type = this.props.item.type;
+
     }
     return (
       <TouchableHighlight onPress={this.props.onPress}>
@@ -21,8 +26,8 @@ export default class ListItem extends Component {
 
         </Image>
           <View style={{flexDirection:'column'}}>
-          <Text style={styles.liText}>{this.props.item.title.length < 25? this.props.item.title : this.props.item.title.substring(0,25) + "..."}</Text>
-          <Text style={styles.liText}>{lastMessageInfo}</Text>
+          <Text style={styles.liText}>{this.props.item.title.length < 25? this.props.item.title +'' + type: this.props.item.title.substring(0,25)+'' + type}</Text>
+          <Text style={styles.liText}>{lastMessageInfo }</Text>
           </View>
         </View>
 

@@ -158,38 +158,10 @@ export default class ViewEvent extends Component{
         source={{ uri: newObject['uploadURL'] }}>
 
       </Image>
-
-      <View style={styles.iconView}>
-        <View style={styles.goingViewInfo}>
-        <TouchableOpacity style={[{alignItems: 'center'},{justifyContent: 'center'}]}
-        onPress={ () => this.goingToggle()}
-        >
-          <View style={[{flexDirection: 'row'},{alignItems: 'center'} ,{justifyContent:'space-between'}]}>
-            <Icon name="md-checkmark" size={30} style={{color:this.state.goingColor}}/>
-            <Icon name="ios-arrow-dropdown" size={15} style={{marginTop:5},{color:this.state.goingColor}}/>
-          </View>
-            <Text style={[styles.message,{color:this.state.goingColor}]}>{this.state.attending}</Text>
-        </TouchableOpacity>
-
-        </View>
-
-        <View style={styles.goingViewInfo}>
-          <TouchableOpacity style={[{alignItems: 'center'},{justifyContent: 'center'}]}
-          onPress={ () => this.websiteToggle()}>
-            <Icon name="ios-globe-outline" size={30} style={{color:this.state.websiteColor}}/>
-            <Text style={[styles.message,{color:this.state.websiteColor}]}>Website</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.goingViewInfo}>
-          <TouchableOpacity style={[{alignItems: 'center'},{justifyContent: 'center'}]}
-          onPress={ () => this.shareToggle()}>
-            <Icon name="ios-share" size={30} style={{color:this.state.shareColor}}/>
-            <Text style={[styles.message,{color:this.state.shareColor}]}>Share</Text>
-          </TouchableOpacity>
-        </View>
-
+      <View style={styles.goingViewInfo}>
       </View>
+
+
 
       <View style = {styles.infoView}>
       <Icon name="ios-pricetag" size={20} style={{color:this.state.color}}/>
@@ -208,6 +180,7 @@ export default class ViewEvent extends Component{
       </View>
 
       </View>
+
 
       <View style = {styles.infoView}>
       <FontIcon name="map-marker" size={20} style={{color:this.state.color}}/>
@@ -245,6 +218,38 @@ export default class ViewEvent extends Component{
     //
     //   })()
     // }
+    // Todo going info and stuffs
+    // <View style={styles.iconView}>
+    //   <View style={styles.goingViewInfo}>
+    //   <TouchableOpacity style={[{alignItems: 'center'},{justifyContent: 'center'}]}
+    //   onPress={ () => this.goingToggle()}
+    //   >
+    //     <View style={[{flexDirection: 'row'},{alignItems: 'center'} ,{justifyContent:'space-between'}]}>
+    //       <Icon name="md-checkmark" size={30} style={{color:this.state.goingColor}}/>
+    //       <Icon name="ios-arrow-dropdown" size={15} style={{marginTop:5},{color:this.state.goingColor}}/>
+    //     </View>
+    //       <Text style={[styles.message,{color:this.state.goingColor}]}>{this.state.attending}</Text>
+    //   </TouchableOpacity>
+    //
+    //   </View>
+    //
+    //   <View style={styles.goingViewInfo}>
+    //     <TouchableOpacity style={[{alignItems: 'center'},{justifyContent: 'center'}]}
+    //     onPress={ () => this.websiteToggle()}>
+    //       <Icon name="ios-globe-outline" size={30} style={{color:this.state.websiteColor}}/>
+    //       <Text style={[styles.message,{color:this.state.websiteColor}]}>Website</Text>
+    //     </TouchableOpacity>
+    //   </View>
+    //
+    //   <View style={styles.goingViewInfo}>
+    //     <TouchableOpacity style={[{alignItems: 'center'},{justifyContent: 'center'}]}
+    //     onPress={ () => this.shareToggle()}>
+    //       <Icon name="ios-share" size={30} style={{color:this.state.shareColor}}/>
+    //       <Text style={[styles.message,{color:this.state.shareColor}]}>Share</Text>
+    //     </TouchableOpacity>
+    //   </View>
+    //
+    // </View>
   }
 }
 

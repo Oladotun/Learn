@@ -52,6 +52,11 @@ export default class ChatHome extends Component {
        for (async_item in item_async){
          allItems.push(item_async[async_item]);
        }
+       allItems.sort(function(a,b){
+         var c = new Date(a.createdAt);
+          var d = new Date(b.createdAt);
+          return d - c;
+       });
        this.setState({
          allItems: allItems,
          dataSource: this.state.dataSource.cloneWithRows(allItems),
@@ -70,6 +75,11 @@ export default class ChatHome extends Component {
       }
     }
     console.log(allItemSlice);
+    allItemSlice.sort(function(a,b){
+      var c = new Date(a.createdAt);
+       var d = new Date(b.createdAt);
+       return d - c;
+    });
     this.setState({
       allItems: allItemSlice,
       dataSource: this.state.dataSource.cloneWithRows(allItemSlice),
@@ -135,6 +145,7 @@ export default class ChatHome extends Component {
                        title: attendingEvents[events].event_title,
                        photoURL: attendingEvents[events].uploadURL,
                        _key: events,
+                       type: "(Main)",
                        lastMessage: value.text,
                        createdAt: value.createdAt,
                        sender: value.name,
@@ -147,6 +158,7 @@ export default class ChatHome extends Component {
                      items_sync.push({
                        title: attendingEvents[events].event_title,
                        photoURL: attendingEvents[events].uploadURL,
+                       type: "(Main)",
                        _key: events
                      });
                    }
@@ -162,6 +174,7 @@ export default class ChatHome extends Component {
                      lastMessage: value.text,
                      createdAt: value.createdAt,
                      sender: value.name,
+                     type: "(Main)",
                      urlSender: value.avatar});
 
                    }
@@ -179,6 +192,7 @@ export default class ChatHome extends Component {
              var newArray;
              chatRef.orderByChild("order").limitToFirst(1).on("value",function(snapshot){
                  var data = snapshot.val();
+                if(!self.state.loaded){
                  if (data) {
                    var count = 0;
 
@@ -192,7 +206,8 @@ export default class ChatHome extends Component {
                      lastMessage: value.text,
                      createdAt: value.createdAt,
                      sender: value.name,
-                     urlSender: value.avatar
+                     urlSender: value.avatar,
+                     type: "(Main)"
 
                    });
 
@@ -200,10 +215,27 @@ export default class ChatHome extends Component {
                    items_sync.push({
                      title: createdEvents[events].event_title,
                      photoURL: createdEvents[events].uploadURL,
-                     _key: events
+                     _key: events,
+                     type: "(Main)"
                    });
                  }
                  self.setDataSource(items_sync, items_async);
+
+               } else {
+                 if(data){
+                   var info = Object.keys(data)[0];
+                   var value = data[info];
+                   self.updateDataSource({title: createdEvents[events].event_title,
+                   photoURL: createdEvents[events].uploadURL,
+                   _key: events,
+                   lastMessage: value.text,
+                   createdAt: value.createdAt,
+                   sender: value.name,
+                   type: "(Main)",
+                   urlSender: value.avatar});
+
+                 }
+               }
 
              });
 
@@ -219,6 +251,8 @@ export default class ChatHome extends Component {
           var newArray;
           chatRef.orderByChild("order").limitToFirst(1).on("value",function(snapshot){
               var data = snapshot.val();
+
+              if(!self.state.loaded){
               if (data) {
 
                 var info = Object.keys(data)[0];
@@ -230,7 +264,8 @@ export default class ChatHome extends Component {
                   lastMessage: value.text,
                   createdAt: value.createdAt,
                   sender: value.name,
-                  urlSender: value.avatar
+                  urlSender: value.avatar,
+                  type: "(Sub)"
 
                 });
 
@@ -238,10 +273,27 @@ export default class ChatHome extends Component {
                 items_sync.push({
                   title: subgroupInfo[events].event_title,
                   photoURL: subgroupInfo[events].uploadURL,
-                  _key: events
+                  _key: events,
+                  type: "(Sub)"
                 });
               }
               self.setDataSource(items_sync, items_async);
+            } else {
+              if(data){
+                var info = Object.keys(data)[0];
+                var value = data[info];
+                self.updateDataSource({title: subgroupInfo[events].event_title,
+                photoURL: subgroupInfo[events].uploadURL,
+                _key: events,
+                lastMessage: value.text,
+                createdAt: value.createdAt,
+                sender: value.name,
+                type: "(Sub)",
+                urlSender: value.avatar});
+
+              }
+
+            }
 
           });
 
