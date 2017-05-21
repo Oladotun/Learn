@@ -7,17 +7,25 @@ import {groupsStyles,height,width} from '../styles'
 
 export default class ListItem extends Component {
   render() {
+    var lastMessageInfo = '';
+    if (this.props.item.lastMessage){
+      lastMessageInfo = this.props.item.lastMessage.length < 25? this.props.item.lastMessage : this.props.item.lastMessage.substring(0,25) + "...";
+    }
     return (
       <TouchableHighlight onPress={this.props.onPress}>
         <View style={styles.li}>
+
         <Image
           source={{ uri:this.props.item.photoURL}}
           style={ styles.image }>
 
         </Image>
-          <Text style={styles.liText}>{this.props.item.title}</Text>
-          <Text style={styles.liText}>{this.props.item.lastMessage}</Text>
+          <View style={{flexDirection:'column'}}>
+          <Text style={styles.liText}>{this.props.item.title.length < 25? this.props.item.title : this.props.item.title.substring(0,25) + "..."}</Text>
+          <Text style={styles.liText}>{lastMessageInfo}</Text>
+          </View>
         </View>
+
       </TouchableHighlight>
     );
   }
