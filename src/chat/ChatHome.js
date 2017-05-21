@@ -22,7 +22,10 @@ export default class ChatHome extends Component {
       allEvents: [],
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
-      })
+      }),
+      totalItemsInList: 0,
+      loaded: false,
+      allItems: []
     }
 
 
@@ -32,10 +35,45 @@ export default class ChatHome extends Component {
     this.loadUserChatInfo();
   }
 
+  setDataSource = (item_sync, item_async) =>{
+    var loadedItemsLength = 0;
+    if (item_sync){
+      loadedItemsLength = loadedItemsLength + item_sync.length;
+    }
+    if (item_async){
+      loadedItemsLength = loadedItemsLength + item_async.length;
+    }
+    var allItems = [];
+    if(this.state.totalItemsInList === loadedItemsLength){
+       for (item in item_sync){
+         allItems.push(item_sync[item]);
+       }
+
+       for (async_item in item_async){
+         allItems.push(item_async[async_item]);
+       }
+       this.setState({
+         allItems: allItems,
+         dataSource: this.state.dataSource.cloneWithRows(allItems),
+         loaded: true
+       });
+
+
+    }
+  }
+  // updateDataSource = (newItem) => {
+  //   var allItemSlice = this.state.allItems.slice();
+  //
+  // }
+
   loadUserChatInfo = () => {
 
     var self = this;
-    var userRef = database.ref('users').child(this.props.userUid);
+    var userRef = database.ref('users').child(this.props.userUid)
+    var chatGroupRef = database.ref('chat');
+    var attendingEventsRef = userRef.child('attendingEvents');
+
+
 
     userRef.on('value', function(snapshot){
       // console("In value snapshot");
@@ -44,34 +82,121 @@ export default class ChatHome extends Component {
         var createdEvents = snapshot.val().createdEvents;
 
         var subgroupInfo = snapshot.val().subgroupInfo;
+        var listLength = 0;
 
-        // console(attendingEvents);
-        // console(createdEvents);
+        if (attendingEvents){
+          listLength = listLength + Object.keys(attendingEvents).length;
+        }
+        if (createdEvents){
+          listLength = listLength + Object.keys(createdEvents).length;
+
+        }
+        if (subgroupInfo){
+          listLength = listLength + Object.keys(subgroupInfo).length;
+        }
+
+
+        self.setState({totalItemsInList: listLength});
+
+        // Continue from here
         var allEvents = [];
         var items = [];
+        var items_async = [];
+        var items_sync = [];
+
        if (attendingEvents){
          Object.keys(attendingEvents).forEach(function(events) {
-           var obj = {};
-           obj[events] = attendingEvents[events];
-             allEvents.push(obj);
-             items.push({
-               title: attendingEvents[events].event_title,
-               photoURL: attendingEvents[events].uploadURL,
-               _key: events
+
+             var chatRef = chatGroupRef.child(events);
+             var newArray;
+             chatRef.orderByChild("order").limitToFirst(1).on("value",function(snapshot){
+                 var data = snapshot.val();
+                //  if(!self.stateloaded){
+                   if (data) {
+                     var count = 0;
+
+                     var info = Object.keys(data)[0];
+                     var value = data[info];
+
+
+                     items_async.push({
+                       title: attendingEvents[events].event_title,
+                       photoURL: attendingEvents[events].uploadURL,
+                       _key: events,
+                       lastMessage: value.text,
+                       createdAt: value.createdAt,
+                       sender: value.name,
+                       urlSender: value.avatar
+
+                     });
+
+                   } else {
+                     console.log("no message");
+                     items_sync.push({
+                       title: attendingEvents[events].event_title,
+                       photoURL: attendingEvents[events].uploadURL,
+                       _key: events
+                     });
+                   }
+                   self.setDataSource(items_sync, items_async);
+
+                 }
+                //   else {
+                //    if(data){
+                //      var info = Object.keys(data)[0];
+                //      var value = data[info];
+                //      self.updateDataSource({title: attendingEvents[events].event_title,
+                //      photoURL: attendingEvents[events].uploadURL,
+                //      _key: events,
+                //      lastMessage: value.text,
+                //      createdAt: value.createdAt,
+                //      sender: value.name,
+                //      urlSender: value.avatar});
+                 //
+                //    }
+                //  }
+
              });
          });
        }
 
        if(createdEvents){
+
          Object.keys(createdEvents).forEach(function(events) {
-           var obj = {};
-           obj[events] = createdEvents[events];
-             allEvents.push(obj);
-             items.push({
-               title: createdEvents[events].event_title,
-               photoURL: createdEvents[events].uploadURL,
-               _key: events
+
+             var chatRef = chatGroupRef.child(events);
+             var newArray;
+             chatRef.orderByChild("order").limitToFirst(1).on("value",function(snapshot){
+                 var data = snapshot.val();
+                 if (data) {
+                   var count = 0;
+
+                   var info = Object.keys(data)[0];
+                   var value = data[info];
+
+                   items_async.push({
+                     title: createdEvents[events].event_title,
+                     photoURL: createdEvents[events].uploadURL,
+                     _key: events,
+                     lastMessage: value.text,
+                     createdAt: value.createdAt,
+                     sender: value.name,
+                     urlSender: value.avatar
+
+                   });
+
+                 } else {
+                   items_sync.push({
+                     title: createdEvents[events].event_title,
+                     photoURL: createdEvents[events].uploadURL,
+                     _key: events
+                   });
+                 }
+                 self.setDataSource(items_sync, items_async);
+
              });
+
+
          });
 
        }
@@ -79,38 +204,40 @@ export default class ChatHome extends Component {
        if(subgroupInfo){
          Object.keys(subgroupInfo).forEach(function(events){
 
-           var obj = {};
-           obj[events] = subgroupInfo[events];
-           allEvents.push(obj);
-           items.push({
-             title: subgroupInfo[events].event_title,
-             photoURL: subgroupInfo[events].uploadURL,
-             _key: events
-           });
+          var chatRef = chatGroupRef.child(events);
+          var newArray;
+          chatRef.orderByChild("order").limitToFirst(1).on("value",function(snapshot){
+              var data = snapshot.val();
+              if (data) {
+
+                var info = Object.keys(data)[0];
+                var value = data[info];
+                items_async.push({
+                  title: subgroupInfo[events].event_title,
+                  photoURL: subgroupInfo[events].uploadURL,
+                  _key: events,
+                  lastMessage: value.text,
+                  createdAt: value.createdAt,
+                  sender: value.name,
+                  urlSender: value.avatar
+
+                });
+
+              } else {
+                items_sync.push({
+                  title: subgroupInfo[events].event_title,
+                  photoURL: subgroupInfo[events].uploadURL,
+                  _key: events
+                });
+              }
+              self.setDataSource(items_sync, items_async);
+
+          });
 
          });
        }
 
-
-        self.setState({allEvents: allEvents});
-
-        self.setState({
-          dataSource: self.state.dataSource.cloneWithRows(items)
-        });
-        // console(items);
-
       }
-
-
-      // for (events in attendingEvents){
-      //   allEvents.push({events: attendingEvents[events]});
-      // }
-      //
-      // for (created in createdEvents){
-      //   allEvents.push({created: createdEvents[created]});
-      // }
-
-      // // console(allEvents);
     });
 
 
@@ -137,53 +264,6 @@ export default class ChatHome extends Component {
       </View>
     )
   }
-  // render() {
-  //     return (
-  //       <View style={styles.container}>
-  //       <ScrollView
-  //
-  //       >
-  //
-  //       {
-  //
-  //         (() => {
-  //           var chatInfos = []
-  //           if (this.state.allEvents.length > 0) {
-  //             // console('going to group chat');
-  //             // console(this.props);
-  //
-  //             var itemChat = [];
-  //             for (items in this.state.allEvents) {
-  //               var eachEvent = this.state.allEvents[items];
-  //               var userKey = null;
-  //               var value = null;
-  //               Object.keys(eachEvent).forEach(function(key) {
-  //                 userKey = key;
-  //                 value = eachEvent[key];
-  //               });
-  //               chatInfos.push(<ChatGroupInfo key = {userKey} channel = {value} route={this.props.route} userUid = {this.props.userUid}
-  //               displayName= {this.props.displayName}
-  //               eventUid = {userKey}
-  //               callingFrom = {'ChatHome'}
-  //               photoURL={this.props.photoURL} navigator={this.props.navigator}/>)
-  //
-  //             }
-  //             return chatInfos;
-  //
-  //           } else {
-  //             return (<Text style={{fontSize:20}}> I am home </Text>);
-  //           }
-  //         }
-  //         )()
-  //
-  //       }
-  //
-  //       </ScrollView>
-  //
-  //       </View>
-  //
-  //     );
-  // }
 
   _openFromNotification = (chatUid) =>{
 

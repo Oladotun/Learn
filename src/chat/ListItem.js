@@ -16,6 +16,7 @@ export default class ListItem extends Component {
 
         </Image>
           <Text style={styles.liText}>{this.props.item.title}</Text>
+          <Text style={styles.liText}>{this.props.item.lastMessage}</Text>
         </View>
       </TouchableHighlight>
     );
