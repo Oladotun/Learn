@@ -61,10 +61,22 @@ export default class ChatHome extends Component {
 
     }
   }
-  // updateDataSource = (newItem) => {
-  //   var allItemSlice = this.state.allItems.slice();
-  //
-  // }
+  updateDataSource = (newItem) => {
+    var allItemSlice = this.state.allItems.slice();
+    // allItemSlice[newItem._key] = newItem;
+    for (item in allItemSlice){
+      if (allItemSlice[item]._key === newItem._key){
+        allItemSlice[item] = newItem;
+      }
+    }
+    console.log(allItemSlice);
+    this.setState({
+      allItems: allItemSlice,
+      dataSource: this.state.dataSource.cloneWithRows(allItemSlice),
+      loaded: true
+    });
+
+  }
 
   loadUserChatInfo = () => {
 
@@ -111,7 +123,7 @@ export default class ChatHome extends Component {
              var newArray;
              chatRef.orderByChild("order").limitToFirst(1).on("value",function(snapshot){
                  var data = snapshot.val();
-                //  if(!self.stateloaded){
+                 if(!self.state.loaded){
                    if (data) {
                      var count = 0;
 
@@ -140,21 +152,20 @@ export default class ChatHome extends Component {
                    }
                    self.setDataSource(items_sync, items_async);
 
+                 } else {
+                   if(data){
+                     var info = Object.keys(data)[0];
+                     var value = data[info];
+                     self.updateDataSource({title: attendingEvents[events].event_title,
+                     photoURL: attendingEvents[events].uploadURL,
+                     _key: events,
+                     lastMessage: value.text,
+                     createdAt: value.createdAt,
+                     sender: value.name,
+                     urlSender: value.avatar});
+
+                   }
                  }
-                //   else {
-                //    if(data){
-                //      var info = Object.keys(data)[0];
-                //      var value = data[info];
-                //      self.updateDataSource({title: attendingEvents[events].event_title,
-                //      photoURL: attendingEvents[events].uploadURL,
-                //      _key: events,
-                //      lastMessage: value.text,
-                //      createdAt: value.createdAt,
-                //      sender: value.name,
-                //      urlSender: value.avatar});
-                 //
-                //    }
-                //  }
 
              });
          });
