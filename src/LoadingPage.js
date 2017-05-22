@@ -204,7 +204,7 @@ export default class LoadingPage extends Component {
 
     // (required) Called when a remote or local notification is opened or received
     onNotification: function(notification) {
-        // console( 'NOTIFICATION:', notification );
+        console.log( 'NOTIFICATION:', notification );
         self.setState({chatUid:notification.data.chatUid});
     },
 

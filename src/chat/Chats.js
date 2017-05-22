@@ -40,6 +40,7 @@ export default class Chat extends Component {
                         name: child.val().name
                     }
                 });
+              
             });
 
             this.setState({
@@ -76,11 +77,11 @@ export default class Chat extends Component {
                 order: -1 * now
             })
 
-            PushNotification.localNotification({
-              message: message.text, // (required)
-              userInfo: {chatUid: this.props.eventUid},
-              date: new Date(Date.now() + (60 * 1000)) // in 60 secs
-            });
+            // PushNotification.localNotification({
+            //   message: message.text, // (required)
+            //   userInfo: {chatUid: this.props.eventUid},
+            //   date: new Date(Date.now() + (60 * 1000)) // in 60 secs
+            // });
         })
 
     }

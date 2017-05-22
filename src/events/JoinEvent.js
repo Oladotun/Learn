@@ -350,7 +350,7 @@ export default class JoinEvent extends Component{
 
      </View>
      <View style={{
-       backgroundColor: '#f0f',
+       backgroundColor: '#4A90E2',
        borderBottomColor: '#000000',
        borderTopWidth: 1,
        borderBottomWidth: 1 }}>

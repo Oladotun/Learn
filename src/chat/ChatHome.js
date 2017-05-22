@@ -11,6 +11,7 @@ import ChatGroupInfo from './ChatGroupInfo';
 import firebase from 'firebase';
 import {database} from '../Config';
 import ListItem from './ListItem';
+var PushNotification = require('react-native-push-notification');
 
 export default class ChatHome extends Component {
 
@@ -80,11 +81,33 @@ export default class ChatHome extends Component {
        var d = new Date(b.createdAt);
        return d - c;
     });
+    this.sendPushNotification(newItem);
     this.setState({
       allItems: allItemSlice,
       dataSource: this.state.dataSource.cloneWithRows(allItemSlice),
       loaded: true
     });
+
+  }
+  sendPushNotification = (data) => {
+    if (this.props.userUid !== data.uid){
+      console.log(data);
+      if (this.state.loaded){
+        PushNotification.localNotification({
+          message: data.sender +":" + data.lastMessage, // (required)
+          userInfo: {chatUid: data.uid},
+          date: new Date(Date.now()) // in 60 secs
+        });
+      } else {
+        PushNotification.localNotification({
+          message: data.name+" : "+ data.text, // (required)
+          userInfo: {chatUid: data.uid},
+          date: new Date(Date.now()) // in 60 secs
+        });
+
+      }
+
+    }
 
   }
 
@@ -152,6 +175,8 @@ export default class ChatHome extends Component {
                        urlSender: value.avatar
 
                      });
+                     self.sendPushNotification(value);
+
 
                    } else {
                      console.log("no message");
@@ -210,6 +235,7 @@ export default class ChatHome extends Component {
                      type: "[Main]"
 
                    });
+                   self.sendPushNotification(value);
 
                  } else {
                    items_sync.push({
@@ -268,6 +294,7 @@ export default class ChatHome extends Component {
                   type: "[Sub]"
 
                 });
+                self.sendPushNotification(value);
 
               } else {
                 items_sync.push({
