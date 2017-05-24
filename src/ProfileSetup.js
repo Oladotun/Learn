@@ -95,7 +95,7 @@ export default class ProfileSetUp extends Component {
       this.setState({error1: 1});
     } else if(this.state.lastName === '') {
       this.setState({error2: 1});
-    } else if(this.state.uploadURL === '' || this.state.uploadURL === undefined) {
+    } else if(this.state.uploadURL === 'nothing' || this.state.uploadURL === undefined) {
       this.setState({error3: 1});
     } else {
       var user = firebase.auth().currentUser;
