@@ -65,7 +65,7 @@ export default class JoinEvent extends Component{
       for (childKey in snapshot) {
         var child = snapshot[childKey];
 
-        if(child[self.state.sex] < child['max_users']/2 ){
+        if(child[self.state.sex] <= child['max_users']/2 ){
           var parentInfo = child['parent_chatInfo'];
 
           if(self.state.sex === 'male'){
@@ -107,7 +107,7 @@ export default class JoinEvent extends Component{
 
     currSubGroupRef.once('value').then(function(snapshot){
       var subgroupInfo = snapshot.val();
-      if (subgroupInfo[self.state.sex] < subgroupInfo['max_users']/2){
+      if (subgroupInfo[self.state.sex] <= subgroupInfo['max_users']/2){
 
         userInfo[self.props.eventDataLocation] = {
           'displayName': self.props.displayName,

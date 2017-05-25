@@ -248,7 +248,7 @@ export default class LoadingPage extends Component {
            </View>);
         } else if (this.state.user){
             this.state.unSubscribe();
-          if (this.state.displayName === null || this.state.photoURL === null) {
+          if (this.state.displayName === null || this.state.photoURL === null || this.state.photoURL === 'nothing') {
               return(
                 <Navigator
                   // Default to movies route
