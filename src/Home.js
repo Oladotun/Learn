@@ -114,7 +114,6 @@ export default class Home extends Component {
           displayName : this.props.displayName,
           userUid : this.props.userUid,
           photoURL: this.props.photoURL,
-          sex: this.props.sex,
           eventDataLocation: route.eventDataLocation
 
       } );
@@ -200,8 +199,7 @@ export default class Home extends Component {
                             rightValid: this.state.rightButtonValidated,
                             displayName : this.props.displayName,
                             userUid : this.props.userUid,
-                            photoURL: this.props.photoURL,
-                            sex: this.props.sex
+                            photoURL: this.props.photoURL
                         });
     }else if(route.viewType === 'None'){
       this.refs.nav.popToTop();
@@ -243,7 +241,6 @@ export default class Home extends Component {
                             onSaveButton: this.onSaveButton,
                             userUid : this.props.userUid,
                             displayName: this.props.displayName,
-                            sex: this.props.sex,
                             photoURL: this.props.photoURL,
                           rightValid: true}}
               renderScene = { renderRouterScene  }
@@ -273,6 +270,7 @@ export default class Home extends Component {
     }
     // else if (this.state.selectedTab === 'contacts'){
     //   return(<Contacts/>)
+    // rightIcon: <FontAwesome name="pencil-square-o" size={30} style={[{color:'#4A90E2'},{marginRight:10}]}/> ,
     // }
     else if (this.state.selectedTab === 'chats'){
       // console("chat home screen");
@@ -282,8 +280,6 @@ export default class Home extends Component {
                                 title: 'Chat List',
                                 openMenu: this.openMenu ,
                                 closeMenu: this.closeMenu,
-                                rightIcon: <FontAwesome name="pencil-square-o" size={30} style={[{color:'#4A90E2'},{marginRight:10}]}/> ,
-
                             userUid : this.props.userUid,
                             displayName: this.props.displayName,
                             photoURL: this.props.photoURL,
@@ -472,7 +468,6 @@ const renderRouterScene = (route, navigator) => {
                userUid = {route.userUid}
                displayName = {route.displayName}
                photoURL = {route.photoURL}
-               sex = {route.sex}
                ref = 'eventsHome'
             />
          )
@@ -487,7 +482,6 @@ const renderRouterScene = (route, navigator) => {
                displayName={route.displayName}
                userUid = {route.userUid}
                photoURL = {route.photoURL}
-               sex = {route.sex}
             />
          )
       }
@@ -535,7 +529,6 @@ const renderRouterScene = (route, navigator) => {
           eventDataLocation = {route.eventDataLocation}
           displayName={route.displayName}
           userUid = {route.userUid}
-          sex = {route.sex}
           photoURL = {route.photoURL}
           ref='joinEvent'
            />

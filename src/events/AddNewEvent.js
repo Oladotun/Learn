@@ -39,8 +39,7 @@ export default class AddNewEvent extends Component{
         event_category: 'get together',
         is_event_private: false,
         host_name: this.props.displayName,
-        attendingCount: 1,
-        subgroupVersion: 1
+        attendingCount: 1
       },
       place: null,
       uploadURL: 'nothing',
@@ -182,23 +181,17 @@ export default class AddNewEvent extends Component{
 
        var userRef =  database.ref('users/' + user.uid );
        var eventRef = database.ref('events/');
-       var subgroupRef = database.ref('eventSubGroup');
-       var parentEventSubGroupRef = database.ref('parentEventSubGroup');
        var chatMemberRef= database.ref('chatMembers');
        var createdRef = userRef.child('createdEvents');
        this.state.formData.owner_id = user.uid + '';
        this.state.attendingCount = 1;
-       this.state.subgroupVersion = 1;
 
        this.setState({formData:this.state.formData});
        if(this.state.mode === 'add'){
          var newEventRef = eventRef.push();
-         var eventSubGroupRef = subgroupRef.push();
-         var subgroupString = eventSubGroupRef.key;
          var eventString = newEventRef.key;
          var info = {};
          var userInfo = {};
-         var subgroupInfo = {};
 
          info[eventString] = {
            'event_title' : this.state.formData.event_title,
@@ -210,40 +203,13 @@ export default class AddNewEvent extends Component{
          userInfo[eventString] = {
            'displayName': this.props.displayName,
            'photoURL' : this.props.photoURL,
-           'sex': this.props.sex
+
          };
 
-         var malecount = 0;
-         var femalecount = 0;
-        //  var nextChatLocation = subgroupString;
-         this.state.formData['openSubgroupMale'] = subgroupString;
-         this.state.formData['openSubgroupFemale'] = subgroupString;
-         if (this.props.sex === 'male'){
-           malecount = 1;
-         } else {
-           femalecount = 1;
-         }
-         subgroupInfo[subgroupString] = {
-           'max_users': this.state.formData.user_per_groupchat,
-           'male': malecount,
-           'female': femalecount,
-           'event_title' : this.state.formData.event_title,
-           'event_time' : this.state.formData.event_time,
-           'sortDate' : this.state.formData.sortDate,
-           'uploadURL' : this.state.formData.uploadURL,
-           'parent_chatInfo': eventString,
-           'currentCount': 1,
-           'version': 1,
-         }
-
-
          newEventRef.update(this.state.formData);
-         parentEventSubGroupRef.child(eventString).child(subgroupString).update(subgroupInfo[subgroupString]);
          createdRef.child(eventString).set(info[eventString]);
          chatMemberRef.child(eventString).child(this.props.userUid).update(userInfo[eventString]);
-         chatMemberRef.child(subgroupString).child(this.props.userUid).update(userInfo[eventString]);
-         subgroupRef.child(subgroupString).update(subgroupInfo[subgroupString]);
-         userRef.child('subgroupInfo').child(subgroupString).update(subgroupInfo[subgroupString]);
+
          this.props.navigator.pop();
        } else if (this.state.mode === 'update'){
 

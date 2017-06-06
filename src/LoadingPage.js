@@ -20,7 +20,7 @@ const RouteMapper = (route, navigator) => {
   if(route.name === 'textVerification') {
     return <TextVerification navigator={navigator} />
   }else if(route.name === 'home') {
-    return <Home navigator={navigator} displayName={route.displayName} userUid = {route.userUid} photoURL ={route.photoURL}  sex={route.sex} chatUid={route.chatUid}/>
+    return <Home navigator={navigator} displayName={route.displayName} userUid = {route.userUid} photoURL ={route.photoURL} chatUid={route.chatUid}/>
   } else if(route.name === 'profileSetUp') {
     return <ProfileSetUp navigator={navigator} phoneNumber={route.phoneNumber} />
   } else if(route.name === 'settings'){
@@ -61,15 +61,13 @@ export default class LoadingPage extends Component {
         firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
           var username = snapshot.val().displayName;
           var photoURL = snapshot.val().photoURL;
-          var sex = snapshot.val().sex;
 
           self.setState({
             user: user,
             loading: false,
             displayName: username,
             photoURL: photoURL,
-            userSet: true,
-            sex: sex
+            userSet: true
           });
 
 
@@ -273,7 +271,6 @@ export default class LoadingPage extends Component {
                    displayName: this.state.displayName,
                    userUid: this.state.user.uid,
                    photoURL: this.state.photoURL,
-                   sex: this.state.sex,
                    chatUid: this.state.chatUid}
                  }
                   // Use FloatFromBottom transition between screens

@@ -58,8 +58,7 @@ export default class EventsHome extends Component {
                             rightValid: true,
                             displayName : this.props.displayName,
                             userUid : this.props.userUid,
-                            photoURL: this.props.photoURL,
-                            sex: this.props.sex
+                            photoURL: this.props.photoURL
                         });
     }
 

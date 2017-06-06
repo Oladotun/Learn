@@ -21,53 +21,8 @@ import Background from './Background';
 import {styles} from './styles';
 import {storage,database,uploadImage} from './Config';
 
-// // Init Firebase
-// let config = {
-//   apiKey: "AIzaSyArUrQ20hQ4o4nohBBKs0VH5tH3bX6vDMI",
-//   authDomain: "oremi-a0b25.firebaseapp.com",
-//   databaseURL: "https://oremi-a0b25.firebaseio.com",
-//   storageBucket: "oremi-a0b25.appspot.com",
-//   messagingSenderId: "427045602725"
-// };
 const {width, height} = Dimensions.get('window');
-// firebase.initializeApp(config);
-// export const storage = firebase.storage()
-// export const database = firebase.database();
-// export const user = firebase.auth().currentUser;
 
-// Prepare Blob support
-// const Blob = RNFetchBlob.polyfill.Blob
-// const fs = RNFetchBlob.fs
-// window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
-// window.Blob = Blob
-//
-// export const uploadImage = (uri, mime = 'application/octet-stream') => {
-//   return new Promise((resolve, reject) => {
-//     const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
-//     const sessionId = new Date().getTime()
-//     let uploadBlob = null
-//     const imageRef = storage.ref('images').child(`${sessionId}`)
-//
-//     fs.readFile(uploadUri, 'base64')
-//       .then((data) => {
-//         return Blob.build(data, { type: `${mime};BASE64` })
-//       })
-//       .then((blob) => {
-//         uploadBlob = blob
-//         return imageRef.put(blob, { contentType: mime })
-//       })
-//       .then(() => {
-//         uploadBlob.close()
-//         return imageRef.getDownloadURL()
-//       })
-//       .then((url) => {
-//         resolve(url)
-//       })
-//       .catch((error) => {
-//         reject(error)
-//     })
-//   })
-// }
 
 
 export default class ProfileSetUp extends Component {
@@ -78,7 +33,6 @@ export default class ProfileSetUp extends Component {
       opacity: 1,
       firstName: '',
       lastName: '',
-      sex: 'male',
       error1: 0,
       error2:0,
       error3: 0,
@@ -101,7 +55,6 @@ export default class ProfileSetUp extends Component {
       var user = firebase.auth().currentUser;
       var self = this;
       firebase.database().ref('users/' + user.uid).set({
-        sex: this.state.sex,
         displayName: this.state.firstName + " " + this.state.lastName,
         photoURL: this.state.uploadURL,
         phoneNumber: this.props.phoneNumber
@@ -238,19 +191,6 @@ export default class ProfileSetUp extends Component {
           />
           <Text style={[styles.error,{opacity:this.state.error2}]}> Field cannot be empty</Text>
           </Form>
-          <View style={styles.pickerContainer}>
-          <Text style={styles.text}>Sex:</Text>
-            <Picker
-              selectedValue={this.state.sex}
-              onValueChange={(lang) => this.setState({sex: lang})}
-              style={styles.picker}
-              >
-              <Picker.Item label="Not disclose" value="undisclosed" />
-              <Picker.Item label="Male" value="male" />
-              <Picker.Item label="Female" value="female" />
-
-          </Picker>
-        </View>
 
           <View style={styles.btnContainers}>
             <TouchableOpacity onPress={() => this._goToNext() }>

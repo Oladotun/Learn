@@ -125,8 +125,6 @@ export default class ChatHome extends Component {
       if (snapshot.val()){
         var attendingEvents = snapshot.val().attendingEvents;
         var createdEvents = snapshot.val().createdEvents;
-
-        var subgroupInfo = snapshot.val().subgroupInfo;
         var listLength = 0;
 
         if (attendingEvents){
@@ -136,10 +134,6 @@ export default class ChatHome extends Component {
           listLength = listLength + Object.keys(createdEvents).length;
 
         }
-        if (subgroupInfo){
-          listLength = listLength + Object.keys(subgroupInfo).length;
-        }
-
 
         self.setState({totalItemsInList: listLength});
 
@@ -168,7 +162,6 @@ export default class ChatHome extends Component {
                        title: attendingEvents[events].event_title,
                        photoURL: attendingEvents[events].uploadURL,
                        _key: events,
-                       type: "[Main]",
                        lastMessage: value.text,
                        createdAt: value.createdAt,
                        sender: value.name,
@@ -183,7 +176,6 @@ export default class ChatHome extends Component {
                      items_sync.push({
                        title: attendingEvents[events].event_title,
                        photoURL: attendingEvents[events].uploadURL,
-                       type: "[Main]",
                        _key: events
                      });
                    }
@@ -199,7 +191,6 @@ export default class ChatHome extends Component {
                      lastMessage: value.text,
                      createdAt: value.createdAt,
                      sender: value.name,
-                     type: "[Main]",
                      urlSender: value.avatar});
 
                    }
@@ -231,8 +222,7 @@ export default class ChatHome extends Component {
                      lastMessage: value.text,
                      createdAt: value.createdAt,
                      sender: value.name,
-                     urlSender: value.avatar,
-                     type: "[Main]"
+                     urlSender: value.avatar
 
                    });
                    self.sendPushNotification(value);
@@ -241,8 +231,7 @@ export default class ChatHome extends Component {
                    items_sync.push({
                      title: createdEvents[events].event_title,
                      photoURL: createdEvents[events].uploadURL,
-                     _key: events,
-                     type: "[Main]"
+                     _key: events
                    });
                  }
                  self.setDataSource(items_sync, items_async);
@@ -257,7 +246,6 @@ export default class ChatHome extends Component {
                    lastMessage: value.text,
                    createdAt: value.createdAt,
                    sender: value.name,
-                   type: "[Main]",
                    urlSender: value.avatar});
 
                  }
@@ -270,75 +258,12 @@ export default class ChatHome extends Component {
 
        }
 
-       if(subgroupInfo){
-         Object.keys(subgroupInfo).forEach(function(events){
-
-          var chatRef = chatGroupRef.child(events);
-          var newArray;
-          chatRef.orderByChild("order").limitToFirst(1).on("value",function(snapshot){
-              var data = snapshot.val();
-
-              if(!self.state.loaded){
-              if (data) {
-
-                var info = Object.keys(data)[0];
-                var value = data[info];
-                items_async.push({
-                  title: subgroupInfo[events].event_title,
-                  photoURL: subgroupInfo[events].uploadURL,
-                  _key: events,
-                  lastMessage: value.text,
-                  createdAt: value.createdAt,
-                  sender: value.name,
-                  urlSender: value.avatar,
-                  type: "[Sub]"
-
-                });
-                self.sendPushNotification(value);
-
-              } else {
-                items_sync.push({
-                  title: subgroupInfo[events].event_title,
-                  photoURL: subgroupInfo[events].uploadURL,
-                  _key: events,
-                  type: "[Sub]"
-                });
-              }
-              self.setDataSource(items_sync, items_async);
-            } else {
-              if(data){
-                var info = Object.keys(data)[0];
-                var value = data[info];
-                self.updateDataSource({title: subgroupInfo[events].event_title,
-                photoURL: subgroupInfo[events].uploadURL,
-                _key: events,
-                lastMessage: value.text,
-                createdAt: value.createdAt,
-                sender: value.name,
-                type: "[Sub]",
-                urlSender: value.avatar});
-
-              }
-
-            }
-
-          });
-
-         });
-       }
-
       }
     });
 
 
   }
 
-  componentWillMount() {
-
-  }
-  componentWillUnmount(){
-
-  }
 
   render() {
     return (
