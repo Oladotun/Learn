@@ -16,6 +16,7 @@ import ViewEvent from './events/ViewEvent';
 
 import {SimpleApp} from './events/EventsHome';
 import Settings from './settings/Settings';
+import EditProfile from './settings/EditProfile';
 import Contacts from './contacts/Contact';
 import ChatHome from './chat/ChatHome'
 import Chat from './chat/Chats'
@@ -174,6 +175,8 @@ export default class Home extends Component {
       }
 
 
+    } else if(route.name === 'EditProfile'){
+      this.refs.setnav.pop();
     }
 
 
@@ -216,7 +219,9 @@ export default class Home extends Component {
       }
         this.refs.nav.pop();
     } else {
-      if (this.refs.chatNav){
+      if (this.ref.setnav){
+        this.refs.setnab.pop();
+      } else if (this.refs.chatNav){
         this.refs.chatNav.pop();
       } else {
         this.refs.nav.pop();
@@ -266,7 +271,39 @@ export default class Home extends Component {
 
         )
     } else if (this.state.selectedTab === 'settings'){
-      return(<Settings displayName={this.props.displayName} photoURL={this.props.photoURL}/>)
+
+      return(
+        <Navigator
+              initialRoute = {{ name: 'Settings',
+                                title: 'Settings',
+                                openMenu: this.openMenu ,
+                                closeMenu: this.closeMenu,
+
+                            userUid : this.props.userUid,
+                            displayName: this.props.displayName,
+                            photoURL: this.props.photoURL,
+                          rightValid: true}}
+              renderScene = { renderRouterScene  }
+              configureScene = {(route, routeStack) => {
+
+                return Navigator.SceneConfigs.FloatFromRight;
+
+              }
+
+              }
+              navigationBar = {
+                 <Navigator.NavigationBar
+                    style = { styles.navigationBar }
+                    routeMapper = { NavigationBarRouteMapper } />
+              }
+              ref = "setnav"
+              sceneStyle={{paddingTop: 64}}
+           />
+
+
+
+        );
+      // return(<Settings displayName={this.props.displayName} photoURL={this.props.photoURL} userUid={this.props.userUid}/>)
     }
     // else if (this.state.selectedTab === 'contacts'){
     //   return(<Contacts/>)
@@ -312,19 +349,6 @@ export default class Home extends Component {
 
   render() {
     const { rightButtonValidated } = this.state.rightButtonValidated;
-  // comment out contacts
-    // <Icon.TabBarItem
-    //     title=""
-    //     iconName="ios-people-outline"
-    //     selected={this.state.selectedTab === 'contacts'}
-    //     onPress={() => {
-    //       this.setState({
-    //         selectedTab: 'contacts',
-    //
-    //       });
-    //     }}>
-    //     {this.renderScreen()}
-    // </Icon.TabBarItem>
 
     return (
 
@@ -566,6 +590,8 @@ const renderRouterScene = (route, navigator) => {
         displayName= {route.displayName}
         photoURL = {route.photoURL}
         />)
+      } else if(route.name === 'EditProfile'){
+        return(<EditProfile navigator={navigator} route={route} displayName={route.displayName} photoURL={route.photoURL} userUid={route.userUid}/>)
       }
    }
 

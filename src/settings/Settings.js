@@ -10,9 +10,22 @@ import SettingsList from 'react-native-settings-list';
 export default class Settings extends Component {
 
   constructor(){
-  super();
-  this.onValueChange = this.onValueChange.bind(this);
-  this.state = {switchValue: false};
+    super();
+    this.onValueChange = this.onValueChange.bind(this);
+    this.state = {switchValue: false};
+  }
+
+goToNextProfile = () => {
+  this.props.navigator.push({name:'EditProfile',
+                      title: 'Edit Profile',
+                      openMenu: this.props.openMenu ,
+                      closeMenu: this.props.closeMenu,
+                      rightText: 'Save',
+                      leftText: 'Cancel',
+                        displayName : this.props.displayName,
+                        userUid : this.props.userUid,
+                        photoURL: this.props.photoURL
+                    });
 }
 render() {
   var bgColor = '#DCE3F4';
@@ -30,7 +43,7 @@ render() {
           <SettingsList.Item
             icon={<Image style={{alignSelf:'center',marginLeft:20,height:40, width:40}} source={{uri:this.props.photoURL}}/>}
             title={this.props.displayName}
-            onPress={() => {}}
+            onPress={() => this.goToNextProfile()}
           />
 
           <SettingsList.Header headerText='User Settings' headerStyle={{marginTop:15}}/>
