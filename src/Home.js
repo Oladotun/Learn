@@ -191,7 +191,10 @@ export default class Home extends Component {
 
   closeMenu = (route) => {
     // console('close in home');
-    if (route.name === 'EventsHome') {
+    if(route.name=== 'EditProfile'){
+        this.refs.setnav.pop();
+
+    }else if (route.name === 'EventsHome') {
       this.refs.nav.push({name:'AddNewEvent',
                           title: 'Add Event',
                           openMenu: this.openMenu ,
@@ -219,9 +222,7 @@ export default class Home extends Component {
       }
         this.refs.nav.pop();
     } else {
-      if (this.ref.setnav){
-        this.refs.setnab.pop();
-      } else if (this.refs.chatNav){
+      if (this.refs.chatNav){
         this.refs.chatNav.pop();
       } else {
         this.refs.nav.pop();
@@ -278,7 +279,6 @@ export default class Home extends Component {
                                 title: 'Settings',
                                 openMenu: this.openMenu ,
                                 closeMenu: this.closeMenu,
-
                             userUid : this.props.userUid,
                             displayName: this.props.displayName,
                             photoURL: this.props.photoURL,
@@ -589,9 +589,17 @@ const renderRouterScene = (route, navigator) => {
         return(<Settings navigator={navigator} route={route}
         displayName= {route.displayName}
         photoURL = {route.photoURL}
+        openMenu = {route.openMenu}
+        closeMenu = {route.closeMenu}
         />)
       } else if(route.name === 'EditProfile'){
-        return(<EditProfile navigator={navigator} route={route} displayName={route.displayName} photoURL={route.photoURL} userUid={route.userUid}/>)
+        return(<EditProfile navigator={navigator}
+          route={route} displayName={route.displayName}
+          photoURL={route.photoURL}
+          userUid={route.userUid}
+          openMenu = {route.openMenu}
+          closeMenu = {route.closeMenu}
+          />)
       }
    }
 

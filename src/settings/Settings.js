@@ -16,12 +16,13 @@ export default class Settings extends Component {
   }
 
 goToNextProfile = () => {
+  console.log(this.props);
   this.props.navigator.push({name:'EditProfile',
                       title: 'Edit Profile',
                       openMenu: this.props.openMenu ,
                       closeMenu: this.props.closeMenu,
                       rightText: 'Save',
-                      leftText: 'Cancel',
+                      leftText: 'Back',
                         displayName : this.props.displayName,
                         userUid : this.props.userUid,
                         photoURL: this.props.photoURL
