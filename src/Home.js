@@ -36,14 +36,31 @@ export default class Home extends Component {
     if(this.props.chatUid == null){
       this.state = {
         selectedTab:'eventHome',
-        rightButtonValidated: false
+        rightButtonValidated: false,
+        displayName: this.props.displayName,
+        photoURL: this.props.photoURL
       }
     } else {
       this.state = {
         selectedTab:'chats',
-        rightButtonValidated: false
+        rightButtonValidated: false,
+        displayName: this.props.displayName,
+        photoURL: this.props.photoURL
       }
     }
+
+  }
+
+  componentDidMount(){
+    firebase.database().ref('/users/' + this.props.userUid).on('value').then(function(snapshot) {
+      var username = snapshot.val().displayName;
+      var photoURL = snapshot.val().photoURL;
+
+      self.setState({
+        displayName: username,
+        photoURL: photoURL
+      });
+}
 
   }
 
@@ -74,7 +91,7 @@ export default class Home extends Component {
         closeMenu: this.closeMenu,
         rightText: 'Done',
         leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>,
-        displayName : this.props.displayName,
+        displayName : this.state.displayName,
         userUid : this.props.userUid,
         eventArray: eventArray
 
@@ -97,8 +114,8 @@ export default class Home extends Component {
           rightText: '',
           leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>,
           eventUid: route.eventDataLocation,
-          photoURL: this.props.photoURL,
-          displayName: this.props.displayName,
+          photoURL: this.state.photoURL,
+          displayName: this.state.displayName,
           viewType: 'memberHome'
 
       } );
@@ -112,9 +129,9 @@ export default class Home extends Component {
           closeMenu: this.closeMenu,
           rightText: 'Send',
           leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>,
-          displayName : this.props.displayName,
+          displayName : this.state.displayName,
           userUid : this.props.userUid,
-          photoURL: this.props.photoURL,
+          photoURL: this.state.photoURL,
           eventDataLocation: route.eventDataLocation
 
       } );
@@ -129,7 +146,7 @@ export default class Home extends Component {
           rightText: 'Update',
           leftText: 'Close',
           eventDataLocation: route.eventDataLocation,
-          displayName : this.props.displayName,
+          displayName : this.state.displayName,
           userUid : this.props.userUid
 
       } );
@@ -176,7 +193,9 @@ export default class Home extends Component {
 
 
     } else if(route.name === 'EditProfile'){
-      this.refs.setnav.pop();
+      this.refs.setnav.refs.editProfile.validate()
+      // editProfile
+      // this.refs.setnav.pop();
     }
 
 
@@ -203,9 +222,9 @@ export default class Home extends Component {
                           leftText: 'Cancel',
                           onSaveButton: this.onSaveButton,
                             rightValid: this.state.rightButtonValidated,
-                            displayName : this.props.displayName,
+                            displayName : this.state.displayName,
                             userUid : this.props.userUid,
-                            photoURL: this.props.photoURL
+                            photoURL: this.state.photoURL
                         });
     }else if(route.viewType === 'None'){
       this.refs.nav.popToTop();
@@ -246,8 +265,8 @@ export default class Home extends Component {
                                 leftIcon: <Icon name="ios-add" size={40} style={[{color:'#4A90E2'},{marginLeft:10}]}/>,
                             onSaveButton: this.onSaveButton,
                             userUid : this.props.userUid,
-                            displayName: this.props.displayName,
-                            photoURL: this.props.photoURL,
+                            displayName: this.state.displayName,
+                            photoURL: this.state.photoURL,
                           rightValid: true}}
               renderScene = { renderRouterScene  }
               configureScene = {(route, routeStack) => {
@@ -280,8 +299,8 @@ export default class Home extends Component {
                                 openMenu: this.openMenu ,
                                 closeMenu: this.closeMenu,
                             userUid : this.props.userUid,
-                            displayName: this.props.displayName,
-                            photoURL: this.props.photoURL,
+                            displayName: this.state.displayName,
+                            photoURL: this.state.photoURL,
                           rightValid: true}}
               renderScene = { renderRouterScene  }
               configureScene = {(route, routeStack) => {
@@ -303,7 +322,7 @@ export default class Home extends Component {
 
 
         );
-      // return(<Settings displayName={this.props.displayName} photoURL={this.props.photoURL} userUid={this.props.userUid}/>)
+      // return(<Settings displayName={this.state.displayName} photoURL={this.state.photoURL} userUid={this.props.userUid}/>)
     }
     // else if (this.state.selectedTab === 'contacts'){
     //   return(<Contacts/>)
@@ -318,8 +337,8 @@ export default class Home extends Component {
                                 openMenu: this.openMenu ,
                                 closeMenu: this.closeMenu,
                             userUid : this.props.userUid,
-                            displayName: this.props.displayName,
-                            photoURL: this.props.photoURL,
+                            displayName: this.state.displayName,
+                            photoURL: this.state.photoURL,
                             chatUid: this.props.chatUid
                       }}
               renderScene = { renderRouterScene  }
@@ -342,7 +361,7 @@ export default class Home extends Component {
 
 
 
-      // return(<ChatHome userUid= {this.props.userUid} displayName= {this.props.displayName} photoURL={this.props.photoURL}/>)
+      // return(<ChatHome userUid= {this.props.userUid} displayName= {this.state.displayName} photoURL={this.state.photoURL}/>)
     }
   }
 
@@ -591,6 +610,7 @@ const renderRouterScene = (route, navigator) => {
         photoURL = {route.photoURL}
         openMenu = {route.openMenu}
         closeMenu = {route.closeMenu}
+        userUid = {route.userUid}
         />)
       } else if(route.name === 'EditProfile'){
         return(<EditProfile navigator={navigator}
@@ -599,6 +619,7 @@ const renderRouterScene = (route, navigator) => {
           userUid={route.userUid}
           openMenu = {route.openMenu}
           closeMenu = {route.closeMenu}
+          ref = 'editProfile'
           />)
       }
    }

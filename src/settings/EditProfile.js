@@ -33,31 +33,26 @@ export default class AddNewEvent extends Component{
 
       },
     uploadURL: 'nothing',
-
+    changed: false,
+    namechange:false
     }
   }
 
   _pickImage() {
-    this.setState({loading: true })
+    this.setState({opacity: 1,loading: true })
     var self = this;
     ImagePicker.launchImageLibrary({}, response  => {
       // //(response);
       if (response.didCancel === true) {
+        this.setState({ opacity: 0,loading:false})
 
       } else {
+        console.log(response.uri);
 
-        uploadImage(response.uri)
-          .then((url) => {
-            this.setState({ uploadURL: url, opacity: 0,loading:false})
-            if (this.state.gotonext){
-              self.validate();
-            }
 
-          })
-          .catch(error => {
-            this.setState({ loading:false });
-            // //(error)
-          })
+        this.setState({ uploadURL: response.uri, opacity: 0,loading:false, changed:true});
+        // console.log(this.props.userUid);
+
       }
     })
   }
@@ -68,20 +63,74 @@ export default class AddNewEvent extends Component{
 
   handleFormChange(formData){
 
-    if (formData.firstName == undefined || formData.firstName == undefined) {
-      formData.firstName = '';
-      formData.lastName = '';
-    }
+    // if (formData.firstName == undefined || formData.lastName == undefined) {
+    //   formData.firstName = '';
+    //   formData.lastName = '';
+    // }
+    console.log(formData);
 
-    this.setState({formData:formData});
+    const updatedFormData = this.state.formData;
+
+    Object.keys(formData).forEach(function(key) {
+      updatedFormData[key] =formData[key];
+    });
+
+    this.setState({formData:updatedFormData, namechange:true});
+    console.log(this.state.formData);
     this.props.onFormChange && this.props.onFormChange(formData);
 
 
   }
 
   validate = () => {
+    var userInfoRef = database.ref('users/' + this.props.userUid);
 
-    this.props.navigator.pop();
+    if(this.state.formData.firstName === ''|| this.state.formData.lastName === ''){
+      Alert.alert('Error!', "Name Cannot Be Empty", [{
+          text: 'OK',
+      //     onPress: () => {//('aint legal');}
+        }]);
+        return
+    }
+
+    if (this.state.namechange){
+      userInfoRef.update({
+        displayName: this.state.formData.firstName + " " + this.state.formData.lastName
+      });
+      if(!this.state.changed){
+        this.props.navigator.replacePrevious(
+          {
+            name:'Settings',
+            title: 'Settings',
+            openMenu: this.props.openMenu ,
+            closeMenu: this.props.closeMenu,
+        userUid : this.props.userUid,
+        displayName: this.state.formData.firstName + " " + this.state.formData.lastName,
+        photoURL: this.props.photoURL
+
+        }
+        );
+      }
+    }
+    if(this.state.changed){
+      uploadImage(this.state.uploadURL, this.props.userUid)
+        .then((url) => {
+          userInfoRef.update({
+            uploadURL: url
+          });
+          this.props.navigator.pop();
+        })
+        .catch(error => {
+          Alert.alert('Error!', "There was an error while uploading, try again", [{
+              text: 'OK',
+          //     onPress: () => {//('aint legal');}
+            }]);
+
+          // //(error)
+        })
+    } else {
+      this.props.navigator.pop();
+    }
 
     }
 
@@ -135,15 +184,18 @@ export default class AddNewEvent extends Component{
             )
             default:
                 return(
+
+                  <TouchableOpacity
+                  onPress={ () => this._pickImage()}>
+
                   <Image
                   style={myStyles.imageContainer}
                     source={{ uri: this.state.uploadURL }}>
-                  <TouchableOpacity style={[{alignItems: 'center'},{justifyContent: 'center'}]}
-                  onPress={ () => this._pickImage()}>
-                      <Icon name="ios-camera" size={30} style={{opacity: this.state.opacity}} color={Colors.white}/>
-                      <Text style={[otherStyles.h4, globals.primaryText, {opacity: this.state.opacity}]}>Add a Photo</Text>
+                      <ActivityIndicator style={{opacity: this.state.opacity}}/>
+                    </Image>
+
                   </TouchableOpacity>
-                  </Image>
+
 
                 )
           }
@@ -159,7 +211,7 @@ export default class AddNewEvent extends Component{
         label="Personal Information">
 
         <InputField
-          ref='first_name'
+          ref='firstName'
           label ='Name'
           placeholder='First Name'
           multiline ={true}
@@ -167,8 +219,8 @@ export default class AddNewEvent extends Component{
           helpText={((self)=>{
 
             if(Object.keys(self.refs).length !== 0){
-              if(!self.refs.registrationForm.refs.first_name.valid){
-                return self.refs.registrationForm.refs.first_name.validationErrors.join("\n");
+              if(!self.refs.registrationForm.refs.firstName.valid){
+                return self.refs.registrationForm.refs.firstName.validationErrors.join("\n");
               }
 
             }
@@ -187,7 +239,7 @@ export default class AddNewEvent extends Component{
           />
 
           <InputField
-            ref='last_name'
+            ref='lastName'
             label ='Last Name'
             placeholder='Last Name'
             multiline ={true}
@@ -195,8 +247,8 @@ export default class AddNewEvent extends Component{
             helpText={((self)=>{
 
               if(Object.keys(self.refs).length !== 0){
-                if(!self.refs.registrationForm.refs.last_name.valid){
-                  return self.refs.registrationForm.refs.last_name.validationErrors.join("\n");
+                if(!self.refs.registrationForm.refs.lastName.valid){
+                  return self.refs.registrationForm.refs.lastName.validationErrors.join("\n");
                 }
 
               }

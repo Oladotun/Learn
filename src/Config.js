@@ -33,12 +33,19 @@ const fs = RNFetchBlob.fs
 window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
 window.Blob = Blob
 
-export const uploadImage = (uri, mime = 'application/octet-stream') => {
+export const uploadImage = (uri,useruid,mime = 'application/octet-stream') => {
   return new Promise((resolve, reject) => {
     const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
     const sessionId = new Date().getTime()
     let uploadBlob = null
-    const imageRef = storage.ref('images').child(`${sessionId}`)
+    console.log("I am in user uid");
+    console.log(useruid);
+    let imageRef = null;
+    if (useruid){
+      imageRef = storage.ref('images').child(`${useruid}`);
+    }else {
+      imageRef = storage.ref('images').child(`${sessionId}`);
+    }
 
     fs.readFile(uploadUri, 'base64')
       .then((data) => {
