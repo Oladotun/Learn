@@ -51,19 +51,10 @@ export default class Home extends Component {
 
   }
 
-  componentDidMount(){
-    firebase.database().ref('/users/' + this.props.userUid).on('value').then(function(snapshot) {
-      var username = snapshot.val().displayName;
-      var photoURL = snapshot.val().photoURL;
-
-      self.setState({
-        displayName: username,
-        photoURL: photoURL
-      });
-}
-
+  updateName = (newName) => {
+    this.setState({displayName:newName});
+    console.log(newName);
   }
-
 
 
 
@@ -301,6 +292,7 @@ export default class Home extends Component {
                             userUid : this.props.userUid,
                             displayName: this.state.displayName,
                             photoURL: this.state.photoURL,
+                            updateName: this.updateName,
                           rightValid: true}}
               renderScene = { renderRouterScene  }
               configureScene = {(route, routeStack) => {
@@ -611,6 +603,7 @@ const renderRouterScene = (route, navigator) => {
         openMenu = {route.openMenu}
         closeMenu = {route.closeMenu}
         userUid = {route.userUid}
+        updateName = {route.updateName}
         />)
       } else if(route.name === 'EditProfile'){
         return(<EditProfile navigator={navigator}
@@ -619,6 +612,7 @@ const renderRouterScene = (route, navigator) => {
           userUid={route.userUid}
           openMenu = {route.openMenu}
           closeMenu = {route.closeMenu}
+          updateName = {route.updateName}
           ref = 'editProfile'
           />)
       }

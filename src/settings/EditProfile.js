@@ -98,6 +98,7 @@ export default class AddNewEvent extends Component{
         displayName: this.state.formData.firstName + " " + this.state.formData.lastName
       });
       if(!this.state.changed){
+        this.props.updateName(this.state.formData.firstName + " " + this.state.formData.lastName);
         this.props.navigator.replacePrevious(
           {
             name:'Settings',
