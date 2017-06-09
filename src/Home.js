@@ -55,6 +55,11 @@ export default class Home extends Component {
     this.setState({displayName:newName});
     console.log(newName);
   }
+  updateImage = (newImageUrl) => {
+    this.setState({photoURL: newImageUrl});
+
+    this.refs.setnav.refs.editProfile.pushPrevious(newImageUrl);
+  }
 
 
 
@@ -293,6 +298,7 @@ export default class Home extends Component {
                             displayName: this.state.displayName,
                             photoURL: this.state.photoURL,
                             updateName: this.updateName,
+                            updateImage: this.updateImage,
                           rightValid: true}}
               renderScene = { renderRouterScene  }
               configureScene = {(route, routeStack) => {
@@ -604,6 +610,7 @@ const renderRouterScene = (route, navigator) => {
         closeMenu = {route.closeMenu}
         userUid = {route.userUid}
         updateName = {route.updateName}
+        updateImage = {route.updateImage}
         />)
       } else if(route.name === 'EditProfile'){
         return(<EditProfile navigator={navigator}
@@ -613,6 +620,7 @@ const renderRouterScene = (route, navigator) => {
           openMenu = {route.openMenu}
           closeMenu = {route.closeMenu}
           updateName = {route.updateName}
+          updateImage = {route.updateImage}
           ref = 'editProfile'
           />)
       }

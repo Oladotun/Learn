@@ -26,7 +26,8 @@ goToNextProfile = () => {
                         displayName : this.props.displayName,
                         userUid : this.props.userUid,
                         photoURL: this.props.photoURL,
-                        updateName: this.props.updateName
+                        updateName: this.props.updateName,
+                        updateImage: this.props.updateImage
                     });
 }
 render() {

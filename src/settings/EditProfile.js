@@ -82,6 +82,26 @@ export default class AddNewEvent extends Component{
 
   }
 
+  pushPrevious = (url) => {
+    this.props.navigator.push(
+      {
+        name:'Settings',
+        title: 'Settings',
+        openMenu: this.props.openMenu ,
+        closeMenu: this.props.closeMenu,
+        userUid : this.props.userUid,
+        displayName: this.state.formData.firstName + " " + this.state.formData.lastName,
+        photoURL: this.state.uploadURL,
+        updateName: this.props.updateName,
+        updateImage: this.props.updateImage
+
+    }
+    );
+
+
+    console.log("push to previous");
+  }
+
   validate = () => {
     var userInfoRef = database.ref('users/' + this.props.userUid);
 
@@ -97,8 +117,9 @@ export default class AddNewEvent extends Component{
       userInfoRef.update({
         displayName: this.state.formData.firstName + " " + this.state.formData.lastName
       });
+      this.props.updateName(this.state.formData.firstName + " " + this.state.formData.lastName);
       if(!this.state.changed){
-        this.props.updateName(this.state.formData.firstName + " " + this.state.formData.lastName);
+
         this.props.navigator.replacePrevious(
           {
             name:'Settings',
@@ -107,21 +128,27 @@ export default class AddNewEvent extends Component{
             closeMenu: this.props.closeMenu,
         userUid : this.props.userUid,
         displayName: this.state.formData.firstName + " " + this.state.formData.lastName,
-        photoURL: this.props.photoURL
+        photoURL: this.state.uploadURL,
+        updateName: this.props.updateName,
+        updateImage: this.props.updateImage
 
         }
         );
       }
     }
     if(this.state.changed){
+      this.setState({opacity:1, loading:true});
+      var self = this;
       uploadImage(this.state.uploadURL, this.props.userUid)
         .then((url) => {
           userInfoRef.update({
-            uploadURL: url
+            photoURL: `${url}`
           });
-          this.props.navigator.pop();
+          self.setState({opacity:0, loading:false,uploadURL:url});
+          self.props.updateImage(url);
         })
         .catch(error => {
+          console.log(error);
           Alert.alert('Error!', "There was an error while uploading, try again", [{
               text: 'OK',
           //     onPress: () => {//('aint legal');}
