@@ -54,24 +54,47 @@ export default class ProfileSetUp extends Component {
     } else {
       var user = firebase.auth().currentUser;
       var self = this;
-      firebase.database().ref('users/' + user.uid).set({
+      var userInfoRef = firebase.database().ref('users/').child(user.uid);
+      userInfoRef.set({
         displayName: this.state.firstName + " " + this.state.lastName,
         photoURL: this.state.uploadURL,
         phoneNumber: this.props.phoneNumber
       });
 
-       self.props.navigator.push({name:'home'});
        this.setInfo(user);
-      user.updateProfile({
-        displayName: this.state.firstName + " " + this.state.lastName,
-        photoURL: this.state.uploadURL
-            }).then(function() {
-              // Update successful.
-              // console(user);
-              self.props.navigator.push({name:'home'});
-            }, function(error) {
-              // An error happened.
-      });
+
+       this.setState({opacity:1, loading:true});
+       var self = this;
+       uploadImage(this.state.uploadURL, user.uid)
+         .then((url) => {
+           userInfoRef.update({
+             photoURL: `${url}`
+           });
+           self.setState({opacity:0, loading:false,uploadURL:url});
+          //  self.props.updateImage(url);
+            self.props.navigator.push({name:'home'});
+         })
+         .catch(error => {
+           console.log(error);
+           Alert.alert('Error!', "There was an error while uploading, try again", [{
+               text: 'OK',
+           //     onPress: () => {//('aint legal');}
+             }]);
+
+           // //(error)
+         })
+
+
+      // user.updateProfile({
+      //   displayName: this.state.firstName + " " + this.state.lastName,
+      //   photoURL: this.state.uploadURL
+      //       }).then(function() {
+      //         // Update successful.
+      //         // console(user);
+      //         self.props.navigator.push({name:'home'});
+      //       }, function(error) {
+      //         // An error happened.
+      // });
 
 
 
@@ -88,27 +111,67 @@ export default class ProfileSetUp extends Component {
     }
   }
 
-
-
   _pickImage() {
-    this.setState({ uploadURL: '' })
-
+    this.setState({uploadURL:'',opacity: 1,error3:0,loading: true })
+    var self = this;
     ImagePicker.launchImageLibrary({}, response  => {
+      // //(response);
       if (response.didCancel === true) {
-        this.setState({ uploadURL: 'nothing' });
-      } else {
+        this.setState({uploadURL:'nothing' ,opacity: 1,loading:false})
 
-        uploadImage(response.uri)
-          .then((url) => {
-            this.setState({ uploadURL: url, opacity:0 })
-          })
-          .catch(error => {
-            this.setState({ uploadURL: 'nothing' });
-            // console(error)
-          })
+      } else {
+        console.log(response.uri);
+
+
+        this.setState({ uploadURL: response.uri, opacity: 0,loading:false});
+        // console.log(this.props.userUid);
+
       }
     })
   }
+
+
+  // this.setState({opacity:1, loading:true});
+  // var self = this;
+  // uploadImage(this.state.uploadURL, this.props.userUid)
+  //   .then((url) => {
+  //     userInfoRef.update({
+  //       photoURL: `${url}`
+  //     });
+  //     self.setState({opacity:0, loading:false,uploadURL:url});
+  //     self.props.updateImage(url);
+  //   })
+  //   .catch(error => {
+  //     console.log(error);
+  //     Alert.alert('Error!', "There was an error while uploading, try again", [{
+  //         text: 'OK',
+  //     //     onPress: () => {//('aint legal');}
+  //       }]);
+  //
+  //     // //(error)
+  //   })
+
+
+  //
+  // _pickImage() {
+  //   this.setState({ uploadURL: '' })
+  //
+  //   ImagePicker.launchImageLibrary({}, response  => {
+  //     if (response.didCancel === true) {
+  //       this.setState({ uploadURL: 'nothing' });
+  //     } else {
+  //
+  //       uploadImage(response.uri)
+  //         .then((url) => {
+  //           this.setState({ uploadURL: url, opacity:0 })
+  //         })
+  //         .catch(error => {
+  //           this.setState({ uploadURL: 'nothing' });
+  //           // console(error)
+  //         })
+  //     }
+  //   })
+  // }
 
   render(){
     return  (

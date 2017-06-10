@@ -239,6 +239,17 @@ export default class LoadingPage extends Component {
 
   render(){
 
+    // return(
+    //   <Navigator
+    //     // Default to movies route
+    //     initialRoute={{name: 'profileSetUp', phoneNumber: this.state.phoneNumber}}
+    //     // Use FloatFromBottom transition between screens
+    //     configureScene={(route, routeStack) => Navigator.SceneConfigs.FloatFromBottom}
+    //     // Pass a route mapper functions
+    //     renderScene={RouteMapper}
+    //   />
+    //   );
+
       if(this.state.loading) {
            return(
            <View style ={styles.container}>
