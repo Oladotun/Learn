@@ -17,6 +17,7 @@ import ViewEvent from './events/ViewEvent';
 import {SimpleApp} from './events/EventsHome';
 import Settings from './settings/Settings';
 import EditProfile from './settings/EditProfile';
+import ViewProfile from './settings/ViewProfile';
 import Contacts from './contacts/Contact';
 import ChatHome from './chat/ChatHome'
 import Chat from './chat/Chats'
@@ -170,6 +171,7 @@ export default class Home extends Component {
           eventUid: route.eventUid,
           photoURL: route.photoURL,
           displayName: route.displayName,
+          viewType: "ChatHome"
         });
 
       } else {
@@ -183,7 +185,7 @@ export default class Home extends Component {
           eventUid: route.eventUid,
           photoURL: route.photoURL,
           displayName: route.displayName,
-
+          viewType: "memberHome"
 
         })
       }
@@ -207,8 +209,25 @@ export default class Home extends Component {
 
   closeMenu = (route) => {
     // console('close in home');
-    if(route.name=== 'EditProfile'){
-        this.refs.setnav.pop();
+    if (route.name === 'ViewProfile'){
+      console.log(route.viewType);
+      if(route.viewType ==='ChatHome'){
+        this.refs.chatNav.pop();
+      } else {
+        this.refs.nav.pop();
+      }
+
+    }else if(route.name=== 'EditProfile'){
+
+      this.refs.setnav.pop();
+      // if(this.refs.chatNav){
+      //   this.refs.chatNav.pop();
+      // }else if (this.refs.setnav){
+      //   this.refs.setnav.pop();
+      // } else {
+      //   this.refs.nav.pop();
+      // }
+
 
     }else if (route.name === 'EventsHome') {
       this.refs.nav.push({name:'AddNewEvent',
@@ -338,7 +357,8 @@ export default class Home extends Component {
                             userUid : this.props.userUid,
                             displayName: this.state.displayName,
                             photoURL: this.state.photoURL,
-                            chatUid: this.props.chatUid
+                            chatUid: this.props.chatUid,
+                            viewType: "ChatHome"
                       }}
               renderScene = { renderRouterScene  }
               configureScene = {(route, routeStack) => {
@@ -589,19 +609,24 @@ const renderRouterScene = (route, navigator) => {
             displayName= {route.displayName}
             photoURL={route.photoURL}
             chatUid={route.chatUid}
+
         />)
 
       } else if(route.name === 'Chat'){
+        console.log("In chat at home");
+        console.log(route.viewType);
         return(<Chat navigator={navigator} route={route}
                 userUid= {route.userUid}
               displayName= {route.displayName}
               photoURL={route.photoURL}
-              eventUid= {route.eventUid}
+              eventUid= {route.eventUid} viewType= {route.viewType}
 
         />)
       } else if(route.name === 'ChatMoreInfo'){
         return(<ChatMoreInfo navigator={navigator} route={route}
-            eventUid = {route.eventUid}
+            eventUid = {route.eventUid} displayName= {route.displayName}
+            photoURL={route.photoURL} openMenu = {route.openMenu}
+            closeMenu = {route.closeMenu} viewType = {route.viewType}
           />)
       } else if(route.name === 'Settings'){
         return(<Settings navigator={navigator} route={route}
@@ -623,6 +648,12 @@ const renderRouterScene = (route, navigator) => {
           updateName = {route.updateName}
           updateImage = {route.updateImage}
           ref = 'editProfile'
+          />)
+      } else if(route.name === 'ViewProfile'){
+        return(<ViewProfile navigator={navigator}
+          route={route} displayName={route.displayName}
+          photoURL={route.photoURL} viewType = {route.viewType}
+          closeMenu = {route.closeMenu}
           />)
       }
    }

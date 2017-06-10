@@ -83,7 +83,17 @@ export default class ChatMoreInfo extends Component {
   _renderItem(item) {
 
     const onPress = () => {
-      // console("nothing");
+      console.log("in more info");
+      console.log(this.props.viewType);
+      this.props.navigator.push({name:'ViewProfile',
+                          title: 'View Profile',
+                          closeMenu: this.props.closeMenu,
+                          leftText: 'Back',
+                            displayName : this.props.displayName,
+                            userUid : this.props.userUid,
+                            photoURL: this.props.photoURL,
+                            viewType: this.props.viewType
+                        });
     };
 
     return (

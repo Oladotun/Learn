@@ -23,7 +23,7 @@ import Colors from '../styles/colors';
 import {database,uploadImage} from '../Config';
 
 var {height, width} = Dimensions.get('window');
-export default class AddNewEvent extends Component{
+export default class EditProfile extends Component{
   constructor(props){
     super(props);
     this.state = {
