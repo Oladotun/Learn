@@ -79,6 +79,45 @@ export default class EventsHome extends Component {
 
       }
 
+      updateEventUserInfo = (userUid, userName, userPhoto) => {
+        // let userRef =  database.ref('/events/' );
+        // attendingEvents //
+        // createdEvents // update host_name
+        //
+        // userRef.once('value', function(snapshot){
+        //
+        // });
+
+        let userAttend = database.ref('users/').child(userUid).child('attendingEvents');
+
+        userAttend.once('value', function(snapshot){
+          snapshot.forEach(function(child){
+            var key = child.key;
+            var chatInfo = {};
+            chatInfo[userUid] = {'displayName':userName, 'photoURL':userPhoto};
+            let chatMemberInfo  = database.ref('chatMembers').child(key).child(userUid);
+            chatMemberInfo.update(chatInfo[userUid]);
+
+          });
+        });
+
+        let userCreatedEvents = database.ref('users/').child(userUid).child('createdEvents');
+        userCreatedEvents.once('value',function(snapshot){
+          snapshot.forEach(function(child){
+            var key = child.key;
+
+            var chatInfo = {};
+            chatInfo[userUid] = {'displayName':userName, 'photoURL':userPhoto};
+            let chatMemberInfo  = database.ref('chatMembers').child(key).child(userUid);
+            chatMemberInfo.update(chatInfo[userUid]);
+
+            let eventsInfo = database.ref('events').child(key).update({'host_name':userName});
+
+          });
+
+        });
+      }
+
 
     loadAllNonEvents = async() =>{
       let userUid = this.props.userUid;

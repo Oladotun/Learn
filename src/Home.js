@@ -54,11 +54,12 @@ export default class Home extends Component {
   updateName = (newName) => {
     this.setState({displayName:newName});
     console.log(newName);
+    this.refs.nav.refs.eventsHome.updateEventUserInfo(this.props.userUid,newName,this.state.photoURL);
   }
   updateImage = (newImageUrl) => {
     this.setState({photoURL: newImageUrl});
-
     this.refs.setnav.refs.editProfile.pushPrevious(newImageUrl);
+    this.refs.nav.refs.eventsHome.updateEventUserInfo(this.props.userUid,this.state.displayName,newImageUrl);
   }
 
 
