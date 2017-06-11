@@ -55,7 +55,7 @@ export default class ProfileSetUp extends Component {
       var user = firebase.auth().currentUser;
       var self = this;
       var userInfoRef = firebase.database().ref('users/').child(user.uid);
-      userInfoRef.set({
+      userInfoRef.update({
         displayName: this.state.firstName + " " + this.state.lastName,
         photoURL: this.state.uploadURL,
         phoneNumber: this.props.phoneNumber
