@@ -51,29 +51,48 @@ export default class AddNewEvent extends Component{
   }
 
   _pickImage() {
-    this.setState({uploadURL:'', loading: true })
+    this.setState({uploadURL:'',opacity: 1,loading: true })
     var self = this;
     ImagePicker.launchImageLibrary({}, response  => {
       // //(response);
       if (response.didCancel === true) {
-        this.setState({ uploadURL: 'nothing' });
+        this.setState({uploadURL:'nothing' ,opacity: 1,loading:false})
+
       } else {
+        console.log(response.uri);
 
-        uploadImage(response.uri)
-          .then((url) => {
-            this.setState({ uploadURL: url, opacity: 0,loading:false})
-            if (this.state.gotonext){
-              self.validate();
-            }
 
-          })
-          .catch(error => {
-            this.setState({ uploadURL: 'nothing' });
-            // //(error)
-          })
+        this.setState({ uploadURL: response.uri, opacity: 0,loading:false});
+        // console.log(this.props.userUid);
+
       }
     })
   }
+
+  // _pickImage() {
+  //   this.setState({uploadURL:'', loading: true })
+  //   var self = this;
+  //   ImagePicker.launchImageLibrary({}, response  => {
+  //     // //(response);
+  //     if (response.didCancel === true) {
+  //       this.setState({ uploadURL: 'nothing' });
+  //     } else {
+  //
+  //       uploadImage(response.uri)
+  //         .then((url) => {
+  //           this.setState({ uploadURL: url, opacity: 0,loading:false})
+  //           if (this.state.gotonext){
+  //             self.validate();
+  //           }
+  //
+  //         })
+  //         .catch(error => {
+  //           this.setState({ uploadURL: 'nothing' });
+  //           // //(error)
+  //         })
+  //     }
+  //   })
+  // }
 
 
 
@@ -193,24 +212,45 @@ export default class AddNewEvent extends Component{
          var info = {};
          var userInfo = {};
 
-         info[eventString] = {
-           'event_title' : this.state.formData.event_title,
-           'event_time' : this.state.formData.event_time,
-           'sortDate' : this.state.formData.sortDate,
-           'uploadURL' : this.state.formData.uploadURL,
-           'user_per_groupchat': this.state.formData.user_per_groupchat
-         };
-         userInfo[eventString] = {
-           'displayName': this.props.displayName,
-           'photoURL' : this.props.photoURL,
 
-         };
+         this.setState({opacity:1, loading:true});
+         var self = this;
+         uploadImage(this.state.formData.uploadURL, eventString)
+           .then((url) => {
 
-         newEventRef.update(this.state.formData);
-         createdRef.child(eventString).set(info[eventString]);
-         chatMemberRef.child(eventString).child(this.props.userUid).update(userInfo[eventString]);
+             this.state.formData.uploadURL = url;
 
-         this.props.navigator.pop();
+             info[eventString] = {
+               'event_title' : this.state.formData.event_title,
+               'event_time' : this.state.formData.event_time,
+               'sortDate' : this.state.formData.sortDate,
+               'uploadURL' : this.state.formData.uploadURL,
+               'user_per_groupchat': this.state.formData.user_per_groupchat
+             };
+             userInfo[eventString] = {
+               'displayName': this.props.displayName,
+               'photoURL' : this.props.photoURL,
+
+             };
+
+             newEventRef.update(this.state.formData);
+             createdRef.child(eventString).set(info[eventString]);
+             chatMemberRef.child(eventString).child(this.props.userUid).update(userInfo[eventString]);
+
+
+             self.setState({opacity:0, loading:false,uploadURL:url});
+            this.props.navigator.pop();
+
+           })
+           .catch(error => {
+             console.log(error);
+             Alert.alert('Error!', "There was an error while uploading, try again", [{
+                 text: 'OK',
+             //     onPress: () => {//('aint legal');}
+               }]);
+
+             // //(error)
+           })
        } else if (this.state.mode === 'update'){
 
          if (this.props.eventDataLocation){
@@ -219,42 +259,126 @@ export default class AddNewEvent extends Component{
           //  var updateEventRef = eventRef.child(this.props.dataLocation);
           var updateEventsRef = eventRef.child(this.props.eventDataLocation);
           var updateUserEventsRef = createdRef.child(this.props.eventDataLocation);
-           updateEventsRef.update(this.state.formData, response => {
-            //  //(response);
-           });
 
-           updateUserEventsRef.update(
-             {
-               'event_title' : this.state.formData.event_title,
-               'event_time' : this.state.formData.event_time,
-               'uploadURL' : this.state.formData.uploadURL,
-               'sortDate': this.state.formData.sortDate
-             }
+          this.setState({opacity:1, loading:true});
+          var self = this;
+          uploadImage(this.state.formData.uploadURL,this.props.eventDataLocation)
+            .then((url) => {
 
-           );
-         }
-         this.props.navigator.replacePrevious(
-           {
-             name:'ViewEvent',
-             title: 'Event Info',
-             eventObject:this.state.formData,
-             openMenu: this.props.route.openMenu ,
-             closeMenu: this.props.route.closeMenu,
-             eventDataLocation: this.props.route.eventDataLocation,
-             rightText: 'Edit',
-             leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>
+              this.state.formData.uploadURL = url;
 
-         }
-         );
-         this.props.navigator.pop();
+
+              updateEventsRef.update(this.state.formData, response => {
+               //  //(response);
+              });
+
+              updateUserEventsRef.update(
+                {
+                  'event_title' : this.state.formData.event_title,
+                  'event_time' : this.state.formData.event_time,
+                  'uploadURL' : this.state.formData.uploadURL,
+                  'sortDate': this.state.formData.sortDate
+                }
+
+              );
+
+            self.setState({opacity:0, loading:false,uploadURL:url});
+            this.props.navigator.replacePrevious(
+              {
+                name:'ViewEvent',
+                title: 'Event Info',
+                eventObject:this.state.formData,
+                openMenu: this.props.route.openMenu ,
+                closeMenu: this.props.route.closeMenu,
+                eventDataLocation: this.props.route.eventDataLocation,
+                rightText: 'Edit',
+                leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>
+
+            }
+            );
+            this.props.navigator.pop();
+
+            //   info[eventString] = {
+            //     'event_title' : this.state.formData.event_title,
+            //     'event_time' : this.state.formData.event_time,
+            //     'sortDate' : this.state.formData.sortDate,
+            //     'uploadURL' : this.state.formData.uploadURL,
+            //     'user_per_groupchat': this.state.formData.user_per_groupchat
+            //   };
+            //   userInfo[eventString] = {
+            //     'displayName': this.props.displayName,
+            //     'photoURL' : this.props.photoURL,
+             //
+            //   };
+             //
+            //   newEventRef.update(this.state.formData);
+            //   createdRef.child(eventString).set(info[eventString]);
+            //   chatMemberRef.child(eventString).child(this.props.userUid).update(userInfo[eventString]);
+             //
+             //
+             //
+            //  //  userInfoRef.update({
+            //  //    photoURL: `${url}`
+            //  //  });
+            //   self.setState({opacity:0, loading:false,uploadURL:url});
+            //  //  self.props.updateImage(url);
+            //  this.props.navigator.pop();
+
+            })
+            .catch(error => {
+              console.log(error);
+              Alert.alert('Error!', "There was an error while uploading, try again", [{
+                  text: 'OK',
+              //     onPress: () => {//('aint legal');}
+                }]);
+
+              // //(error)
+            })
+
+
+
+
+
+
+
+
+
+
+
+        //    updateEventsRef.update(this.state.formData, response => {
+        //     //  //(response);
+        //    });
+         //
+        //    updateUserEventsRef.update(
+        //      {
+        //        'event_title' : this.state.formData.event_title,
+        //        'event_time' : this.state.formData.event_time,
+        //        'uploadURL' : this.state.formData.uploadURL,
+        //        'sortDate': this.state.formData.sortDate
+        //      }
+         //
+        //    );
+        //  }
+        //  this.props.navigator.replacePrevious(
+        //    {
+        //      name:'ViewEvent',
+        //      title: 'Event Info',
+        //      eventObject:this.state.formData,
+        //      openMenu: this.props.route.openMenu ,
+        //      closeMenu: this.props.route.closeMenu,
+        //      eventDataLocation: this.props.route.eventDataLocation,
+        //      rightText: 'Edit',
+        //      leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>
+         //
+        //  }
+        //  );
+        //  this.props.navigator.pop();
 
        }
 
+     }
 
-
-
-
-      }
+   }
 
     // }
 
@@ -365,16 +489,22 @@ export default class AddNewEvent extends Component{
 
             )
             default:
+
+
+
                 return(
+
+                  <TouchableOpacity
+                  onPress={ () => this._pickImage()}>
+
                   <Image
                   style={myStyles.imageContainer}
                     source={{ uri: this.state.uploadURL }}>
-                  <TouchableOpacity style={[{alignItems: 'center'},{justifyContent: 'center'}]}
-                  onPress={ () => this._pickImage()}>
-                      <Icon name="ios-camera" size={30} style={{opacity: this.state.opacity}} color={Colors.white}/>
-                      <Text style={[otherStyles.h4, globals.primaryText, {opacity: this.state.opacity}]}>Add a Photo</Text>
+                      <ActivityIndicator style={{opacity: this.state.opacity}}/>
+                    </Image>
+
                   </TouchableOpacity>
-                  </Image>
+
 
                 )
           }
