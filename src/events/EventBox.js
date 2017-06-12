@@ -21,6 +21,13 @@ export default class EventBox extends Component {
 
   }
 
+  componentWillMount(){
+    if(this.props.newMessage){
+      console.log("trying to call notifCount");
+      this.props.notifCount();
+    }
+  }
+
 
   loadValues =() =>{
     var self = this;

@@ -6,12 +6,17 @@ const { View, TouchableHighlight, Text, Image,StyleSheet } = ReactNative;
 import {groupsStyles,height,width} from '../styles'
 
 export default class ListItem extends Component {
+
   render() {
     var lastMessageInfo = '';
     var type = '';
     if (this.props.item.lastMessage){
       lastMessageInfo = this.props.item.lastMessage.length < 25? this.props.item.lastMessage : this.props.item.lastMessage.substring(0,25) + "...";
     }
+
+
+
+
 
     console.log(this.props.item);
 
@@ -87,7 +92,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderWidth: 1,
     backgroundColor: '#0000ff',
-  
+
   },
   image: {
 

@@ -194,12 +194,30 @@ export default class EventsHome extends Component {
                               var eachItem = this.state.createdEvents[items];
 
                               var name = eachItem['event_title'];
-                              var image = eachItem['uploadURL']
+                              var image = eachItem['uploadURL'];
+                              var lastDelivered = eachItem['lastDelivered'];
+                              var lastOpened = eachItem['lastOpened'];
+                              var newMessage = false;
+                              if(lastOpened && lastDelivered){
+                                if(lastDelivered > lastOpened){
+                                  newMessage = true;
+                                }
+                              } else {
+                                if(lastDelivered){
+                                  if(!lastOpened){
+                                    newMessage = true;
+                                  }
+
+                                }
+                              }
+
+
+
 
 
                             itemInfo.push(  <EventBox key={items} dataLocation = {items} navigator ={this.props.navigator}
-                              displayName = {this.props.displayName} photoURL={this.props.photoURL} userUid = {this.props.userUid}
-                              eventObject={eachItem} openMenu= {this.props.openMenu} closeMenu={this.props.closeMenu} />);
+                              displayName = {this.props.displayName} photoURL={this.props.photoURL} userUid = {this.props.userUid} notifCount={this.props.notifCount}
+                              eventObject={eachItem} openMenu= {this.props.openMenu} closeMenu={this.props.closeMenu} newMessage = {newMessage} />);
                             }
                             return itemInfo;
 
@@ -249,11 +267,26 @@ export default class EventsHome extends Component {
 
                               var name = eachItem['event_title'];
                               var image = eachItem['uploadURL']
+                              var lastDelivered = eachItem['lastDelivered'];
+                              var lastOpened = eachItem['lastOpened'];
+                              var newMessage = false;
+                              if(lastOpened && lastDelivered){
+                                if(lastDelivered > lastOpened){
+                                  newMessage = true;
+                                }
+                              } else {
+                                if(lastDelivered){
+                                  if(!lastOpened){
+                                    newMessage = true;
+                                  }
+
+                                }
+                              }
 
 
                             itemInfo.push(  <EventBox key={items} dataLocation = {items} navigator ={this.props.navigator}
-                              displayName = {this.props.displayName} photoURL={this.props.photoURL} userUid = {this.props.userUid}
-                              eventObject={eachItem} openMenu= {this.props.openMenu} joinEvent ={'false'} closeMenu={this.props.closeMenu} />);
+                              displayName = {this.props.displayName} photoURL={this.props.photoURL} userUid = {this.props.userUid} notifCount={this.props.notifCount}
+                              eventObject={eachItem} openMenu= {this.props.openMenu} joinEvent ={'false'} closeMenu={this.props.closeMenu} newMessage = {newMessage}  />);
                             }
                             return itemInfo;
 

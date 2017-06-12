@@ -39,14 +39,16 @@ export default class Home extends Component {
         selectedTab:'eventHome',
         rightButtonValidated: false,
         displayName: this.props.displayName,
-        photoURL: this.props.photoURL
+        photoURL: this.props.photoURL,
+        notifCount: 0,
       }
     } else {
       this.state = {
         selectedTab:'chats',
         rightButtonValidated: false,
         displayName: this.props.displayName,
-        photoURL: this.props.photoURL
+        photoURL: this.props.photoURL,
+        notifCount: 0
       }
     }
 
@@ -61,6 +63,14 @@ export default class Home extends Component {
     this.setState({photoURL: newImageUrl});
     this.refs.setnav.refs.editProfile.pushPrevious(newImageUrl);
     this.refs.nav.refs.eventsHome.updateEventUserInfo(this.props.userUid,this.state.displayName,newImageUrl);
+  }
+
+  updateNotifCount = () => {
+    var val = this.state.notifCount;
+    this.state.notifCount = val + 1;
+    console.log("calling notif count");
+
+    this.setState({notifCount: this.state.notifCount});
   }
 
 
@@ -240,7 +250,8 @@ export default class Home extends Component {
                             rightValid: this.state.rightButtonValidated,
                             displayName : this.state.displayName,
                             userUid : this.props.userUid,
-                            photoURL: this.state.photoURL
+                            photoURL: this.state.photoURL,
+
                         });
     }else if(route.viewType === 'None'){
       this.refs.nav.popToTop();
@@ -267,6 +278,7 @@ export default class Home extends Component {
 
   }
 
+
 // ios-add
 
   renderScreen = () => {
@@ -283,6 +295,7 @@ export default class Home extends Component {
                             userUid : this.props.userUid,
                             displayName: this.state.displayName,
                             photoURL: this.state.photoURL,
+                            notifCount: this.updateNotifCount,
                           rightValid: true}}
               renderScene = { renderRouterScene  }
               configureScene = {(route, routeStack) => {
@@ -358,6 +371,7 @@ export default class Home extends Component {
                             displayName: this.state.displayName,
                             photoURL: this.state.photoURL,
                             chatUid: this.props.chatUid,
+                            notifCount: this.updateNotifCount,
                             viewType: "ChatHome"
                       }}
               renderScene = { renderRouterScene  }
@@ -411,7 +425,7 @@ export default class Home extends Component {
       <Icon.TabBarItem
         title=""
         iconName="ios-text-outline"
-
+        badge={this.state.notifCount > 0 ? this.state.notifCount : undefined}
         selected={this.state.selectedTab === 'chats'}
         onPress={() => {
           this.setState({
@@ -530,6 +544,7 @@ const renderRouterScene = (route, navigator) => {
                userUid = {route.userUid}
                displayName = {route.displayName}
                photoURL = {route.photoURL}
+               notifCount = {route.notifCount}
                ref = 'eventsHome'
             />
          )
@@ -609,6 +624,7 @@ const renderRouterScene = (route, navigator) => {
             displayName= {route.displayName}
             photoURL={route.photoURL}
             chatUid={route.chatUid}
+            notifCount = {route.notifCount}
 
         />)
 
@@ -621,6 +637,7 @@ const renderRouterScene = (route, navigator) => {
               photoURL={route.photoURL}
               eventUid= {route.eventUid} viewType= {route.viewType}
               userEventRef = {route.userEventRef}
+
 
 
         />)
