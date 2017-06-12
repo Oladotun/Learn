@@ -40,8 +40,10 @@ export default class Chat extends Component {
                         name: child.val().name
                     }
                 });
-              
+
             });
+
+            this.props.userEventRef.update({'lastOpened': new Date().getTime()});
 
             this.setState({
                 loading: false,
@@ -57,7 +59,7 @@ export default class Chat extends Component {
     }
 
     componentWillUnmount() {
-        this.chatRefData.off()
+        this.chatRefData.off();
     }
 
     onSend(messages = []) {
@@ -76,6 +78,9 @@ export default class Chat extends Component {
                 name: this.props.displayName,
                 order: -1 * now
             })
+
+            this.props.userEventRef.update({'lastDelivered': now});
+            this.props.userEventRef.update({'lastOpened': now});
 
             // PushNotification.localNotification({
             //   message: message.text, // (required)

@@ -620,6 +620,8 @@ const renderRouterScene = (route, navigator) => {
               displayName= {route.displayName}
               photoURL={route.photoURL}
               eventUid= {route.eventUid} viewType= {route.viewType}
+              userEventRef = {route.userEventRef}
+
 
         />)
       } else if(route.name === 'ChatMoreInfo'){

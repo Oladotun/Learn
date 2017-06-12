@@ -75,7 +75,7 @@ export default class ChatHome extends Component {
         allItemSlice[item] = newItem;
       }
     }
-    console.log(allItemSlice);
+    // console.log(allItemSlice);
     allItemSlice.sort(function(a,b){
       var c = new Date(a.createdAt);
        var d = new Date(b.createdAt);
@@ -91,7 +91,7 @@ export default class ChatHome extends Component {
   }
   sendPushNotification = (data) => {
     if (this.props.userUid !== data.uid){
-      console.log(data);
+      // console.log(data);
       if (this.state.loaded){
         PushNotification.localNotification({
           message: data.sender +":" + data.lastMessage, // (required)
@@ -150,51 +150,82 @@ export default class ChatHome extends Component {
              var newArray;
              chatRef.orderByChild("order").limitToFirst(1).on("value",function(snapshot){
                  var data = snapshot.val();
-                 if(!self.state.loaded){
-                   if (data) {
-                     var count = 0;
+                 attendingEventsRef.child(events).once("value", function(attendSnapshot){
+                  var opened = attendSnapshot.val().lastOpened;
+                  var delivered = attendSnapshot.val().lastDelivered;
+                  var newMessage = false;
+                  if(opened && delivered){
+                    if(delivered > opened){
+                       newMessage = true;
+                    }
+                  }
 
-                     var info = Object.keys(data)[0];
-                     var value = data[info];
+                  if(delivered){
+                    if(!opened){
+                      newMessage = true;
+                    }
 
-
-                     items_async.push({
-                       title: attendingEvents[events].event_title,
-                       photoURL: attendingEvents[events].uploadURL,
-                       _key: events,
-                       lastMessage: value.text,
-                       createdAt: value.createdAt,
-                       sender: value.name,
-                       urlSender: value.avatar
-
-                     });
-                     self.sendPushNotification(value);
+                  }
 
 
-                   } else {
-                     console.log("no message");
-                     items_sync.push({
-                       title: attendingEvents[events].event_title,
-                       photoURL: attendingEvents[events].uploadURL,
-                       _key: events
-                     });
-                   }
-                   self.setDataSource(items_sync, items_async);
+                  if(!self.state.loaded){
+                    if (data) {
+                      var count = 0;
 
-                 } else {
-                   if(data){
-                     var info = Object.keys(data)[0];
-                     var value = data[info];
-                     self.updateDataSource({title: attendingEvents[events].event_title,
-                     photoURL: attendingEvents[events].uploadURL,
-                     _key: events,
-                     lastMessage: value.text,
-                     createdAt: value.createdAt,
-                     sender: value.name,
-                     urlSender: value.avatar});
+                      var info = Object.keys(data)[0];
+                      var value = data[info];
 
-                   }
-                 }
+
+                      items_async.push({
+                        title: attendingEvents[events].event_title,
+                        photoURL: attendingEvents[events].uploadURL,
+                        _key: events,
+                        lastMessage: value.text,
+                        createdAt: value.createdAt,
+                        sender: value.name,
+                        urlSender: value.avatar,
+                        userEventRef: attendingEventsRef.child(events),
+                        lastDelivered: attendingEventsRef.child(events).update({'lastDelivered': value.createdAt}),
+                        newMessage : newMessage
+
+                      });
+                      self.sendPushNotification(value);
+
+
+                    } else {
+                      console.log("no message");
+                      items_sync.push({
+                        title: attendingEvents[events].event_title,
+                        photoURL: attendingEvents[events].uploadURL,
+                        _key: events,
+                        userEventRef: attendingEventsRef.child(events),
+                        newMessage: newMessage
+                      });
+                    }
+                    self.setDataSource(items_sync, items_async);
+
+                  } else {
+                    if(data){
+                      var info = Object.keys(data)[0];
+                      var value = data[info];
+                      self.updateDataSource({title: attendingEvents[events].event_title,
+                      photoURL: attendingEvents[events].uploadURL,
+                      _key: events,
+                      lastMessage: value.text,
+                      createdAt: value.createdAt,
+                      sender: value.name,
+                      urlSender: value.avatar,
+                      userEventRef: attendingEventsRef.child(events),
+                      lastDelivered: attendingEventsRef.child(events).update({'lastDelivered': value.createdAt}),
+                      newMessage: newMessage
+                    });
+
+                    }
+                  }
+
+
+                });
+
 
              });
          });
@@ -205,51 +236,82 @@ export default class ChatHome extends Component {
          Object.keys(createdEvents).forEach(function(events) {
 
              var chatRef = chatGroupRef.child(events);
-             var newArray;
              chatRef.orderByChild("order").limitToFirst(1).on("value",function(snapshot){
                  var data = snapshot.val();
-                if(!self.state.loaded){
-                 if (data) {
-                   var count = 0;
+                 var createdRef = userRef.child('createdEvents');
+                 createdRef.child(events).once("value", function(createdSnapshot){
 
-                   var info = Object.keys(data)[0];
-                   var value = data[info];
+                   var opened = createdSnapshot.val().lastOpened;
+                   var delivered = createdSnapshot.val().lastDelivered;
+                   var newMessage = false;
+                   if(opened && delivered){
+                     if(delivered > opened){
+                        newMessage = true;
+                     }
+                   }
 
-                   items_async.push({
-                     title: createdEvents[events].event_title,
-                     photoURL: createdEvents[events].uploadURL,
-                     _key: events,
-                     lastMessage: value.text,
-                     createdAt: value.createdAt,
-                     sender: value.name,
-                     urlSender: value.avatar
+                   if(delivered){
+                     if(!opened){
+                       newMessage = true;
+                     }
 
-                   });
-                   self.sendPushNotification(value);
+                   }
 
-                 } else {
-                   items_sync.push({
-                     title: createdEvents[events].event_title,
-                     photoURL: createdEvents[events].uploadURL,
-                     _key: events
-                   });
-                 }
-                 self.setDataSource(items_sync, items_async);
 
-               } else {
-                 if(data){
-                   var info = Object.keys(data)[0];
-                   var value = data[info];
-                   self.updateDataSource({title: createdEvents[events].event_title,
-                   photoURL: createdEvents[events].uploadURL,
-                   _key: events,
-                   lastMessage: value.text,
-                   createdAt: value.createdAt,
-                   sender: value.name,
-                   urlSender: value.avatar});
+                   if(!self.state.loaded){
+                    if (data) {
+                      var count = 0;
 
-                 }
-               }
+                      var info = Object.keys(data)[0];
+                      var value = data[info];
+
+                      items_async.push({
+                        title: createdEvents[events].event_title,
+                        photoURL: createdEvents[events].uploadURL,
+                        _key: events,
+                        lastMessage: value.text,
+                        createdAt: value.createdAt,
+                        sender: value.name,
+                        urlSender: value.avatar,
+                        userEventRef: userRef.child('createdEvents').child(events),
+                        lastDelivered: userRef.child('createdEvents').child(events).update({'lastDelivered': value.createdAt}),
+                        newMessage: newMessage
+
+                      });
+                      self.sendPushNotification(value);
+
+                    } else {
+                      items_sync.push({
+                        title: createdEvents[events].event_title,
+                        photoURL: createdEvents[events].uploadURL,
+                        _key: events,
+                        userEventRef: userRef.child('createdEvents').child(events),
+                        newMessage: newMessage
+                      });
+                    }
+                    self.setDataSource(items_sync, items_async);
+
+                  } else {
+                    if(data){
+                      var info = Object.keys(data)[0];
+                      var value = data[info];
+                      self.updateDataSource({title: createdEvents[events].event_title,
+                      photoURL: createdEvents[events].uploadURL,
+                      _key: events,
+                      lastMessage: value.text,
+                      createdAt: value.createdAt,
+                      sender: value.name,
+                      urlSender: value.avatar,
+                      userEventRef: userRef.child('createdEvents').child(events),
+                      lastDelivered: userRef.child('createdEvents').child(events).update({'lastDelivered': value.createdAt}),
+                      newMessage: newMessage
+                    });
+
+                    }
+                  }
+
+                 });
+
 
              });
 
@@ -306,6 +368,7 @@ export default class ChatHome extends Component {
     const onPress = () => {
       // console("nothing");
 
+
       this.props.navigator.push({
                             name: 'Chat',
                             title: item.title,
@@ -317,7 +380,9 @@ export default class ChatHome extends Component {
                             userUid: this.props.userUid,
                             photoURL: this.props.photoURL,
                             eventUid: item._key,
-                            viewType: "ChatHome"
+                            viewType: "ChatHome",
+                            userEventRef: item.userEventRef,
+                            lastOpened: item.userEventRef.update({'lastOpened': new Date().getTime()})
 
 
         });

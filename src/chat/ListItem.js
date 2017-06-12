@@ -13,7 +13,11 @@ export default class ListItem extends Component {
       lastMessageInfo = this.props.item.lastMessage.length < 25? this.props.item.lastMessage : this.props.item.lastMessage.substring(0,25) + "...";
     }
 
+    console.log(this.props.item);
+
+
     return (
+
       <TouchableHighlight onPress={this.props.onPress}>
         <View style={styles.li}>
 
@@ -25,6 +29,18 @@ export default class ListItem extends Component {
           <View style={{flexDirection:'column'}}>
           <Text style={styles.liText}>{this.props.item.title.length < 25?  this.props.item.title : this.props.item.title.substring(0,25)}</Text>
           <Text style={styles.liText}>{lastMessageInfo }</Text>
+          </View>
+          <View style={{ flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
+      }}>
+          {
+            (() => {
+              return(this.props.item.newMessage? <View style={styles.liImage}></View> : <View><Text>{''}</Text></View>)
+            }) ()
+
+
+          }
           </View>
         </View>
 
@@ -60,6 +76,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 20,
     marginTop: 10
+  },
+  liImage: {
+    color: '#333',
+    height: 10,
+    width: 10,
+    borderRadius: 5,
+    marginLeft: 20,
+    marginTop: 10,
+    marginRight: 10,
+    borderWidth: 1,
+    backgroundColor: '#0000ff',
+  
   },
   image: {
 
