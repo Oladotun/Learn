@@ -65,9 +65,17 @@ export default class Home extends Component {
     this.refs.nav.refs.eventsHome.updateEventUserInfo(this.props.userUid,this.state.displayName,newImageUrl);
   }
 
-  updateNotifCount = () => {
+  updateNotifCount = (min) => {
     var val = this.state.notifCount;
-    this.state.notifCount = val + 1;
+
+
+    if(min){
+      this.state.notifCount = val - 1;
+    } else {
+      this.state.notifCount = val + 1;
+    }
+
+
     console.log("calling notif count");
 
     this.setState({notifCount: this.state.notifCount});

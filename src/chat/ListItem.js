@@ -7,6 +7,12 @@ import {groupsStyles,height,width} from '../styles'
 
 export default class ListItem extends Component {
 
+  // componentWillMount(){
+  //   if(this.props.item.newMessage){
+  //     console.log("trying to call notifCount");
+  //     this.props.item.notifCount();
+  //   }
+  // }
   render() {
     var lastMessageInfo = '';
     var type = '';
@@ -83,7 +89,6 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   liImage: {
-    color: '#333',
     height: 10,
     width: 10,
     borderRadius: 5,

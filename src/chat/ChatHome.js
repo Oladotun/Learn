@@ -186,7 +186,8 @@ export default class ChatHome extends Component {
                         urlSender: value.avatar,
                         userEventRef: attendingEventsRef.child(events),
                         lastDelivered: attendingEventsRef.child(events).update({'lastDelivered': value.createdAt}),
-                        newMessage : newMessage
+                        newMessage : newMessage,
+                        notifCount: self.props.notifCount
 
                       });
                       self.sendPushNotification(value);
@@ -199,7 +200,8 @@ export default class ChatHome extends Component {
                         photoURL: attendingEvents[events].uploadURL,
                         _key: events,
                         userEventRef: attendingEventsRef.child(events),
-                        newMessage: newMessage
+                        newMessage: newMessage,
+                        notifCount: self.props.notifCount
                       });
                     }
                     self.setDataSource(items_sync, items_async);
@@ -217,7 +219,8 @@ export default class ChatHome extends Component {
                       urlSender: value.avatar,
                       userEventRef: attendingEventsRef.child(events),
                       lastDelivered: attendingEventsRef.child(events).update({'lastDelivered': value.createdAt}),
-                      newMessage: newMessage
+                      newMessage: newMessage,
+                      notifCount: self.props.notifCount
                     });
 
                     }
@@ -275,7 +278,8 @@ export default class ChatHome extends Component {
                         urlSender: value.avatar,
                         userEventRef: userRef.child('createdEvents').child(events),
                         lastDelivered: userRef.child('createdEvents').child(events).update({'lastDelivered': value.createdAt}),
-                        newMessage: newMessage
+                        newMessage: newMessage,
+                        notifCount: self.props.notifCount
 
                       });
                       self.sendPushNotification(value);
@@ -286,7 +290,8 @@ export default class ChatHome extends Component {
                         photoURL: createdEvents[events].uploadURL,
                         _key: events,
                         userEventRef: userRef.child('createdEvents').child(events),
-                        newMessage: newMessage
+                        newMessage: newMessage,
+                        notifCount: self.props.notifCount
                       });
                     }
                     self.setDataSource(items_sync, items_async);
@@ -304,7 +309,8 @@ export default class ChatHome extends Component {
                       urlSender: value.avatar,
                       userEventRef: userRef.child('createdEvents').child(events),
                       lastDelivered: userRef.child('createdEvents').child(events).update({'lastDelivered': value.createdAt}),
-                      newMessage: newMessage
+                      newMessage: newMessage,
+                      notifCount: self.props.notifCount
                     });
 
                     }
@@ -367,6 +373,9 @@ export default class ChatHome extends Component {
 
     const onPress = () => {
       // console("nothing");
+      if(item.newMessage){
+        item.notifCount(-1);
+      }
 
 
       this.props.navigator.push({
