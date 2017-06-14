@@ -72,7 +72,10 @@ export default class ProfileSetUp extends Component {
            });
            self.setState({opacity:0, loading:false,uploadURL:url});
           //  self.props.updateImage(url);
-            self.props.navigator.push({name:'home'});
+            self.props.navigator.push({name:'home',
+            displayName: this.state.firstName + " " + this.state.lastName,
+            userUid: user.uid,
+            photoURL: url});
          })
          .catch(error => {
            console.log(error);

@@ -81,7 +81,7 @@ export default class ChatHome extends Component {
        var d = new Date(b.createdAt);
        return d - c;
     });
-    this.sendPushNotification(newItem);
+    // this.sendPushNotification(newItem);
     this.setState({
       allItems: allItemSlice,
       dataSource: this.state.dataSource.cloneWithRows(allItemSlice),
@@ -190,7 +190,10 @@ export default class ChatHome extends Component {
                         notifCount: self.props.notifCount
 
                       });
-                      self.sendPushNotification(value);
+                      if (newMessage){
+                        self.sendPushNotification(value);
+                      }
+
 
 
                     } else {
@@ -282,7 +285,10 @@ export default class ChatHome extends Component {
                         notifCount: self.props.notifCount
 
                       });
-                      self.sendPushNotification(value);
+                      if(newMessage){
+                        self.sendPushNotification(value);
+                      }
+
 
                     } else {
                       items_sync.push({

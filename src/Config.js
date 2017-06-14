@@ -5,21 +5,17 @@ import {
   Platform
 } from 'react-native';
 import RNFetchBlob from 'react-native-fetch-blob';
-import SendBird from 'sendbird';
+
 
 const {width, height} = Dimensions.get('window');
 // Init Firebase
 let config = {
-  apiKey: "AIzaSyArUrQ20hQ4o4nohBBKs0VH5tH3bX6vDMI",
-  authDomain: "oremi-a0b25.firebaseapp.com",
-  databaseURL: "https://oremi-a0b25.firebaseio.com",
-  storageBucket: "oremi-a0b25.appspot.com",
-  messagingSenderId: "427045602725"
+  apiKey: "AIzaSyDuqaoET4PfCIP4lCeFXWy3OHS9Zxvw_hw",
+  authDomain: "oremi-162302.firebaseapp.com",
+  databaseURL: "https://oremi-162302.firebaseio.com",
+  storageBucket: "oremi-162302.appspot.com",
+  messagingSenderId: "177102174761"
 };
-
-export const sendBird = new SendBird({
-    appId: '22A1C74F-AB20-44E0-8EEC-42D609F1187C'
-});
 
 
 

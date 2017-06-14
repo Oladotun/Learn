@@ -71,7 +71,7 @@ export default class JoinEvent extends Component{
 
     chatMemberRef.child(eventString).child(this.props.userUid).update(userInfo[eventString]);
 
-
+    attendingEventsInfo.update({'lastDelivered': new Date().getTime()})
     this.props.navigator.push({
                           name: 'Chat',
                           title: this.props.eventObject.event_title,
@@ -83,7 +83,9 @@ export default class JoinEvent extends Component{
                           userUid: this.props.userUid,
                           photoURL: this.props.photoURL,
                           eventUid: this.props.eventDataLocation,
-                          viewType: "None"
+                          viewType: "None",
+                          userEventRef: attendingEventsInfo,
+                          lastOpened: attendingEventsInfo.update({'lastOpened': new Date().getTime()})
 
 
       });
