@@ -262,41 +262,78 @@ export default class AddNewEvent extends Component{
 
           this.setState({opacity:1, loading:true});
           var self = this;
-          uploadImage(this.state.formData.uploadURL,this.props.eventDataLocation)
-            .then((url) => {
 
-              this.state.formData.uploadURL = url;
+          if(this.state.formData.uploadURL.includes('http')){
 
+            updateEventsRef.update(this.state.formData, response => {
+             //  //(response);
+            });
 
-              updateEventsRef.update(this.state.formData, response => {
-               //  //(response);
-              });
-
-              updateUserEventsRef.update(
-                {
-                  'event_title' : this.state.formData.event_title,
-                  'event_time' : this.state.formData.event_time,
-                  'uploadURL' : this.state.formData.uploadURL,
-                  'sortDate': this.state.formData.sortDate
-                }
-
-              );
-
-            self.setState({opacity:0, loading:false,uploadURL:url});
-            this.props.navigator.replacePrevious(
+            updateUserEventsRef.update(
               {
-                name:'ViewEvent',
-                title: 'Event Info',
-                eventObject:this.state.formData,
-                openMenu: this.props.route.openMenu ,
-                closeMenu: this.props.route.closeMenu,
-                eventDataLocation: this.props.route.eventDataLocation,
-                rightText: 'Edit',
-                leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>
+                'event_title' : this.state.formData.event_title,
+                'event_time' : this.state.formData.event_time,
+                'uploadURL' : this.state.formData.uploadURL,
+                'sortDate': this.state.formData.sortDate
+              }
 
-            }
             );
-            this.props.navigator.pop();
+
+          // self.setState({opacity:0, loading:false,uploadURL:this.state.formData.uploadURL});
+          this.props.navigator.replacePrevious(
+            {
+              name:'ViewEvent',
+              title: 'Event Info',
+              eventObject:this.state.formData,
+              openMenu: this.props.route.openMenu ,
+              closeMenu: this.props.route.closeMenu,
+              eventDataLocation: this.props.route.eventDataLocation,
+              rightText: 'Edit',
+              leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>
+
+          }
+          );
+          this.props.navigator.pop();
+
+          } else {
+            uploadImage(this.state.formData.uploadURL,this.props.eventDataLocation)
+              .then((url) => {
+
+                this.state.formData.uploadURL = url;
+
+
+                updateEventsRef.update(this.state.formData, response => {
+                 //  //(response);
+                });
+
+                updateUserEventsRef.update(
+                  {
+                    'event_title' : this.state.formData.event_title,
+                    'event_time' : this.state.formData.event_time,
+                    'uploadURL' : url,
+                    'sortDate': this.state.formData.sortDate
+                  }
+
+                );
+
+              self.setState({opacity:0, loading:false,uploadURL:url});
+              this.props.navigator.replacePrevious(
+                {
+                  name:'ViewEvent',
+                  title: 'Event Info',
+                  eventObject:this.state.formData,
+                  openMenu: this.props.route.openMenu ,
+                  closeMenu: this.props.route.closeMenu,
+                  eventDataLocation: this.props.route.eventDataLocation,
+                  rightText: 'Edit',
+                  leftIcon: <Icon name="ios-arrow-back" size={30} style={[{color:'#4A90E2'},{marginLeft:10}]}/>
+
+              }
+              );
+              this.props.navigator.pop();
+
+
+
 
             //   info[eventString] = {
             //     'event_title' : this.state.formData.event_title,
@@ -334,6 +371,9 @@ export default class AddNewEvent extends Component{
 
               // //(error)
             })
+
+          }
+
 
 
 
